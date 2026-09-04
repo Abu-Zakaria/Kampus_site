@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -103,6 +104,14 @@ class PageController extends Controller
         $validated['show_in_footer'] = $request->boolean('show_in_footer');
 
         $page->update($validated);
+
+        if (strtolower($page->slug) === 'home') {
+            $heroImage = $validated['content']['hero_image'] ?? '';
+            Setting::updateOrCreate(
+                ['key' => 'home_hero_image'],
+                ['value' => $heroImage ? (string) $heroImage : '']
+            );
+        }
 
         return redirect()->route('admin.pages.index')
             ->with('success', "Page '{$page->name}' updated successfully.");

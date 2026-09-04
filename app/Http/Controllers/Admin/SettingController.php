@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -60,20 +61,59 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
+        // Handle explicit removal of home hero banner image
+        if ($request->boolean('remove_home_hero_image') || $request->input('remove_home_hero_image') == '1' || $request->input('remove_home_hero_image') === true) {
+            Setting::updateOrCreate(['key' => 'home_hero_image'], ['value' => '']);
+            $this->syncHomePageHeroImage(null);
+
+            return redirect()->route('admin.settings.index')
+                ->with('success', 'Hero banner image removed successfully.');
+        }
+
         foreach ($request->except(['_token', '_method']) as $key => $value) {
             if ($request->hasFile($key)) {
                 $path = $request->file($key)->store('settings', 'public');
                 Setting::updateOrCreate(['key' => $key], ['value' => $path]);
+
+                if ($key === 'home_hero_image') {
+                    $this->syncHomePageHeroImage('/storage/' . $path);
+                }
             } elseif ($value !== null) {
                 Setting::updateOrCreate(
                     ['key' => $key],
                     ['value' => is_array($value) ? json_encode($value) : $value]
                 );
+
+                if ($key === 'home_hero_image') {
+                    if (is_string($value) && trim($value) !== '') {
+                        $imgUrl = (str_starts_with($value, 'http') || str_starts_with($value, '/')) ? $value : ('/storage/' . $value);
+                        $this->syncHomePageHeroImage($imgUrl);
+                    } else {
+                        $this->syncHomePageHeroImage(null);
+                    }
+                }
             }
         }
 
         return redirect()->route('admin.settings.index')
             ->with('success', 'Global brand and site settings updated successfully.');
+    }
+
+    /**
+     * Synchronize hero image with Home Page CMS record.
+     */
+    protected function syncHomePageHeroImage(?string $url): void
+    {
+        $homePage = Page::where('slug', 'home')->first();
+        if ($homePage) {
+            $content = $homePage->content ?? [];
+            $content['hero_image'] = $url ?: null;
+            if (!isset($content['hero']) || !is_array($content['hero'])) {
+                $content['hero'] = [];
+            }
+            $content['hero']['image'] = $url ?: null;
+            $homePage->update(['content' => $content]);
+        }
     }
 
     /**

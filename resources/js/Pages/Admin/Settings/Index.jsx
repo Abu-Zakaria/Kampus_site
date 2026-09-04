@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link, router } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
 import {
     Settings,
@@ -16,13 +16,18 @@ import {
     Upload,
     Globe,
     Layout,
-    FileText
+    FileText,
+    ArrowUpRight,
+    Trash2
 } from 'lucide-react';
 
 export default function Index({ settings = {} }) {
     const [logoPreview, setLogoPreview] = useState(settings.site_logo ? `/storage/${settings.site_logo}` : null);
     const [footerLogoPreview, setFooterLogoPreview] = useState(settings.footer_logo ? `/storage/${settings.footer_logo}` : null);
     const [faviconPreview, setFaviconPreview] = useState(settings.site_favicon ? `/storage/${settings.site_favicon}` : null);
+    const [heroBannerPreview, setHeroBannerPreview] = useState(
+        settings.home_hero_image ? (settings.home_hero_image.startsWith('http') || settings.home_hero_image.startsWith('/') ? settings.home_hero_image : `/storage/${settings.home_hero_image}`) : null
+    );
 
     const { data, setData, post, processing } = useForm({
         // Brand & Logos
@@ -33,6 +38,7 @@ export default function Index({ settings = {} }) {
         footer_subtitle: settings.footer_subtitle || settings.site_tagline || 'Global Higher Education Advisers',
         footer_logo: null,
         site_favicon: null,
+        home_hero_image: null,
         footer_description: settings.footer_description || 'Empowering ambitious students worldwide to access top-tier university education with bespoke admissions counselling, visa support, and scholarship guidance.',
         
         // General & Header
@@ -74,6 +80,20 @@ export default function Index({ settings = {} }) {
         if (file) {
             const url = URL.createObjectURL(file);
             previewSetter(url);
+        }
+    };
+
+    const handleRemoveHeroBanner = () => {
+        if (window.confirm('Are you sure you want to remove the Homepage Hero Banner image?')) {
+            router.post('/admin/settings', {
+                remove_home_hero_image: 1
+            }, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setHeroBannerPreview(null);
+                    setData('home_hero_image', null);
+                }
+            });
         }
     };
 
@@ -221,6 +241,75 @@ export default function Index({ settings = {} }) {
                             </div>
 
                         </div>
+
+                        {/* Homepage Hero Banner Quick Configuration */}
+                        <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div>
+                                    <h4 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <ImageIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                        <span>Homepage Hero Banner Image</span>
+                                    </h4>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                        Set a high-resolution background banner image for the front homepage hero section
+                                    </p>
+                                </div>
+                                <Link
+                                    href="/admin/pages/1/edit"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-bold hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors shrink-0"
+                                >
+                                    <span>Customize Full Hero in CMS</span>
+                                    <ArrowUpRight className="w-3.5 h-3.5" />
+                                </Link>
+                            </div>
+
+                            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 space-y-3">
+                                {heroBannerPreview ? (
+                                    <div className="relative h-44 rounded-xl overflow-hidden bg-slate-900 border border-slate-300 dark:border-slate-700">
+                                        <img src={heroBannerPreview} alt="Hero Banner Preview" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+                                        <div className="absolute bottom-3 left-3 text-white text-xs font-mono truncate max-w-md bg-black/60 px-2 py-1 rounded">
+                                            Active Hero Banner
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="h-28 rounded-xl bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center p-4 text-center">
+                                        <ImageIcon className="w-6 h-6 text-slate-400 mb-1" />
+                                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">No custom banner uploaded yet</span>
+                                        <span className="text-[10px] text-slate-400">Using default high-res educational campus image</span>
+                                    </div>
+                                )}
+
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="home_hero_image_input"
+                                        className="hidden"
+                                        onChange={(e) => handleFileChange('home_hero_image', e.target.files[0], setHeroBannerPreview)}
+                                    />
+                                    <label
+                                        htmlFor="home_hero_image_input"
+                                        className="py-2.5 px-4 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-2 cursor-pointer transition-colors shadow-xs"
+                                    >
+                                        <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                        <span>{heroBannerPreview ? 'Replace Hero Banner' : 'Upload Hero Banner Image'}</span>
+                                    </label>
+
+                                    {heroBannerPreview && (
+                                        <button
+                                            type="button"
+                                            onClick={handleRemoveHeroBanner}
+                                            className="py-2.5 px-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                            <span>Remove Banner</span>
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     {/* SECTION 2: BRAND TITLES & HEADINGS */}

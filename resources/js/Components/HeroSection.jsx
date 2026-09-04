@@ -111,6 +111,21 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
     const subtitle = content?.hero_subtitle || 'Expert, unbiased guidance to top universities across the UK, USA, Finland and Dubai, completely free.';
     const badgeText = content?.badge_text || 'ICEF & British Council Certified Guidance';
 
+    const rawHeroImage = content?.hero_image || content?.hero?.image || content?.hero_banner_image;
+    const globalHeroImage = props?.globalSettings?.home_hero_image;
+    const resolvedGlobalHero = (globalHeroImage && typeof globalHeroImage === 'string' && globalHeroImage.trim() !== '')
+        ? (globalHeroImage.startsWith('http') || globalHeroImage.startsWith('/') ? globalHeroImage : `/storage/${globalHeroImage}`)
+        : null;
+
+    // Check if hero image is explicitly removed (hero_image is null or empty in content)
+    const isExplicitlyRemoved = (content && ('hero_image' in content) && !content.hero_image);
+
+    const heroImage = isExplicitlyRemoved ? null : (resolvedGlobalHero || rawHeroImage || null);
+
+    const overlayOpacityVal = content?.hero_overlay_opacity !== undefined && content?.hero_overlay_opacity !== null && content?.hero_overlay_opacity !== ''
+        ? Math.max(15, Math.min(95, parseInt(content.hero_overlay_opacity, 10)))
+        : 75;
+
     const stats = [
         {
             value: `${dynamicCountriesCount}+`,
@@ -180,16 +195,52 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
     const heroCountries = countries && countries.length >= 4 ? countries.slice(0, 4) : defaultCountries;
 
     return (
-        <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 bg-slate-50 dark:bg-slate-950 transition-colors">
-            {/* Ambient Background Blur Patterns */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none overflow-hidden">
-                <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[120px]" />
-                <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-[140px]" />
-                <div className="absolute top-[250px] left-[30%] w-72 h-72 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[100px]" />
-            </div>
+        <section className={`relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 transition-colors ${
+            heroImage ? 'bg-slate-950 text-white' : 'bg-slate-50 dark:bg-slate-950'
+        }`}>
+            {/* 1. HERO BACKGROUND IMAGE (IF CONFIGURED FROM CMS) */}
+            {heroImage && (
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    {/* The Background Photo */}
+                    <img
+                        src={heroImage}
+                        alt="Campus & University Hero Banner"
+                        className="w-full h-full object-cover object-center scale-[1.02] transform transition-transform duration-1000 ease-out"
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                        }}
+                    />
+
+                    {/* Dark Multi-Stop Gradient Scrim for Legibility */}
+                    <div
+                        className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-900/70"
+                        style={{ opacity: overlayOpacityVal / 100 }}
+                    />
+
+                    {/* Subtle Vertical Fade Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950/90 pointer-events-none" />
+
+                    {/* Ambient Glow Orbs over banner */}
+                    <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-600/25 rounded-full blur-[130px] pointer-events-none" />
+                    <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-600/20 rounded-full blur-[140px] pointer-events-none" />
+                </div>
+            )}
+
+            {/* Ambient Background Blur Patterns (default when no hero image) */}
+            {!heroImage && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none overflow-hidden">
+                    <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[120px]" />
+                    <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-[140px]" />
+                    <div className="absolute top-[250px] left-[30%] w-72 h-72 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[100px]" />
+                </div>
+            )}
 
             {/* Subtle Grid Lines Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+            <div className={`absolute inset-0 ${
+                heroImage
+                    ? 'bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]'
+                    : 'bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]'
+            } bg-[size:36px_36px] pointer-events-none`} />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -197,13 +248,31 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
                     {/* LEFT COLUMN: HERO CONTENT */}
                     <div className="lg:col-span-7 space-y-6 text-left">
                         
+                        {/* Top Badge */}
+                        {badgeText && (
+                            <div>
+                                <span className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                                    heroImage
+                                        ? 'bg-white/15 text-blue-200 border border-white/20 backdrop-blur-md shadow-xs'
+                                        : 'bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/80'
+                                }`}>
+                                    <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                                    <span>{badgeText}</span>
+                                </span>
+                            </div>
+                        )}
+
                         {/* Main Headline */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] ${
+                            heroImage ? 'text-white drop-shadow-xs' : 'text-slate-900 dark:text-white'
+                        }`}>
                             {heading}
                         </h1>
 
                         {/* Subtitle */}
-                        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl">
+                        <p className={`text-lg sm:text-xl leading-relaxed font-normal max-w-2xl ${
+                            heroImage ? 'text-slate-200' : 'text-slate-600 dark:text-slate-300'
+                        }`}>
                             {subtitle}
                         </p>
 
@@ -219,25 +288,31 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
 
                             <button
                                 onClick={onOpenBookCall}
-                                className="px-7 py-3.5 rounded-full bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-white font-semibold text-base border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center gap-2 shadow-xs hover:border-blue-500 dark:hover:border-blue-500 transition-all cursor-pointer"
+                                className={`px-7 py-3.5 rounded-full font-semibold text-base flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer ${
+                                    heroImage
+                                        ? 'bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-md hover:border-white/50'
+                                        : 'bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500'
+                                }`}
                             >
-                                <PhoneCall className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                <PhoneCall className="w-5 h-5 text-blue-400" />
                                 <span>Book a Call</span>
                             </button>
                         </div>
 
                         {/* Trust Micro-bullets */}
-                        <div className="pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <div className={`pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-medium ${
+                            heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                        }`}>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>Zero Service Charge</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>Fast 48-Hour Offer Letter</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>100% Visa File Review</span>
                             </div>
                         </div>
@@ -296,22 +371,32 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
                 </div>
 
                 {/* BOTTOM STATS STRIP */}
-                <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t border-slate-200/80 dark:border-slate-800/80">
+                <div className={`mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t ${
+                    heroImage ? 'border-white/15' : 'border-slate-200/80 dark:border-slate-800/80'
+                }`}>
                     {stats.map((st, i) => {
                         const IconComp = st.icon;
                         return (
                             <div
                                 key={i}
-                                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 shadow-xs flex items-center gap-4 hover:border-slate-300 dark:hover:border-slate-700 transition-all group"
+                                className={`p-5 rounded-2xl border shadow-xs flex items-center gap-4 transition-all group ${
+                                    heroImage
+                                        ? 'bg-slate-900/70 hover:bg-slate-900/90 border-white/15 hover:border-white/30 backdrop-blur-md shadow-lg shadow-black/20'
+                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
+                                }`}
                             >
                                 <div className={`p-3 rounded-xl bg-gradient-to-br ${st.color} text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
                                     <IconComp className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                    <div className={`text-2xl font-extrabold tracking-tight ${
+                                        heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
+                                    }`}>
                                         <AnimatedCounter value={st.value} />
                                     </div>
-                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                    <div className={`text-xs font-medium ${
+                                        heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                                    }`}>
                                         {st.label}
                                     </div>
                                 </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, useForm, router, Link } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
 import PageBuilder from '../../../Components/Admin/PageBuilder';
@@ -13,10 +13,17 @@ import {
     HelpCircle,
     LayoutTemplate,
     ExternalLink,
-    CheckCircle2
+    CheckCircle2,
+    Upload,
+    Image as ImageIcon,
+    Trash2,
+    Loader2
 } from 'lucide-react';
 
 export default function Edit({ page }) {
+    const [isUploadingHero, setIsUploadingHero] = useState(false);
+    const [uploadHeroError, setUploadHeroError] = useState('');
+
     const coreSlugs = [
         '/',
         'home',
@@ -60,16 +67,54 @@ export default function Edit({ page }) {
         };
 
         // Keep content.hero synchronized as well
-        if (field === 'hero_heading' || field === 'hero_subtitle' || field === 'badge_text') {
+        if (['hero_heading', 'hero_subtitle', 'badge_text', 'hero_image', 'hero_overlay_opacity'].includes(field)) {
             nextContent.hero = {
                 ...(nextContent.hero || {}),
                 title: field === 'hero_heading' ? val : (nextContent.hero?.title || nextContent.hero_heading || ''),
                 subtitle: field === 'hero_subtitle' ? val : (nextContent.hero?.subtitle || nextContent.hero_subtitle || ''),
                 badge: field === 'badge_text' ? val : (nextContent.hero?.badge || nextContent.badge_text || ''),
+                image: field === 'hero_image' ? val : (nextContent.hero?.image || nextContent.hero_image || ''),
+                overlay_opacity: field === 'hero_overlay_opacity' ? val : (nextContent.hero?.overlay_opacity || nextContent.hero_overlay_opacity || 75),
             };
         }
 
         setData('content', nextContent);
+    };
+
+    const handleHeroImageUpload = async (file) => {
+        if (!file) return;
+        setIsUploadingHero(true);
+        setUploadHeroError('');
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const res = await fetch('/admin/pages/upload-image', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: formData,
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.message || 'Image upload failed. Max file size is 10MB.');
+            }
+
+            const resData = await res.json();
+            if (resData.url) {
+                handleContentFieldChange('hero_image', resData.url);
+            }
+        } catch (err) {
+            console.error('Hero image upload failed:', err);
+            setUploadHeroError(err.message || 'Failed to upload image. Please try again or provide an image URL.');
+        } finally {
+            setIsUploadingHero(false);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -362,6 +407,132 @@ export default function Edit({ page }) {
                                     placeholder="Provide compelling paragraph text for the page hero section..."
                                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
+                            </div>
+
+                            {/* Hero Banner Background Image Customization */}
+                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                        Hero Banner Background Image
+                                    </label>
+                                    <span className="text-[11px] text-slate-400 font-normal">
+                                        Recommended 1920x1080px or higher (JPG, PNG, WebP)
+                                    </span>
+                                </div>
+
+                                {/* Current Image Preview & Actions */}
+                                {(data.content?.hero_image || data.content?.hero?.image) ? (
+                                    <div className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900 group">
+                                        <div className="relative h-48 sm:h-56 w-full">
+                                            <img
+                                                src={data.content?.hero_image || data.content?.hero?.image}
+                                                alt="Hero Banner Preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30" />
+                                            
+                                            <div className="absolute top-3 right-3 flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleContentFieldChange('hero_image', '')}
+                                                    className="px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md backdrop-blur-xs transition-all cursor-pointer"
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                    <span>Remove Image</span>
+                                                </button>
+                                            </div>
+
+                                            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                                                <span className="font-mono truncate max-w-xs sm:max-w-md bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-xs">
+                                                    {data.content?.hero_image || data.content?.hero?.image}
+                                                </span>
+                                                <span className="px-2 py-1 rounded bg-emerald-500/90 text-white font-bold text-[10px] uppercase tracking-wider shadow-xs">
+                                                    Active Banner
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : null}
+
+                                {/* File Upload & URL Input Row */}
+                                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                                    {/* File Upload Button */}
+                                    <div className="sm:col-span-6">
+                                        <label className={`w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-2xl border-2 border-dashed ${
+                                            isUploadingHero
+                                                ? 'border-blue-400 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 cursor-wait'
+                                                : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer'
+                                        } transition-all`}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                disabled={isUploadingHero}
+                                                onChange={(e) => {
+                                                    if (e.target.files && e.target.files[0]) {
+                                                        handleHeroImageUpload(e.target.files[0]);
+                                                    }
+                                                }}
+                                                className="hidden"
+                                            />
+                                            {isUploadingHero ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                                                    <span className="text-xs font-bold">Uploading image...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                                    <span className="text-xs font-bold">
+                                                        {(data.content?.hero_image || data.content?.hero?.image) ? 'Upload Replacement Image' : 'Upload Banner Image from Computer'}
+                                                    </span>
+                                                </>
+                                            )}
+                                        </label>
+                                    </div>
+
+                                    {/* Direct URL input */}
+                                    <div className="sm:col-span-6">
+                                        <input
+                                            type="text"
+                                            value={data.content?.hero_image || data.content?.hero?.image || ''}
+                                            onChange={(e) => handleContentFieldChange('hero_image', e.target.value)}
+                                            placeholder="Or paste external image URL (e.g. Unsplash CDN)..."
+                                            className="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono"
+                                        />
+                                    </div>
+                                </div>
+
+                                {uploadHeroError && (
+                                    <p className="text-xs text-rose-500 font-semibold">{uploadHeroError}</p>
+                                )}
+
+                                {/* Hero Overlay Opacity Control */}
+                                {(data.content?.hero_image || data.content?.hero?.image) && (
+                                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                                        <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
+                                            <span>Background Overlay Darkness / Legibility Contrast:</span>
+                                            <span className="text-blue-600 dark:text-blue-400 font-mono font-black">
+                                                {data.content?.hero_overlay_opacity || 75}%
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <input
+                                                type="range"
+                                                min="20"
+                                                max="95"
+                                                step="5"
+                                                value={data.content?.hero_overlay_opacity || 75}
+                                                onChange={(e) => handleContentFieldChange('hero_overlay_opacity', e.target.value)}
+                                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                            />
+                                        </div>
+                                        <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+                                            <span>Light (20%)</span>
+                                            <span>Balanced / Recommended (75%)</span>
+                                            <span>Deep Dark (95%)</span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* For Policy / Terms pages: Custom Document Body */}
