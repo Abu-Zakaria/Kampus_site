@@ -17,6 +17,7 @@ use App\Http\Controllers\PublicServiceController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\UniversityController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\HeroSlideshowController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\FaqController;
@@ -150,6 +151,14 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
         Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
         Route::post('/settings', [SettingController::class, 'store'])->name('admin.settings.store');
         Route::post('/settings/update', [SettingController::class, 'store'])->name('admin.settings.update');
+
+        // Dedicated Hero Slideshow Management Routes
+        Route::get('/slideshow', [HeroSlideshowController::class, 'index'])->name('admin.slideshow.index');
+        Route::post('/slideshow', [HeroSlideshowController::class, 'store'])->name('admin.slideshow.store');
+        Route::post('/slideshow/upload', [HeroSlideshowController::class, 'upload'])->name('admin.slideshow.upload');
+        Route::post('/slideshow/{index}/replace', [HeroSlideshowController::class, 'replace'])->name('admin.slideshow.replace');
+        Route::delete('/slideshow/{index}', [HeroSlideshowController::class, 'destroy'])->name('admin.slideshow.destroy');
+        Route::post('/slideshow/reset', [HeroSlideshowController::class, 'reset'])->name('admin.slideshow.reset');
     });
 
     // Pages & SEO Routes

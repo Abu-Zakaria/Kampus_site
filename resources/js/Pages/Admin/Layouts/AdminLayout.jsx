@@ -57,6 +57,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     const sidebarLinks = [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
         { name: 'Global Settings', href: '/admin/settings', icon: Settings, permission: 'manage-settings' },
+        { name: 'Hero Slideshow', href: '/admin/slideshow', icon: Layers, permission: 'manage-settings' },
         { name: 'Pages & SEO', href: '/admin/pages', icon: FileText, permission: 'manage-pages' },
         { name: 'Services', href: '/admin/services', icon: Layers, permission: 'manage-pages' },
         { name: 'FAQs', href: '/admin/faqs', icon: HelpCircle, permission: 'manage-pages' },

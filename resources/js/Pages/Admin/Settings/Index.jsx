@@ -16,6 +16,7 @@ import {
     Upload,
     Globe,
     Layout,
+    Layers,
     FileText,
     ArrowUpRight,
     Trash2
@@ -307,6 +308,38 @@ export default function Index({ settings = {} }) {
                                         </button>
                                     )}
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Dedicated Hero 3D Card Slideshow Quick Management */}
+                        <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/80">
+                                <div className="flex items-center gap-3.5">
+                                    <div className="p-3 rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-600/20 shrink-0">
+                                        <Layers className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
+                                                Hero 3D Card Deck Slideshow Images
+                                            </h4>
+                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
+                                                Independent Area
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                                            Manage, upload, reorder, or replace images in the animated 3D card deck on the homepage hero banner.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <Link
+                                    href="/admin/slideshow"
+                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm shadow-blue-600/30 transition-all cursor-pointer shrink-0"
+                                >
+                                    <span>Manage Slideshow Images</span>
+                                    <ArrowUpRight className="w-4 h-4" />
+                                </Link>
                             </div>
                         </div>
 

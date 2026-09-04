@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     Sparkles,
     ArrowRight,
@@ -161,38 +161,67 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
         }
     ];
 
-    const defaultCountries = [
-        {
-            name: 'United Kingdom',
-            slug: 'united-kingdom',
-            country_code: 'GB',
-            subtitle: '150+ Partner Universities',
-            image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'United States',
-            slug: 'united-states',
-            country_code: 'US',
-            subtitle: '200+ STEM & Ivy Pathways',
-            image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'Finland',
-            slug: 'finland',
-            country_code: 'FI',
-            subtitle: 'Pathway to Tuition Grants',
-            image: 'https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'Dubai (UAE)',
-            slug: 'united-arab-emirates',
-            country_code: 'AE',
-            subtitle: 'Fast 100% Visa Guarantee',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
-        },
+    const DEFAULT_HERO_SLIDES = [
+        'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
     ];
 
-    const heroCountries = countries && countries.length >= 4 ? countries.slice(0, 4) : defaultCountries;
+    // Dedicated standalone hero slideshow images (completely unlinked from countries & universities)
+    const rawSlideshowSetting = props?.globalSettings?.hero_slideshow_images || content?.hero_slideshow_images;
+    let configuredSlides = [];
+    if (rawSlideshowSetting) {
+        if (Array.isArray(rawSlideshowSetting)) {
+            configuredSlides = rawSlideshowSetting;
+        } else if (typeof rawSlideshowSetting === 'string') {
+            try {
+                const parsed = JSON.parse(rawSlideshowSetting);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    configuredSlides = parsed;
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
+    }
+
+    const heroSlides = configuredSlides.length > 0 ? configuredSlides : DEFAULT_HERO_SLIDES;
+    const totalSlides = heroSlides.length;
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [exitingSlide, setExitingSlide] = useState(null);
+    const [isFlipping, setIsFlipping] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const goToSlide = (idx) => {
+        if (idx === currentSlide || isFlipping) return;
+        setExitingSlide(currentSlide);
+        setCurrentSlide(idx);
+        setIsFlipping(true);
+
+        setTimeout(() => {
+            setExitingSlide(null);
+            setIsFlipping(false);
+        }, 450);
+    };
+
+    const handleCardClick = (idx, isActive, isExiting) => {
+        if (isExiting || isActive) return;
+        goToSlide(idx);
+    };
+
+    // Auto-advance slideshow every 5 seconds with pause on hover
+    useEffect(() => {
+        if (isPaused || totalSlides <= 1) return;
+        const timer = setInterval(() => {
+            if (!isFlipping) {
+                goToSlide((currentSlide + 1) % totalSlides);
+            }
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [isPaused, totalSlides, currentSlide, isFlipping]);
 
     return (
         <section className={`relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 transition-colors ${
@@ -319,52 +348,102 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
 
                     </div>
 
-                    {/* RIGHT COLUMN: DYNAMIC ANIMATED COUNTRY CARDS WITH BACKGROUND IMAGES */}
-                    <div className="lg:col-span-5 relative">
-                        <div className="grid grid-cols-2 gap-4">
-                            {heroCountries.map((c, idx) => (
-                                <Link
-                                    key={c.id || idx}
-                                    href={`/destinations/${c.slug || 'united-kingdom'}`}
-                                    className="group relative h-44 sm:h-48 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-800 flex flex-col justify-between p-5 text-left"
-                                >
-                                    {/* Country Background Image */}
-                                    <div className="absolute inset-0 bg-slate-950">
-                                        <img
-                                            src={c.image || 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80'}
-                                            alt={c.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-75"
-                                            loading="lazy"
-                                            onError={(e) => {
-                                                e.target.src = 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80';
-                                            }}
-                                        />
-                                    </div>
+                    {/* RIGHT COLUMN: 3D STACK / LAYERED ANIMATED COUNTRY CARDS SLIDESHOW */}
+                    <div
+                        className="lg:col-span-5 relative flex flex-col justify-center select-none"
+                        onMouseEnter={() => setIsPaused(true)}
+                        onMouseLeave={() => setIsPaused(false)}
+                    >
+                        {/* 3D Stack Deck Stage - Compact height and generous width for peeking background cards */}
+                        <div className="relative w-full h-[310px] sm:h-[330px] max-w-[420px] mx-auto">
+                            {heroSlides.map((slide, idx) => {
+                                const isExiting = idx === exitingSlide;
+                                const offset = (idx - currentSlide + totalSlides) % totalSlides;
+                                const isActive = offset === 0 && !isExiting;
+                                const isBehind1 = offset === 1 && !isExiting;
+                                const isBehind2 = offset === 2 && !isExiting;
 
-                                    {/* Dark Gradient Overlay for Crisp Text Legibility */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/40 group-hover:via-slate-950/65 transition-all" />
+                                let zIndex = 0;
+                                let opacity = 0;
+                                let pointerEvents = 'none';
+                                let transform = 'translate3d(90px, 50px, 0) scale(0.85)';
+                                let transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease, box-shadow 400ms ease';
 
-                                    {/* Top Row: Country Code Badge & Hover Arrow */}
-                                    <div className="relative z-10 flex items-center justify-between">
-                                        <span className="px-2.5 py-1 rounded-xl bg-white/20 backdrop-blur-md text-white text-xs font-black font-mono border border-white/30 shadow-xs">
-                                            {c.country_code || (c.name ? c.name.substring(0, 2).toUpperCase() : 'GB')}
-                                        </span>
-                                        <div className="w-7 h-7 rounded-full bg-white/10 backdrop-blur-xs flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-blue-600 transition-all">
-                                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                                if (isExiting) {
+                                    // Front card drops DOWN and vanishes rapidly!
+                                    transform = 'translate3d(0, 90%, 0) scale(0.95)';
+                                    zIndex = 40;
+                                    opacity = 0;
+                                    pointerEvents = 'none';
+                                    transition = 'transform 320ms cubic-bezier(0.4, 0, 1, 1), opacity 180ms ease-in';
+                                } else if (isActive) {
+                                    // Incoming card slides UP to the front position!
+                                    transform = 'translate3d(0, 0, 0) scale(1)';
+                                    zIndex = 30;
+                                    opacity = 1;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease-out';
+                                } else if (isBehind1) {
+                                    // 1st background card: sits slightly right and lower
+                                    transform = 'translate3d(36px, 18px, 0) scale(0.95)';
+                                    zIndex = 20;
+                                    opacity = 0.92;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease-out';
+                                } else if (isBehind2) {
+                                    // 2nd background card: sits further right and lower
+                                    transform = 'translate3d(70px, 36px, 0) scale(0.90)';
+                                    zIndex = 10;
+                                    opacity = 0.82;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease-out';
+                                }
+
+                                const rawSrc = typeof slide === 'string' ? slide : (slide?.image || slide?.url || '');
+                                const resolvedSrc = (rawSrc.startsWith('http') || rawSrc.startsWith('/')) ? rawSrc : `/storage/${rawSrc}`;
+
+                                return (
+                                    <div
+                                        key={idx}
+                                        onClick={() => handleCardClick(idx, isActive, isExiting)}
+                                        className={`absolute top-0 left-0 w-[80%] sm:w-[82%] h-[260px] sm:h-[280px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border select-none ${
+                                            heroImage
+                                                ? 'border-white/25 bg-slate-900'
+                                                : 'border-slate-200/80 dark:border-slate-700/80 bg-slate-950'
+                                        } ${
+                                            isActive
+                                                ? 'shadow-2xl shadow-blue-600/30 ring-1 ring-white/30 cursor-default'
+                                                : isExiting
+                                                ? 'shadow-2xl shadow-black/40 cursor-default'
+                                                : 'cursor-pointer hover:border-blue-400 hover:brightness-110 hover:shadow-2xl hover:shadow-blue-500/25'
+                                        }`}
+                                        style={{
+                                            zIndex,
+                                            opacity,
+                                            pointerEvents,
+                                            transform,
+                                            transition,
+                                            willChange: 'transform, opacity'
+                                        }}
+                                        title={!isActive && !isExiting ? 'Click to bring card forward' : undefined}
+                                    >
+                                        {/* Slideshow Card Image */}
+                                        <div className="w-full h-full bg-slate-950 overflow-hidden">
+                                            <img
+                                                src={resolvedSrc}
+                                                alt={`Hero Slide ${idx + 1}`}
+                                                className={`w-full h-full object-cover transition-transform duration-700 ${
+                                                    isActive ? 'hover:scale-105' : ''
+                                                }`}
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80';
+                                                }}
+                                            />
                                         </div>
                                     </div>
-
-                                    {/* Bottom Row: Name & Subtitle */}
-                                    <div className="relative z-10 space-y-1">
-                                        <h3 className="font-extrabold text-white text-base sm:text-lg group-hover:text-blue-300 transition-colors leading-tight">
-                                            {c.name}
-                                        </h3>
-                                        <p className="text-[11px] sm:text-xs text-slate-300 group-hover:text-white font-medium line-clamp-1 transition-colors">
-                                            {c.subtitle || c.unis || 'Partner Universities'}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
 
