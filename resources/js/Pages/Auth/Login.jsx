@@ -7,6 +7,8 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const initialEmail = prefilledEmail || (urlParams ? urlParams.get('email') || '' : '');
 
+    const isStudent = urlParams ? urlParams.get('type') === 'student' : false;
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: initialEmail,
         password: '',
@@ -22,15 +24,17 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
 
     return (
         <GuestLayout>
-            <Head title="Sign In — Kampus Admin" />
+            <Head title={isStudent ? "Student Sign In — Kampus" : "Sign In — Kampus Portal"} />
 
             {/* HEADER TYPOGRAPHY */}
             <div className="text-center space-y-2 mb-8">
                 <h2 className="text-2xl font-extrabold text-white tracking-tight">
-                    Welcome Back
+                    {isStudent ? 'Student Portal Sign In' : 'Welcome Back'}
                 </h2>
                 <p className="text-sm text-slate-400">
-                    Sign in to manage your Kampus CMS dashboard
+                    {isStudent
+                        ? 'Sign in to monitor applications, admission stages & query replies'
+                        : 'Sign in to manage your student portal or Kampus CMS dashboard'}
                 </p>
             </div>
 

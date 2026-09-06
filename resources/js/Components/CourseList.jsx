@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     MapPin,
     Clock,
@@ -25,12 +25,31 @@ export default function CourseList({
     onSortChange,
     onResetFilters
 }) {
+    const { props } = usePage();
+    const currentUser = props?.auth?.user;
+
     const [viewMode, setViewMode] = useState('grid'); // Default to grid view
     const [selectedCourseModal, setSelectedCourseModal] = useState(null);
     const [applicationSent, setApplicationSent] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [formData, setFormData] = useState({ name: '', email: '', phone: '', notes: '' });
+    const [formData, setFormData] = useState({
+        name: currentUser?.name || '',
+        email: currentUser?.email || '',
+        phone: '',
+        notes: ''
+    });
+
+    const handleOpenCourseModal = (course) => {
+        setSelectedCourseModal(course);
+        if (currentUser) {
+            setFormData(prev => ({
+                ...prev,
+                name: prev.name || currentUser.name || '',
+                email: prev.email || currentUser.email || '',
+            }));
+        }
+    };
 
     const courseList = Array.isArray(courses) ? courses : (courses?.data || []);
     const totalCount = courses?.total ?? courseList.length;
@@ -63,7 +82,9 @@ export default function CourseList({
                     level: selectedCourseModal?.level,
                     duration: selectedCourseModal?.duration,
                     intake: selectedCourseModal?.intake,
-                    tuition_fee: selectedCourseModal?.tuition_fee,
+                    tuition_fee: selectedCourseModal?.show_tuition_fee !== false
+                        ? selectedCourseModal?.tuition_fee
+                        : 'Tuition on Request',
                 })
             });
 
@@ -259,13 +280,19 @@ export default function CourseList({
                                     <div className={viewMode === 'grid' ? 'text-left' : 'text-left lg:text-right'}>
                                         <div className="text-[10px] font-bold uppercase text-slate-400">Annual Tuition</div>
                                         <div className="text-lg font-extrabold text-slate-900 dark:text-white">
-                                            {course.tuition_fee || 'Contact for Fee'}
+                                            {course.show_tuition_fee !== false ? (
+                                                course.tuition_fee || 'Contact for Fee'
+                                            ) : (
+                                                <span className="text-sm font-bold text-amber-600 dark:text-amber-400">
+                                                    Tuition on Request
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 
                                     <button
                                         type="button"
-                                        onClick={() => setSelectedCourseModal(course)}
+                                        onClick={() => handleOpenCourseModal(course)}
                                         className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 hover:scale-105 transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
                                     >
                                         <span>Enquire</span>
@@ -365,9 +392,13 @@ export default function CourseList({
                                             <span className="text-slate-500">Intake:</span>
                                             <span className="font-bold text-slate-900 dark:text-white">{selectedCourseModal.intake || 'Multiple'}</span>
                                         </div>
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between items-center">
                                             <span className="text-slate-500">Annual Tuition:</span>
-                                            <span className="font-bold text-blue-600 dark:text-blue-400">{selectedCourseModal.tuition_fee || 'Contact for Fee'}</span>
+                                            <span className="font-bold text-blue-600 dark:text-blue-400">
+                                                {selectedCourseModal.show_tuition_fee !== false
+                                                    ? (selectedCourseModal.tuition_fee || 'Contact for Fee')
+                                                    : 'Tuition on Request'}
+                                            </span>
                                         </div>
                                     </div>
 

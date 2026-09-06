@@ -14,7 +14,7 @@ class InquiryController extends Controller
      */
     public function index()
     {
-        $messages = ContactMessage::orderBy('id', 'desc')->get();
+        $messages = ContactMessage::with(['repliedBy:id,name', 'user:id,name,email'])->orderBy('id', 'desc')->get();
 
         return Inertia::render('Admin/Inquiries/Index', [
             'messages' => $messages,
@@ -112,6 +112,7 @@ class InquiryController extends Controller
         }
 
         $contactMessage = ContactMessage::create([
+            'user_id' => auth()->id(),
             'name' => $name,
             'email' => $validated['email'],
             'phone' => $phone,
@@ -129,5 +130,26 @@ class InquiryController extends Controller
         }
 
         return back()->with('success', 'Thank you for reaching out! A counselor will respond within 24 hours.');
+    }
+
+    /**
+     * Store admin/counselor reply to a contact inquiry.
+     */
+    public function reply(Request $request, $id)
+    {
+        $message = ContactMessage::findOrFail($id);
+
+        $validated = $request->validate([
+            'reply_message' => 'required|string|max:5000',
+        ]);
+
+        $message->update([
+            'reply_message' => $validated['reply_message'],
+            'replied_at' => now(),
+            'replied_by' => auth()->id(),
+            'is_read' => true,
+        ]);
+
+        return back()->with('success', "Reply successfully sent to {$message->name}.");
     }
 }

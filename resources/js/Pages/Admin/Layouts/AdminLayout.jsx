@@ -67,6 +67,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
+        { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries' },
         { name: 'Inquiries & Messages', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries' },
     ];
 

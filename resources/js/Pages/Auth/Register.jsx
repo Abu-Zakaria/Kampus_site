@@ -4,6 +4,9 @@ import GuestLayout from '../../Layouts/GuestLayout';
 import { User, Mail, Lock, ShieldCheck, UserPlus, ArrowRight } from 'lucide-react';
 
 export default function Register() {
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const isAdmin = urlParams ? urlParams.get('type') === 'admin' : false;
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -20,15 +23,17 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Create Account — Kampus Admin" />
+            <Head title={isAdmin ? "Create Account — Kampus Admin" : "Student Registration — Kampus"} />
 
             {/* HEADER TYPOGRAPHY */}
             <div className="text-center space-y-2 mb-8">
                 <h2 className="text-2xl font-extrabold text-white tracking-tight">
-                    Create Admin Account
+                    {isAdmin ? 'Create Admin Account' : 'Student Registration'}
                 </h2>
                 <p className="text-sm text-slate-400">
-                    Register a new administrator profile for Kampus Group
+                    {isAdmin
+                        ? 'Register a new administrator profile for Kampus Group'
+                        : 'Create your free student account to apply to universities and track replies'}
                 </p>
             </div>
 

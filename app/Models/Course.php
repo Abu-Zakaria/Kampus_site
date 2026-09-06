@@ -18,7 +18,12 @@ class Course extends Model
         'level',
         'duration',
         'tuition_fee',
+        'show_tuition_fee',
         'intake',
+    ];
+
+    protected $casts = [
+        'show_tuition_fee' => 'boolean',
     ];
 
     /**

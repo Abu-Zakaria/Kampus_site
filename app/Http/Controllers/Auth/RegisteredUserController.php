@@ -43,10 +43,18 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if (\Spatie\Permission\Models\Role::where('name', 'Student')->exists()) {
+            $user->assignRole('Student');
+        }
+
+        // Retroactively link past inquiries and applications submitted with this email
+        \App\Models\ContactMessage::where('email', $user->email)->whereNull('user_id')->update(['user_id' => $user->id]);
+        \App\Models\StudentApplication::where('applicant_email', $user->email)->whereNull('user_id')->update(['user_id' => $user->id]);
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('admin.dashboard', absolute: false));
+        return redirect(route('student.dashboard', absolute: false));
     }
 }

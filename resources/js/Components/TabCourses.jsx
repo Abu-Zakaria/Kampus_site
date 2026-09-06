@@ -97,7 +97,13 @@ export default function TabCourses({ courses }) {
                                     <div className="flex items-center justify-between pt-1">
                                         <span className="text-slate-500">Tuition Fee:</span>
                                         <span className="font-extrabold text-slate-900 dark:text-white">
-                                            {course.tuition}
+                                            {course.show_tuition_fee !== false ? (
+                                                course.tuition || course.tuition_fee || 'Contact for Fee'
+                                            ) : (
+                                                <span className="text-xs text-amber-600 dark:text-amber-400 font-bold">
+                                                    Tuition on Request
+                                                </span>
+                                            )}
                                         </span>
                                     </div>
                                 </div>
@@ -147,7 +153,14 @@ export default function TabCourses({ courses }) {
                             <p className="leading-relaxed">{selectedCourse.desc}</p>
                             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 space-y-1.5 font-medium">
                                 <div className="flex justify-between"><span>Duration:</span><span className="font-bold text-slate-900 dark:text-white">{selectedCourse.duration}</span></div>
-                                <div className="flex justify-between"><span>Annual Tuition:</span><span className="font-bold text-blue-600 dark:text-blue-400">{selectedCourse.tuition}</span></div>
+                                <div className="flex justify-between items-center">
+                                    <span>Annual Tuition:</span>
+                                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                                        {selectedCourse.show_tuition_fee !== false
+                                            ? (selectedCourse.tuition || selectedCourse.tuition_fee || 'Contact for Fee')
+                                            : 'Tuition on Request'}
+                                    </span>
+                                </div>
                                 <div className="flex justify-between"><span>Intake Date:</span><span className="font-bold text-slate-900 dark:text-white">{selectedCourse.intake}</span></div>
                             </div>
                         </div>

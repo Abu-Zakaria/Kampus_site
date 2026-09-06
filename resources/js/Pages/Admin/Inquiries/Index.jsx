@@ -19,7 +19,11 @@ import {
     Filter,
     MailOpen,
     GraduationCap,
-    Inbox
+    Inbox,
+    Send,
+    Clock,
+    Check,
+    MessageSquareQuote
 } from 'lucide-react';
 
 export default function Index({ messages = [] }) {
@@ -27,6 +31,8 @@ export default function Index({ messages = [] }) {
     const [filterTab, setFilterTab] = useState('All');
     const [readFilter, setReadFilter] = useState('All');
     const [messageModal, setMessageModal] = useState(null);
+    const [replyText, setReplyText] = useState('');
+    const [isSendingReply, setIsSendingReply] = useState(false);
 
     const totalCount = messages.length;
     const unreadCount = messages.filter(m => !m.is_read).length;
@@ -74,10 +80,30 @@ export default function Index({ messages = [] }) {
 
     const handleViewMessage = (msg) => {
         setMessageModal(msg);
+        setReplyText(msg.reply_message || '');
         // Auto-mark as read when viewing
         if (!msg.is_read) {
             handleToggleRead(msg.id, false);
         }
+    };
+
+    const handleSendReply = (e) => {
+        e.preventDefault();
+        if (!messageModal || !replyText.trim()) return;
+        setIsSendingReply(true);
+
+        router.post(`/admin/inquiries/${messageModal.id}/reply`, {
+            reply_message: replyText
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setMessageModal(prev => prev ? { ...prev, reply_message: replyText, replied_at: new Date().toISOString() } : null);
+                setIsSendingReply(false);
+            },
+            onError: () => {
+                setIsSendingReply(false);
+            }
+        });
     };
 
     return (
@@ -303,18 +329,33 @@ export default function Index({ messages = [] }) {
                                             </td>
 
                                             {/* Status */}
-                                            <td className="py-4 px-6">
-                                                {msg.is_read ? (
-                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                                                        <CheckCircle2 className="w-3.5 h-3.5" />
-                                                        Read
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                                                        <Circle className="w-3.5 h-3.5" />
-                                                        Unread
-                                                    </span>
-                                                )}
+                                            <td className="py-4 px-6 space-y-1">
+                                                <div>
+                                                    {msg.is_read ? (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                                                            <CheckCircle2 className="w-3 h-3" />
+                                                            Read
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                                            <Circle className="w-3 h-3" />
+                                                            Unread
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    {msg.reply_message ? (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                                            <Check className="w-3 h-3" />
+                                                            Replied
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                                            <Clock className="w-3 h-3" />
+                                                            Pending Reply
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </td>
 
                                             {/* Actions */}
@@ -359,10 +400,10 @@ export default function Index({ messages = [] }) {
 
             </div>
 
-            {/* VIEW MESSAGE MODAL */}
+            {/* VIEW & REPLY MESSAGE MODAL */}
             {messageModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative">
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto">
                         <button
                             onClick={() => setMessageModal(null)}
                             className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-xl bg-slate-100 dark:bg-slate-800 transition-colors cursor-pointer"
@@ -430,14 +471,51 @@ export default function Index({ messages = [] }) {
                             </div>
                         </div>
 
-                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                        {/* STUDENT INQUIRY MESSAGE */}
+                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 mb-5">
                             <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-                                Application & Inquiry Details
+                                Student Query Content
                             </p>
-                            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-sans">
+                            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-sans">
                                 {messageModal.message}
                             </p>
                         </div>
+
+                        {/* COUNSELOR REPLY FORM */}
+                        <form onSubmit={handleSendReply} className="space-y-3 p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/50">
+                            <div className="flex items-center justify-between">
+                                <p className="text-xs font-bold text-purple-900 dark:text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <MessageSquareQuote className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                                    <span>Counselor Reply (Sent to Student Portal & Email)</span>
+                                </p>
+                                {messageModal.replied_at && (
+                                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                        <Check className="w-3.5 h-3.5" />
+                                        <span>Replied on {new Date(messageModal.replied_at).toLocaleDateString()}</span>
+                                    </span>
+                                )}
+                            </div>
+
+                            <textarea
+                                rows={4}
+                                required
+                                placeholder="Type your detailed response, counseling advice, or next steps here..."
+                                value={replyText}
+                                onChange={(e) => setReplyText(e.target.value)}
+                                className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-800 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-purple-500 leading-relaxed font-sans"
+                            />
+
+                            <div className="flex justify-end pt-1">
+                                <button
+                                    type="submit"
+                                    disabled={isSendingReply}
+                                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-md shadow-purple-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center gap-1.5"
+                                >
+                                    <Send className="w-3.5 h-3.5" />
+                                    <span>{isSendingReply ? 'Sending Reply...' : messageModal.reply_message ? 'Update Reply' : 'Send Reply to Student'}</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

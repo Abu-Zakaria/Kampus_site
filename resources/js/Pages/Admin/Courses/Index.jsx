@@ -12,7 +12,9 @@ import {
     DollarSign,
     Sparkles,
     GraduationCap,
-    Filter
+    Filter,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 
 export default function Index({ courses = [] }) {
@@ -34,6 +36,10 @@ export default function Index({ courses = [] }) {
         if (confirm(`Are you sure you want to delete "${title}"? This action cannot be undone.`)) {
             router.delete(`/admin/courses/${id}`);
         }
+    };
+
+    const handleToggleFee = (id) => {
+        router.patch(`/admin/courses/${id}/toggle-fee`, {}, { preserveScroll: true });
     };
 
     return (
@@ -159,9 +165,35 @@ export default function Index({ courses = [] }) {
                                                 </div>
                                             </td>
 
-                                            {/* Tuition Fee */}
-                                            <td className="py-4 px-6 text-xs font-bold text-slate-700 dark:text-slate-300">
-                                                {course.tuition_fee}
+                                            {/* Tuition Fee & Visibility Toggle */}
+                                            <td className="py-4 px-6 text-xs">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <span className={`font-bold ${course.show_tuition_fee ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400 line-through'}`}>
+                                                        {course.tuition_fee}
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleToggleFee(course.id)}
+                                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold w-fit transition-all cursor-pointer ${
+                                                            course.show_tuition_fee
+                                                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
+                                                                : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-200'
+                                                        }`}
+                                                        title="Click to toggle Show / Hide fee on public website"
+                                                    >
+                                                        {course.show_tuition_fee ? (
+                                                            <>
+                                                                <Eye className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                                                <span>Visible</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <EyeOff className="w-3 h-3 text-slate-400" />
+                                                                <span>Hidden</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </td>
 
                                             {/* Intake */}

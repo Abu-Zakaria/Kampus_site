@@ -26,6 +26,9 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StudentApplicationController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use Illuminate\Http\Request;
 
 // Public Dynamic Home Route (Using original HomeController)
 Route::get('/', HomeController::class)->name('home');
@@ -135,10 +138,19 @@ Route::post('/api/course-matcher-lead', [FrontendController::class, 'saveMatcher
 // Global Index Search API (Laravel Scout)
 Route::get('/api/global-search', [SearchController::class, 'search'])->name('api.global-search');
 
-// General Dashboard Redirect Route (Aliases 'dashboard' to 'admin.dashboard')
-Route::get('/dashboard', function () {
+// General Dashboard Redirect Route (Smart redirect based on user role)
+Route::get('/dashboard', function (Request $request) {
+    if ($request->user()->hasRole('Student')) {
+        return redirect()->route('student.dashboard');
+    }
     return redirect()->route('admin.dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+// Student Portal & Dashboard Routes
+Route::middleware(['auth'])->prefix('student')->group(function () {
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+    Route::post('/applications/apply', [StudentDashboardController::class, 'apply'])->name('student.applications.apply');
+});
 
 // SECURED ADMIN CMS ROUTES (Protected by 'auth' and 'EnsurePartnerPasswordSet' middleware)
 Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class])->prefix('admin')->group(function () {
@@ -223,6 +235,9 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
         'update' => 'admin.courses.update',
         'destroy' => 'admin.courses.destroy',
     ]);
+    Route::patch('/courses/{course}/toggle-fee', [CourseController::class, 'toggleTuitionFee'])
+        ->middleware('can:manage-courses')
+        ->name('admin.courses.toggle-fee');
 
     // Blog Posts CRUD Routes
     Route::middleware('can:manage-blogs')->group(function () {
@@ -265,6 +280,20 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
         'update' => 'admin.inquiries.update',
         'destroy' => 'admin.inquiries.destroy',
     ]);
+    Route::post('inquiries/{id}/reply', [InquiryController::class, 'reply'])
+        ->middleware('can:manage-inquiries')
+        ->name('admin.inquiries.reply');
+
+    // Student Admission Applications Management Routes (admin management)
+    Route::get('student-applications', [StudentApplicationController::class, 'index'])
+        ->middleware('can:manage-inquiries')
+        ->name('admin.student-applications.index');
+    Route::put('student-applications/{id}/status', [StudentApplicationController::class, 'updateStatus'])
+        ->middleware('can:manage-inquiries')
+        ->name('admin.student-applications.update-status');
+    Route::delete('student-applications/{id}', [StudentApplicationController::class, 'destroy'])
+        ->middleware('can:manage-inquiries')
+        ->name('admin.student-applications.destroy');
 
     // Roles & Permissions Management Routes
     Route::resource('roles', RoleController::class)->middleware('can:manage-roles')->except(['create', 'show', 'edit'])->names([

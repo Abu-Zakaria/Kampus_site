@@ -9,7 +9,9 @@ import {
     Clock,
     DollarSign,
     CalendarDays,
-    Sparkles
+    Sparkles,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 
 export default function Form({ course = null, universities = [] }) {
@@ -22,6 +24,7 @@ export default function Form({ course = null, universities = [] }) {
         level: course?.level || 'Postgraduate',
         duration: course?.duration || '',
         tuition_fee: course?.tuition_fee || '',
+        show_tuition_fee: course ? Boolean(course.show_tuition_fee) : true,
         intake: course?.intake || '',
     });
 
@@ -234,6 +237,50 @@ export default function Form({ course = null, universities = [] }) {
                                 </div>
                                 {errors.tuition_fee && <span className="text-xs text-rose-500 font-semibold">{errors.tuition_fee}</span>}
                             </div>
+                        </div>
+
+                        {/* Tuition Fee Visibility Toggle Box */}
+                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-center justify-between gap-4">
+                            <div className="space-y-0.5">
+                                <div className="flex items-center gap-2">
+                                    {data.show_tuition_fee ? (
+                                        <Eye className="w-4 h-4 text-emerald-500" />
+                                    ) : (
+                                        <EyeOff className="w-4 h-4 text-slate-400" />
+                                    )}
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                                        Annual Tuition Fee Display
+                                    </span>
+                                    <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                                        data.show_tuition_fee
+                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                                            : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+                                    }`}>
+                                        {data.show_tuition_fee ? 'Visible Publicly' : 'Hidden Publicly'}
+                                    </span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                                    {data.show_tuition_fee
+                                        ? 'The fee will be displayed on public course cards, course finder search, and enquiry modals.'
+                                        : 'The exact fee will be hidden from the website and displayed as "Tuition on Request".'}
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => setData('show_tuition_fee', !data.show_tuition_fee)}
+                                className="inline-flex items-center cursor-pointer focus:outline-none shrink-0"
+                            >
+                                <div
+                                    className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${
+                                        data.show_tuition_fee
+                                            ? 'bg-emerald-500 justify-end'
+                                            : 'bg-slate-300 dark:bg-slate-700 justify-start'
+                                    }`}
+                                >
+                                    <div className="bg-white w-4 h-4 rounded-full shadow-md transition-transform" />
+                                </div>
+                            </button>
                         </div>
 
                         {/* Intake */}

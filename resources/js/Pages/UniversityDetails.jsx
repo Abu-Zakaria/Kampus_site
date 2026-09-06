@@ -48,7 +48,8 @@ export default function UniversityDetails({ university = null, slug = 'universit
             name: c.title,
             level: c.level || 'Postgraduate',
             duration: c.duration || '1 Year Full-Time',
-            tuition: c.tuition_fee || '£18,500 / Year',
+            tuition: c.show_tuition_fee !== false ? (c.tuition_fee || '£18,500 / Year') : 'Tuition on Request',
+            show_tuition_fee: c.show_tuition_fee,
             intake: c.intake || 'September 2026',
             desc: c.description || 'Comprehensive degree program with specialized academic tracks.'
         })) : [

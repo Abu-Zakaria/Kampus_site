@@ -50,8 +50,11 @@ class CourseController extends Controller
             'level' => 'required|string|max:255',
             'duration' => 'required|string|max:255',
             'tuition_fee' => 'required|string|max:255',
+            'show_tuition_fee' => 'nullable|boolean',
             'intake' => 'required|string|max:255',
         ]);
+
+        $validated['show_tuition_fee'] = $request->boolean('show_tuition_fee', true);
 
         Course::create($validated);
 
@@ -87,13 +90,28 @@ class CourseController extends Controller
             'level' => 'required|string|max:255',
             'duration' => 'required|string|max:255',
             'tuition_fee' => 'required|string|max:255',
+            'show_tuition_fee' => 'nullable|boolean',
             'intake' => 'required|string|max:255',
         ]);
+
+        $validated['show_tuition_fee'] = $request->boolean('show_tuition_fee', true);
 
         $course->update($validated);
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course updated successfully.');
+    }
+
+    /**
+     * Toggle the visibility of the annual tuition fee for the specified course.
+     */
+    public function toggleTuitionFee(Course $course)
+    {
+        $course->update([
+            'show_tuition_fee' => !$course->show_tuition_fee,
+        ]);
+
+        return back()->with('success', 'Annual tuition fee visibility updated successfully.');
     }
 
     /**

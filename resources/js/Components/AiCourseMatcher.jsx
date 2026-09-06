@@ -450,7 +450,7 @@ export default function AiCourseMatcher({ isOpen, onClose }) {
                                                         <span>•</span>
                                                         <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
                                                             <DollarSign className="w-3.5 h-3.5" />
-                                                            {course.tuition_fee || 'Tuition on request'}
+                                                            {course.show_tuition_fee !== false ? (course.tuition_fee || 'Tuition on request') : 'Tuition on request'}
                                                         </span>
                                                         {course.intake && (
                                                             <>

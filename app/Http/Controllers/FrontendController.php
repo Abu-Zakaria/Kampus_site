@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
 use App\Models\Course;
+use App\Models\StudentApplication;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
@@ -207,7 +209,10 @@ class FrontendController extends Controller
 
         $messageContent = "Direct Course Application / Enquiry:\n\n• " . implode("\n• ", $details) . "\n\n[Captured via Courses Directory]";
 
+        $userId = auth()->id() ?: User::where('email', $validated['email'])->value('id');
+
         $inquiry = ContactMessage::create([
+            'user_id' => $userId,
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => !empty($validated['phone']) ? $validated['phone'] : 'Not provided',
@@ -216,10 +221,40 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
+        // Generate clean unique application reference
+        $appNo = 'KMP-' . date('Y') . '-' . str_pad(StudentApplication::count() + 1, 4, '0', STR_PAD_LEFT);
+
+        $application = StudentApplication::create([
+            'application_no' => $appNo,
+            'user_id' => $userId,
+            'course_id' => $validated['course_id'] ?? null,
+            'university_name' => $validated['university_name'] ?? 'Partner University',
+            'course_title' => $validated['course_title'],
+            'applicant_name' => $validated['name'],
+            'applicant_email' => $validated['email'],
+            'applicant_phone' => !empty($validated['phone']) ? $validated['phone'] : null,
+            'intake' => $validated['intake'] ?? 'September 2026',
+            'level' => $validated['level'] ?? 'Postgraduate',
+            'duration' => $validated['duration'] ?? null,
+            'tuition_fee' => $validated['tuition_fee'] ?? null,
+            'status' => 'pending',
+            'notes' => $validated['notes'] ?? null,
+            'applied_at' => now(),
+            'status_history' => [
+                [
+                    'stage' => 'pending',
+                    'title' => 'Application Submitted',
+                    'timestamp' => now()->toIso8601String(),
+                    'note' => 'Course application lodged via online courses directory.',
+                ]
+            ],
+        ]);
+
         return response()->json([
             'success' => true,
-            'message' => 'Your course enquiry has been submitted successfully! An admissions advisor will contact you shortly.',
+            'message' => 'Your course enquiry and admission application have been submitted successfully! Application Ref: ' . $appNo,
             'inquiry' => $inquiry,
+            'application' => $application,
         ]);
     }
 }

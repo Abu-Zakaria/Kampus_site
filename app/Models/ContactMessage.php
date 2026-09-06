@@ -16,9 +16,30 @@ class ContactMessage extends Model
         'topic',
         'message',
         'is_read',
+        'user_id',
+        'reply_message',
+        'replied_at',
+        'replied_by',
     ];
 
     protected $casts = [
         'is_read' => 'boolean',
+        'replied_at' => 'datetime',
     ];
+
+    /**
+     * Associated Student User (optional).
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Admin/Counselor who replied (optional).
+     */
+    public function repliedBy()
+    {
+        return $this->belongsTo(User::class, 'replied_by');
+    }
 }
