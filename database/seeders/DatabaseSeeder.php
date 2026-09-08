@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             CountryUniversityCourseSeeder::class,
             BlogSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }

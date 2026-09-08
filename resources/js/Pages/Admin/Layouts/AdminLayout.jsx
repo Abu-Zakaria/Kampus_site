@@ -27,7 +27,8 @@ import {
     ShieldCheck,
     HelpCircle,
     Layers,
-    MessageSquare
+    MessageSquare,
+    UserCheck
 } from 'lucide-react';
 
 export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
@@ -63,6 +64,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Services', href: '/admin/services', icon: Layers, permission: 'manage-pages' },
         { name: 'FAQs', href: '/admin/faqs', icon: HelpCircle, permission: 'manage-pages' },
         { name: 'Global Branches', href: '/admin/branches', icon: Globe2, permission: 'manage-pages' },
+        { name: 'Team & Employees', href: '/admin/employees', icon: UserCheck, permission: 'manage-pages' },
         { name: 'Countries', href: '/admin/countries', icon: Globe, permission: 'manage-countries' },
         { name: 'Universities', href: '/admin/universities', icon: Building2, permission: 'manage-universities' },
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
