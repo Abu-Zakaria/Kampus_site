@@ -1,14 +1,12 @@
 import React from 'react';
 import {
     Users,
-    Briefcase,
     Globe2,
     ShieldCheck,
     Award,
     Quote,
     Mail,
     Linkedin,
-    Sparkles,
     Building2,
     CheckCircle2
 } from 'lucide-react';
@@ -31,11 +29,6 @@ export default function AboutTeam({ employees = [], companyStats = {} }) {
                 
                 {/* 1. SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 text-xs font-extrabold uppercase tracking-wider shadow-2xs">
-                        <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                        <span>Our Global Workforce & Team</span>
-                    </div>
-
                     <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
                         {heading}
                     </h2>
@@ -54,11 +47,6 @@ export default function AboutTeam({ employees = [], companyStats = {} }) {
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                         {/* Primary Counter Highlight */}
                         <div className="lg:col-span-6 space-y-3">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-wide uppercase">
-                                <Briefcase className="w-3.5 h-3.5 text-blue-400" />
-                                <span>Company Workforce Size</span>
-                            </div>
-
                             <div className="flex items-baseline gap-3">
                                 <h3 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
                                     {employeeCount}
