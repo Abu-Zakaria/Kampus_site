@@ -28,7 +28,9 @@ class HomeController extends Controller
                 'content' => [
                     'hero_heading' => 'Empowering your global education journey',
                     'hero_subtitle' => 'End-to-end guidance for university admission, scholarships, and student visas.',
-                    'badge_text' => 'OFFICIAL BRITISH COUNCIL & ICEF PARTNER',
+                    'badge_text' => '',
+                    'hero_image' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80',
+                    'hero_overlay_opacity' => '75',
                     'stat_universities' => '500+',
                     'stat_acceptance' => '98%',
                     'stat_scholarships' => '$5M+'

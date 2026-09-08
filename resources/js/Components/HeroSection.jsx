@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import {
     Sparkles,
     ArrowRight,
@@ -109,7 +109,25 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
 
     const heading = content?.hero_heading || 'Building global futures, from dreams to degrees.';
     const subtitle = content?.hero_subtitle || 'Expert, unbiased guidance to top universities across the UK, USA, Finland and Dubai, completely free.';
-    const badgeText = content?.badge_text || 'ICEF & British Council Certified Guidance';
+    const rawBadgeText = content?.badge_text || content?.hero?.badge || '';
+    const badgeText = (rawBadgeText === 'OFFICIAL BRITISH COUNCIL & ICEF PARTNER' || rawBadgeText === 'ICEF & British Council Certified Guidance')
+        ? ''
+        : rawBadgeText;
+
+    const rawHeroImage = content?.hero_image || content?.hero?.image || content?.hero_banner_image;
+    const globalHeroImage = props?.globalSettings?.home_hero_image;
+    const resolvedGlobalHero = (globalHeroImage && typeof globalHeroImage === 'string' && globalHeroImage.trim() !== '')
+        ? (globalHeroImage.startsWith('http') || globalHeroImage.startsWith('/') ? globalHeroImage : `/storage/${globalHeroImage}`)
+        : null;
+
+    // Check if hero image is explicitly removed (hero_image is null or empty in content)
+    const isExplicitlyRemoved = (content && ('hero_image' in content) && !content.hero_image);
+
+    const heroImage = isExplicitlyRemoved ? null : (resolvedGlobalHero || rawHeroImage || null);
+
+    const overlayOpacityVal = content?.hero_overlay_opacity !== undefined && content?.hero_overlay_opacity !== null && content?.hero_overlay_opacity !== ''
+        ? Math.max(15, Math.min(95, parseInt(content.hero_overlay_opacity, 10)))
+        : 75;
 
     const stats = [
         {
@@ -146,50 +164,115 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
         }
     ];
 
-    const defaultCountries = [
-        {
-            name: 'United Kingdom',
-            slug: 'united-kingdom',
-            country_code: 'GB',
-            subtitle: '150+ Partner Universities',
-            image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'United States',
-            slug: 'united-states',
-            country_code: 'US',
-            subtitle: '200+ STEM & Ivy Pathways',
-            image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'Finland',
-            slug: 'finland',
-            country_code: 'FI',
-            subtitle: 'Pathway to Tuition Grants',
-            image: 'https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-            name: 'Dubai (UAE)',
-            slug: 'united-arab-emirates',
-            country_code: 'AE',
-            subtitle: 'Fast 100% Visa Guarantee',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80',
-        },
+    const DEFAULT_HERO_SLIDES = [
+        'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
     ];
 
-    const heroCountries = countries && countries.length >= 4 ? countries.slice(0, 4) : defaultCountries;
+    // Dedicated standalone hero slideshow images (completely unlinked from countries & universities)
+    const rawSlideshowSetting = props?.globalSettings?.hero_slideshow_images || content?.hero_slideshow_images;
+    let configuredSlides = [];
+    if (rawSlideshowSetting) {
+        if (Array.isArray(rawSlideshowSetting)) {
+            configuredSlides = rawSlideshowSetting;
+        } else if (typeof rawSlideshowSetting === 'string') {
+            try {
+                const parsed = JSON.parse(rawSlideshowSetting);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    configuredSlides = parsed;
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
+    }
+
+    const heroSlides = configuredSlides.length > 0 ? configuredSlides : DEFAULT_HERO_SLIDES;
+    const totalSlides = heroSlides.length;
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [exitingSlide, setExitingSlide] = useState(null);
+    const [isFlipping, setIsFlipping] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const goToSlide = (idx) => {
+        if (idx === currentSlide || isFlipping) return;
+        setExitingSlide(currentSlide);
+        setCurrentSlide(idx);
+        setIsFlipping(true);
+
+        setTimeout(() => {
+            setExitingSlide(null);
+            setIsFlipping(false);
+        }, 450);
+    };
+
+    const handleCardClick = (idx, isActive, isExiting) => {
+        if (isExiting || isActive) return;
+        goToSlide(idx);
+    };
+
+    // Auto-advance slideshow every 5 seconds with pause on hover
+    useEffect(() => {
+        if (isPaused || totalSlides <= 1) return;
+        const timer = setInterval(() => {
+            if (!isFlipping) {
+                goToSlide((currentSlide + 1) % totalSlides);
+            }
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [isPaused, totalSlides, currentSlide, isFlipping]);
 
     return (
-        <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 bg-slate-50 dark:bg-slate-950 transition-colors">
-            {/* Ambient Background Blur Patterns */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none overflow-hidden">
-                <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[120px]" />
-                <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-[140px]" />
-                <div className="absolute top-[250px] left-[30%] w-72 h-72 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[100px]" />
-            </div>
+        <section className={`relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 transition-colors ${
+            heroImage ? 'bg-slate-950 text-white' : 'bg-slate-50 dark:bg-slate-950'
+        }`}>
+            {/* 1. HERO BACKGROUND IMAGE (IF CONFIGURED FROM CMS) */}
+            {heroImage && (
+                <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                    {/* The Background Photo */}
+                    <img
+                        src={heroImage}
+                        alt="Campus & University Hero Banner"
+                        className="w-full h-full object-cover object-center scale-[1.02] transform transition-transform duration-1000 ease-out"
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                        }}
+                    />
+
+                    {/* Dark Multi-Stop Gradient Scrim for Legibility */}
+                    <div
+                        className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-900/70"
+                        style={{ opacity: overlayOpacityVal / 100 }}
+                    />
+
+                    {/* Subtle Vertical Fade Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950/90 pointer-events-none" />
+
+                    {/* Ambient Glow Orbs over banner */}
+                    <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-600/25 rounded-full blur-[130px] pointer-events-none" />
+                    <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-600/20 rounded-full blur-[140px] pointer-events-none" />
+                </div>
+            )}
+
+            {/* Ambient Background Blur Patterns (default when no hero image) */}
+            {!heroImage && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none overflow-hidden">
+                    <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[120px]" />
+                    <div className="absolute top-[100px] right-[-100px] w-[450px] h-[450px] bg-indigo-500/15 dark:bg-indigo-600/20 rounded-full blur-[140px]" />
+                    <div className="absolute top-[250px] left-[30%] w-72 h-72 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[100px]" />
+                </div>
+            )}
 
             {/* Subtle Grid Lines Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+            <div className={`absolute inset-0 ${
+                heroImage
+                    ? 'bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]'
+                    : 'bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]'
+            } bg-[size:36px_36px] pointer-events-none`} />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -197,13 +280,31 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
                     {/* LEFT COLUMN: HERO CONTENT */}
                     <div className="lg:col-span-7 space-y-6 text-left">
                         
+                        {/* Top Badge */}
+                        {badgeText && (
+                            <div>
+                                <span className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                                    heroImage
+                                        ? 'bg-white/15 text-blue-200 border border-white/20 backdrop-blur-md shadow-xs'
+                                        : 'bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/80'
+                                }`}>
+                                    <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                                    <span>{badgeText}</span>
+                                </span>
+                            </div>
+                        )}
+
                         {/* Main Headline */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] ${
+                            heroImage ? 'text-white drop-shadow-xs' : 'text-slate-900 dark:text-white'
+                        }`}>
                             {heading}
                         </h1>
 
                         {/* Subtitle */}
-                        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl">
+                        <p className={`text-lg sm:text-xl leading-relaxed font-normal max-w-2xl ${
+                            heroImage ? 'text-slate-200' : 'text-slate-600 dark:text-slate-300'
+                        }`}>
                             {subtitle}
                         </p>
 
@@ -219,99 +320,165 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
 
                             <button
                                 onClick={onOpenBookCall}
-                                className="px-7 py-3.5 rounded-full bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-white font-semibold text-base border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center gap-2 shadow-xs hover:border-blue-500 dark:hover:border-blue-500 transition-all cursor-pointer"
+                                className={`px-7 py-3.5 rounded-full font-semibold text-base flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer ${
+                                    heroImage
+                                        ? 'bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-md hover:border-white/50'
+                                        : 'bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500'
+                                }`}
                             >
-                                <PhoneCall className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                <PhoneCall className="w-5 h-5 text-blue-400" />
                                 <span>Book a Call</span>
                             </button>
                         </div>
 
                         {/* Trust Micro-bullets */}
-                        <div className="pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <div className={`pt-2 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-medium ${
+                            heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                        }`}>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>Zero Service Charge</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>Fast 48-Hour Offer Letter</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <Check className="w-4 h-4 text-emerald-500" />
+                                <Check className="w-4 h-4 text-emerald-400" />
                                 <span>100% Visa File Review</span>
                             </div>
                         </div>
 
                     </div>
 
-                    {/* RIGHT COLUMN: DYNAMIC ANIMATED COUNTRY CARDS WITH BACKGROUND IMAGES */}
-                    <div className="lg:col-span-5 relative">
-                        <div className="grid grid-cols-2 gap-4">
-                            {heroCountries.map((c, idx) => (
-                                <Link
-                                    key={c.id || idx}
-                                    href={`/destinations/${c.slug || 'united-kingdom'}`}
-                                    className="group relative h-44 sm:h-48 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-800 flex flex-col justify-between p-5 text-left"
-                                >
-                                    {/* Country Background Image */}
-                                    <div className="absolute inset-0 bg-slate-950">
-                                        <img
-                                            src={c.image || 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80'}
-                                            alt={c.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-75"
-                                            loading="lazy"
-                                            onError={(e) => {
-                                                e.target.src = 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80';
-                                            }}
-                                        />
-                                    </div>
+                    {/* RIGHT COLUMN: 3D STACK / LAYERED ANIMATED COUNTRY CARDS SLIDESHOW */}
+                    <div
+                        className="lg:col-span-5 relative flex flex-col justify-center select-none"
+                        onMouseEnter={() => setIsPaused(true)}
+                        onMouseLeave={() => setIsPaused(false)}
+                    >
+                        {/* 3D Stack Deck Stage - Compact height and generous width for peeking background cards */}
+                        <div className="relative w-full h-[310px] sm:h-[330px] max-w-[420px] mx-auto">
+                            {heroSlides.map((slide, idx) => {
+                                const isExiting = idx === exitingSlide;
+                                const offset = (idx - currentSlide + totalSlides) % totalSlides;
+                                const isActive = offset === 0 && !isExiting;
+                                const isBehind1 = offset === 1 && !isExiting;
+                                const isBehind2 = offset === 2 && !isExiting;
 
-                                    {/* Dark Gradient Overlay for Crisp Text Legibility */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/40 group-hover:via-slate-950/65 transition-all" />
+                                let zIndex = 0;
+                                let opacity = 0;
+                                let pointerEvents = 'none';
+                                let transform = 'translate3d(90px, 50px, 0) scale(0.85)';
+                                let transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease, box-shadow 400ms ease';
 
-                                    {/* Top Row: Country Code Badge & Hover Arrow */}
-                                    <div className="relative z-10 flex items-center justify-between">
-                                        <span className="px-2.5 py-1 rounded-xl bg-white/20 backdrop-blur-md text-white text-xs font-black font-mono border border-white/30 shadow-xs">
-                                            {c.country_code || (c.name ? c.name.substring(0, 2).toUpperCase() : 'GB')}
-                                        </span>
-                                        <div className="w-7 h-7 rounded-full bg-white/10 backdrop-blur-xs flex items-center justify-center text-white/70 group-hover:text-white group-hover:bg-blue-600 transition-all">
-                                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                                if (isExiting) {
+                                    // Front card drops DOWN and vanishes rapidly!
+                                    transform = 'translate3d(0, 90%, 0) scale(0.95)';
+                                    zIndex = 40;
+                                    opacity = 0;
+                                    pointerEvents = 'none';
+                                    transition = 'transform 320ms cubic-bezier(0.4, 0, 1, 1), opacity 180ms ease-in';
+                                } else if (isActive) {
+                                    // Incoming card slides UP to the front position!
+                                    transform = 'translate3d(0, 0, 0) scale(1)';
+                                    zIndex = 30;
+                                    opacity = 1;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 350ms ease-out';
+                                } else if (isBehind1) {
+                                    // 1st background card: sits slightly right and lower
+                                    transform = 'translate3d(36px, 18px, 0) scale(0.95)';
+                                    zIndex = 20;
+                                    opacity = 0.92;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease-out';
+                                } else if (isBehind2) {
+                                    // 2nd background card: sits further right and lower
+                                    transform = 'translate3d(70px, 36px, 0) scale(0.90)';
+                                    zIndex = 10;
+                                    opacity = 0.82;
+                                    pointerEvents = 'auto';
+                                    transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease-out';
+                                }
+
+                                const rawSrc = typeof slide === 'string' ? slide : (slide?.image || slide?.url || '');
+                                const resolvedSrc = (rawSrc.startsWith('http') || rawSrc.startsWith('/')) ? rawSrc : `/storage/${rawSrc}`;
+
+                                return (
+                                    <div
+                                        key={idx}
+                                        onClick={() => handleCardClick(idx, isActive, isExiting)}
+                                        className={`absolute top-0 left-0 w-[80%] sm:w-[82%] h-[260px] sm:h-[280px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border select-none ${
+                                            heroImage
+                                                ? 'border-white/25 bg-slate-900'
+                                                : 'border-slate-200/80 dark:border-slate-700/80 bg-slate-950'
+                                        } ${
+                                            isActive
+                                                ? 'shadow-2xl shadow-blue-600/30 ring-1 ring-white/30 cursor-default'
+                                                : isExiting
+                                                ? 'shadow-2xl shadow-black/40 cursor-default'
+                                                : 'cursor-pointer hover:border-blue-400 hover:brightness-110 hover:shadow-2xl hover:shadow-blue-500/25'
+                                        }`}
+                                        style={{
+                                            zIndex,
+                                            opacity,
+                                            pointerEvents,
+                                            transform,
+                                            transition,
+                                            willChange: 'transform, opacity'
+                                        }}
+                                        title={!isActive && !isExiting ? 'Click to bring card forward' : undefined}
+                                    >
+                                        {/* Slideshow Card Image */}
+                                        <div className="w-full h-full bg-slate-950 overflow-hidden">
+                                            <img
+                                                src={resolvedSrc}
+                                                alt={`Hero Slide ${idx + 1}`}
+                                                className={`w-full h-full object-cover transition-transform duration-700 ${
+                                                    isActive ? 'hover:scale-105' : ''
+                                                }`}
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80';
+                                                }}
+                                            />
                                         </div>
                                     </div>
-
-                                    {/* Bottom Row: Name & Subtitle */}
-                                    <div className="relative z-10 space-y-1">
-                                        <h3 className="font-extrabold text-white text-base sm:text-lg group-hover:text-blue-300 transition-colors leading-tight">
-                                            {c.name}
-                                        </h3>
-                                        <p className="text-[11px] sm:text-xs text-slate-300 group-hover:text-white font-medium line-clamp-1 transition-colors">
-                                            {c.subtitle || c.unis || 'Partner Universities'}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
 
                 </div>
 
                 {/* BOTTOM STATS STRIP */}
-                <div className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t border-slate-200/80 dark:border-slate-800/80">
+                <div className={`mt-14 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t ${
+                    heroImage ? 'border-white/15' : 'border-slate-200/80 dark:border-slate-800/80'
+                }`}>
                     {stats.map((st, i) => {
                         const IconComp = st.icon;
                         return (
                             <div
                                 key={i}
-                                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 shadow-xs flex items-center gap-4 hover:border-slate-300 dark:hover:border-slate-700 transition-all group"
+                                className={`p-5 rounded-2xl border shadow-xs flex items-center gap-4 transition-all group ${
+                                    heroImage
+                                        ? 'bg-slate-900/70 hover:bg-slate-900/90 border-white/15 hover:border-white/30 backdrop-blur-md shadow-lg shadow-black/20'
+                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
+                                }`}
                             >
                                 <div className={`p-3 rounded-xl bg-gradient-to-br ${st.color} text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
                                     <IconComp className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                    <div className={`text-2xl font-extrabold tracking-tight ${
+                                        heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
+                                    }`}>
                                         <AnimatedCounter value={st.value} />
                                     </div>
-                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                    <div className={`text-xs font-medium ${
+                                        heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                                    }`}>
                                         {st.label}
                                     </div>
                                 </div>

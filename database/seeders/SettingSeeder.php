@@ -29,6 +29,14 @@ class SettingSeeder extends Seeder
             'linkedin_url' => 'https://linkedin.com/company/kampusedu',
             'instagram_url' => 'https://instagram.com/kampusedu',
             'youtube_url' => 'https://youtube.com/c/kampusedu',
+            'hero_slideshow_images' => json_encode([
+                'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
+            ]),
         ];
 
         foreach ($defaults as $key => $value) {
