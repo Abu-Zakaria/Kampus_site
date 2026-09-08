@@ -140,7 +140,7 @@ Route::get('/api/global-search', [SearchController::class, 'search'])->name('api
 
 // General Dashboard Redirect Route (Smart redirect based on user role)
 Route::get('/dashboard', function (Request $request) {
-    if ($request->user()->hasRole('Student')) {
+    if ($request->user()->isStudent()) {
         return redirect()->route('student.dashboard');
     }
     return redirect()->route('admin.dashboard');
@@ -150,11 +150,17 @@ Route::get('/dashboard', function (Request $request) {
 Route::middleware(['auth'])->prefix('student')->group(function () {
     Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
     Route::post('/applications/apply', [StudentDashboardController::class, 'apply'])->name('student.applications.apply');
+    Route::post('/messages', [\App\Http\Controllers\Student\StudentMessageController::class, 'store'])->name('student.messages.store');
+    Route::post('/messages/{id}/reply', [\App\Http\Controllers\Student\StudentMessageController::class, 'reply'])->name('student.messages.reply');
+    Route::post('/messages/{id}/read', [\App\Http\Controllers\Student\StudentMessageController::class, 'markAsRead'])->name('student.messages.read');
 });
 
 // SECURED ADMIN CMS ROUTES (Protected by 'auth' and 'EnsurePartnerPasswordSet' middleware)
 Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('/dashboard', function (Request $request) {
+        if ($request->user()->isStudent()) {
+            return redirect()->route('student.dashboard');
+        }
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
 
@@ -294,6 +300,15 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
     Route::delete('student-applications/{id}', [StudentApplicationController::class, 'destroy'])
         ->middleware('can:manage-inquiries')
         ->name('admin.student-applications.destroy');
+
+    // Student Messages Workstation Routes (admin management)
+    Route::middleware('can:manage-inquiries')->group(function () {
+        Route::get('messages', [\App\Http\Controllers\Admin\StudentMessageController::class, 'index'])->name('admin.messages.index');
+        Route::post('messages', [\App\Http\Controllers\Admin\StudentMessageController::class, 'store'])->name('admin.messages.store');
+        Route::post('messages/{id}/reply', [\App\Http\Controllers\Admin\StudentMessageController::class, 'reply'])->name('admin.messages.reply');
+        Route::patch('messages/{id}/toggle-status', [\App\Http\Controllers\Admin\StudentMessageController::class, 'toggleStatus'])->name('admin.messages.toggle-status');
+        Route::delete('messages/{id}', [\App\Http\Controllers\Admin\StudentMessageController::class, 'destroy'])->name('admin.messages.destroy');
+    });
 
     // Roles & Permissions Management Routes
     Route::resource('roles', RoleController::class)->middleware('can:manage-roles')->except(['create', 'show', 'edit'])->names([

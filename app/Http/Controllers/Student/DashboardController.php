@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Models\Course;
 use App\Models\StudentApplication;
+use App\Models\StudentConversation;
+use App\Models\StudentMessage;
 use App\Models\University;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,6 +35,27 @@ class DashboardController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+        // Retrieve student's messaging conversation threads with counselors
+        $conversations = StudentConversation::where('user_id', $user->id)
+            ->with([
+                'latestMessage.sender:id,name',
+                'messages' => function ($mq) {
+                    $mq->with('sender:id,name')->orderBy('created_at', 'asc');
+                }
+            ])
+            ->orderBy('last_message_at', 'desc')
+            ->get();
+
+        // Determine active conversation if specified
+        $selectedConversationId = $request->input('conversation_id');
+        if ($selectedConversationId) {
+            $activeConv = $conversations->firstWhere('id', $selectedConversationId);
+            if ($activeConv && $activeConv->student_unread_count > 0) {
+                $activeConv->markAsReadByStudent();
+                $activeConv->student_unread_count = 0;
+            }
+        }
+
         // Summary statistics
         $stats = [
             'total_applications' => $applications->count(),
@@ -41,12 +64,14 @@ class DashboardController extends Controller
             'total_inquiries' => $inquiries->count(),
             'replied_inquiries' => $inquiries->whereNotNull('reply_message')->count(),
             'pending_replies' => $inquiries->whereNull('reply_message')->count(),
+            'total_conversations' => $conversations->count(),
+            'unread_messages' => $conversations->sum('student_unread_count'),
         ];
 
-        // List of popular universities & courses for quick application modal
-        $popularUniversities = University::select('id', 'name', 'slug')
+        // List of partner universities & courses for quick application modal
+        $popularUniversities = University::with(['courses:id,university_id,title,level,intake,duration,tuition_fee'])
+            ->select('id', 'name', 'slug')
             ->orderBy('name', 'asc')
-            ->take(50)
             ->get();
 
         return Inertia::render('Student/Dashboard', [
@@ -58,6 +83,9 @@ class DashboardController extends Controller
             ],
             'applications' => $applications,
             'inquiries' => $inquiries,
+            'conversations' => $conversations,
+            'initialConversationId' => $selectedConversationId,
+            'initialTab' => $request->input('active_tab'),
             'stats' => $stats,
             'stages' => StudentApplication::getStages(),
             'universities' => $popularUniversities,
@@ -72,7 +100,9 @@ class DashboardController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
+            'university_id' => 'nullable|integer',
             'university_name' => 'required|string|max:255',
+            'course_id' => 'nullable|integer',
             'course_title' => 'required|string|max:255',
             'intake' => 'nullable|string|max:100',
             'level' => 'nullable|string|max:100',
@@ -84,19 +114,38 @@ class DashboardController extends Controller
         $appNo = 'KMP-' . date('Y') . '-' . str_pad(StudentApplication::count() + 1, 4, '0', STR_PAD_LEFT);
 
         // Find existing university if matched
-        $uni = University::where('name', 'like', '%' . $validated['university_name'] . '%')->first();
+        $uni = null;
+        if (!empty($validated['university_id'])) {
+            $uni = University::find($validated['university_id']);
+        }
+        if (!$uni && !empty($validated['university_name'])) {
+            $uni = University::where('name', 'like', '%' . $validated['university_name'] . '%')->first();
+        }
+
+        $course = null;
+        if (!empty($validated['course_id'])) {
+            $course = Course::find($validated['course_id']);
+        }
+        if (!$course && !empty($validated['course_title'])) {
+            $course = Course::where('title', 'like', '%' . $validated['course_title'] . '%')
+                ->when($uni, fn($q) => $q->where('university_id', $uni->id))
+                ->first();
+        }
 
         $application = StudentApplication::create([
             'application_no' => $appNo,
             'user_id' => $user->id,
             'university_id' => $uni?->id,
-            'university_name' => $validated['university_name'],
-            'course_title' => $validated['course_title'],
+            'course_id' => $course?->id,
+            'university_name' => $uni ? $uni->name : $validated['university_name'],
+            'course_title' => $course ? $course->title : $validated['course_title'],
             'applicant_name' => $user->name,
             'applicant_email' => $user->email,
             'applicant_phone' => $validated['phone'] ?? null,
-            'intake' => $validated['intake'] ?? 'September 2026',
-            'level' => $validated['level'] ?? 'Postgraduate',
+            'intake' => $validated['intake'] ?? ($course?->intake ?: 'September 2026'),
+            'level' => $validated['level'] ?? ($course?->level ?: 'Postgraduate'),
+            'duration' => $course?->duration,
+            'tuition_fee' => $course?->tuition_fee,
             'status' => 'pending',
             'notes' => $validated['notes'] ?? null,
             'applied_at' => now(),

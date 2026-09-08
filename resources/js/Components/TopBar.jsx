@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Phone, Handshake, X, Send, GraduationCap, LogIn, UserPlus, LogOut, ChevronDown, LayoutDashboard, FileText } from 'lucide-react';
+import { Phone, Handshake, X, Send, GraduationCap, LogIn, UserPlus, LogOut, ChevronDown, LayoutDashboard, FileText, MessageSquare } from 'lucide-react';
 import TopbarSearch from './TopbarSearch';
 
 export default function TopBar({ onSearch }) {
@@ -147,10 +147,13 @@ export default function TopBar({ onSearch }) {
                                     <button
                                         type="button"
                                         onClick={() => setIsStudentDropdownOpen(!isStudentDropdownOpen)}
-                                        className="bg-slate-800/90 hover:bg-slate-700 text-white font-extrabold text-xs px-3 sm:px-4 py-2 rounded-full shadow-sm hover:scale-105 transition-all flex items-center gap-2 cursor-pointer border border-purple-500/40"
+                                        className="bg-slate-800/90 hover:bg-slate-700 text-white font-extrabold text-xs px-3 sm:px-4 py-2 rounded-full shadow-sm hover:scale-105 transition-all flex items-center gap-2 cursor-pointer border border-purple-500/40 relative"
                                     >
-                                        <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] text-white font-bold uppercase">
+                                        <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] text-white font-bold uppercase relative">
                                             {props.auth.user.name ? props.auth.user.name.charAt(0) : 'S'}
+                                            {props.unread_student_messages_count > 0 && (
+                                                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-slate-900 animate-ping" />
+                                            )}
                                         </div>
                                         <span className="max-w-[80px] sm:max-w-[110px] truncate">
                                             {props.auth.user.name.split(' ')[0]}
@@ -178,6 +181,21 @@ export default function TopBar({ onSearch }) {
                                                         >
                                                             <LayoutDashboard className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                                                             <span>Student Dashboard</span>
+                                                        </Link>
+                                                        <Link
+                                                            href="/student/dashboard#messages"
+                                                            onClick={() => setIsStudentDropdownOpen(false)}
+                                                            className="flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/50 text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                                                        >
+                                                            <div className="flex items-center gap-2.5">
+                                                                <MessageSquare className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                                                                <span>Counselor Chat</span>
+                                                            </div>
+                                                            {props.unread_student_messages_count > 0 && (
+                                                                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                                                                    {props.unread_student_messages_count}
+                                                                </span>
+                                                            )}
                                                         </Link>
                                                         <Link
                                                             href="/student/dashboard#applications"

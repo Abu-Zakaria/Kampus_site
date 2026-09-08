@@ -62,6 +62,8 @@ class HandleInertiaRequests extends Middleware
             'globalCountriesCount' => fn () => \App\Models\Country::count(),
             'globalUniversitiesCount' => fn () => \App\Models\University::count(),
             'globalSettings' => fn () => Setting::pluck('value', 'key')->toArray(),
+            'unread_student_messages_count' => fn () => $request->user() ? (int) \App\Models\StudentConversation::where('user_id', $request->user()->id)->sum('student_unread_count') : 0,
+            'unread_admin_messages_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) \App\Models\StudentConversation::where('admin_unread_count', '>', 0)->count() : 0,
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

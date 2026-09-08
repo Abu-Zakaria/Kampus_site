@@ -17,17 +17,34 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_students_are_redirected_to_student_portal_upon_login(): void
     {
-        $user = User::factory()->create();
+        // User 1 is created as admin to occupy ID 1
+        User::factory()->create();
+
+        // Student user
+        $student = User::factory()->create();
 
         $response = $this->post('/login', [
-            'email' => $user->email,
+            'email' => $student->email,
             'password' => 'password',
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('student.dashboard', absolute: false));
+    }
+
+    public function test_admin_is_redirected_to_admin_dashboard_upon_login(): void
+    {
+        $admin = User::factory()->create(); // ID 1 is Super Admin
+
+        $response = $this->post('/login', [
+            'email' => $admin->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('admin.dashboard', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void

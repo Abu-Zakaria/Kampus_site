@@ -34,9 +34,26 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
-        if ($user && $user->hasRole('Student')) {
-            return redirect()->intended(route('student.dashboard', absolute: false));
+
+        if ($user && $user->isStudent()) {
+            // Ensure student role is explicitly assigned if missing
+            if (! $user->hasRole('Student')) {
+                $studentRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'web']);
+                $user->assignRole($studentRole);
+            }
+
+            // Only honor intended URL if it is a student portal route
+            $intended = session()->get('url.intended');
+            if ($intended && str_contains($intended, '/student')) {
+                return redirect()->intended(route('student.dashboard', absolute: false));
+            }
+
+            // Forget any stale admin or non-student intended URLs
+            session()->forget('url.intended');
+
+            return redirect()->route('student.dashboard');
         }
 
         return redirect()->intended(route('admin.dashboard', absolute: false));

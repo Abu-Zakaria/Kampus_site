@@ -26,7 +26,8 @@ import {
     Users,
     ShieldCheck,
     HelpCircle,
-    Layers
+    Layers,
+    MessageSquare
 } from 'lucide-react';
 
 export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
@@ -68,7 +69,8 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
         { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries' },
-        { name: 'Inquiries & Messages', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries' },
+        { name: 'Student Messages', href: '/admin/messages', icon: MessageSquare, permission: 'manage-inquiries', badge: props?.unread_admin_messages_count },
+        { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries' },
     ];
 
     const accessControlLinks = [
@@ -144,7 +146,14 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                         <IconComp className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                                         <span>{link.name}</span>
                                     </div>
-                                    {isActive && <ChevronRight className="w-4 h-4 opacity-70" />}
+                                    <div className="flex items-center gap-2">
+                                        {link.badge > 0 && (
+                                            <span className="px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-rose-500 text-white shadow-xs">
+                                                {link.badge}
+                                            </span>
+                                        )}
+                                        {isActive && <ChevronRight className="w-4 h-4 opacity-70" />}
+                                    </div>
                                 </Link>
                             );
                         })}

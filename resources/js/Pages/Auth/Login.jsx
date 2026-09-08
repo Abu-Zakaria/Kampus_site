@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import GuestLayout from '../../Layouts/GuestLayout';
-import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, KeyRound } from 'lucide-react';
+import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, KeyRound, Eye, EyeOff } from 'lucide-react';
 
 export default function Login({ status, canResetPassword, prefilledEmail = '' }) {
+    const [showPassword, setShowPassword] = useState(false);
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const initialEmail = prefilledEmail || (urlParams ? urlParams.get('email') || '' : '');
 
@@ -94,15 +95,23 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                         </div>
                         <input
                             id="password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             name="password"
                             value={data.password}
                             autoComplete="current-password"
                             required
                             placeholder="••••••••"
                             onChange={(e) => setData('password', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
                     </div>
                     {errors.password && (
                         <p className="text-xs font-semibold text-rose-400 pt-1">{errors.password}</p>

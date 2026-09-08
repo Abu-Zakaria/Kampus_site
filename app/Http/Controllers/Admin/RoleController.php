@@ -58,6 +58,9 @@ class RoleController extends Controller
             if ($partnerRole->wasRecentlyCreated) {
                 $partnerRole->syncPermissions(['manage-universities', 'manage-courses']);
             }
+
+            // Ensure Student role exists
+            Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'web']);
         }
 
         $roles = Role::with('permissions')->orderBy('id', 'asc')->get();

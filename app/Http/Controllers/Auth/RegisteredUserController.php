@@ -43,9 +43,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if (\Spatie\Permission\Models\Role::where('name', 'Student')->exists()) {
-            $user->assignRole('Student');
-        }
+        $studentRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'web']);
+        $user->assignRole($studentRole);
 
         // Retroactively link past inquiries and applications submitted with this email
         \App\Models\ContactMessage::where('email', $user->email)->whereNull('user_id')->update(['user_id' => $user->id]);

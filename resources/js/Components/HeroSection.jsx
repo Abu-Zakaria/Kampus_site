@@ -109,7 +109,10 @@ export default function HeroSection({ onOpenAiSearch, onOpenBookCall, content = 
 
     const heading = content?.hero_heading || 'Building global futures, from dreams to degrees.';
     const subtitle = content?.hero_subtitle || 'Expert, unbiased guidance to top universities across the UK, USA, Finland and Dubai, completely free.';
-    const badgeText = content?.badge_text || 'ICEF & British Council Certified Guidance';
+    const rawBadgeText = content?.badge_text || content?.hero?.badge || '';
+    const badgeText = (rawBadgeText === 'OFFICIAL BRITISH COUNCIL & ICEF PARTNER' || rawBadgeText === 'ICEF & British Council Certified Guidance')
+        ? ''
+        : rawBadgeText;
 
     const rawHeroImage = content?.hero_image || content?.hero?.image || content?.hero_banner_image;
     const globalHeroImage = props?.globalSettings?.home_hero_image;
