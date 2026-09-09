@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from '@inertiajs/react';
-import Marquee from 'react-fast-marquee';
 import {
-    Globe,
     ArrowRight,
     CheckCircle2,
     Sparkles,
-    Building2
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 
 export default function Destinations({ countries = [] }) {
@@ -69,6 +68,105 @@ export default function Destinations({ countries = [] }) {
 
     const displayList = countries && countries.length > 0 ? countries : defaultDestinations;
 
+    const scrollerRef = useRef(null);
+    const [canPrev, setCanPrev] = useState(false);
+    const [canNext, setCanNext] = useState(true);
+    const [hasOverflow, setHasOverflow] = useState(false);
+
+    const updateArrows = useCallback(() => {
+        const el = scrollerRef.current;
+        if (!el) return;
+        const overflow = el.scrollWidth > el.clientWidth + 4;
+        setHasOverflow(overflow);
+        setCanPrev(overflow && el.scrollLeft > 4);
+        setCanNext(overflow && el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+    }, []);
+
+    const cardStep = useCallback(() => {
+        const el = scrollerRef.current;
+        if (!el) return 324;
+        const card = el.querySelector('[data-destination-card]');
+        return card ? card.offsetWidth + 24 : 324;
+    }, []);
+
+    const animateScroll = useCallback((targetLeft) => {
+        const el = scrollerRef.current;
+        if (!el) return;
+        const maxLeft = el.scrollWidth - el.clientWidth;
+        const clamped = Math.max(0, Math.min(targetLeft, maxLeft));
+        const startLeft = el.scrollLeft;
+        const delta = clamped - startLeft;
+
+        if (Math.abs(delta) < 1) return;
+
+        const duration = 600;
+        let startTime = null;
+
+        const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+        const cancel = () => {
+            if (el._destAnimId) {
+                cancelAnimationFrame(el._destAnimId);
+                el._destAnimId = null;
+            }
+        };
+
+        cancel();
+
+        const stepFn = (now) => {
+            if (startTime === null) startTime = now;
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            el.scrollLeft = startLeft + delta * easeInOutCubic(progress);
+            updateArrows();
+            if (progress < 1) {
+                el._destAnimId = requestAnimationFrame(stepFn);
+            } else {
+                el._destAnimId = null;
+            }
+        };
+
+        el._destAnimId = requestAnimationFrame(stepFn);
+    }, [updateArrows]);
+
+    const scrollByCard = useCallback((dir) => {
+        const el = scrollerRef.current;
+        if (!el) return;
+        animateScroll(el.scrollLeft + dir * cardStep());
+    }, [animateScroll, cardStep]);
+
+    const handlePrev = () => scrollByCard(-1);
+    const handleNext = () => scrollByCard(1);
+
+    const pauseAuto = useRef(false);
+
+    useEffect(() => {
+        const el = scrollerRef.current;
+        if (!el) return;
+        updateArrows();
+        el.addEventListener('scroll', updateArrows, { passive: true });
+        const resize = new ResizeObserver(updateArrows);
+        resize.observe(el);
+        return () => {
+            el.removeEventListener('scroll', updateArrows);
+            resize.disconnect();
+        };
+    }, [updateArrows]);
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            const el = scrollerRef.current;
+            if (!el || el.matches(':hover') || pauseAuto.current) return;
+            if (el._destAnimId) return;
+            if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 4) {
+                animateScroll(0);
+            } else {
+                animateScroll(el.scrollLeft + cardStep());
+            }
+        }, 3000);
+        return () => clearInterval(id);
+    }, [animateScroll, cardStep]);
+
     const renderCard = (c, indexKey) => {
         const bulletPoints = Array.isArray(c.features) && c.features.length > 0
             ? c.features
@@ -77,6 +175,7 @@ export default function Destinations({ countries = [] }) {
         return (
             <div
                 key={indexKey}
+                data-destination-card
                 className="group/card relative w-[250px] md:w-[300px] h-[400px] rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-800 flex flex-col justify-between shrink-0 mx-3"
             >
                 {/* Background Image with Smooth Scale Zoom */}
@@ -174,10 +273,35 @@ export default function Destinations({ countries = [] }) {
 
             </div>
 
-            {/* SEAMLESS INFINITE MARQUEE CAROUSEL POWERED BY REACT-FAST-MARQUEE */}
-            <Marquee pauseOnHover={true} speed={40} gradient={false} className="py-4">
-                {displayList.map((country, i) => renderCard(country, country.id || i))}
-            </Marquee>
+            {/* STUDY DESTINATIONS CAROUSEL WITH PREV / NEXT CONTROLS */}
+            <div className="relative">
+                <div
+                    ref={scrollerRef}
+                    className="flex overflow-x-auto scroll-smooth py-4 px-4 sm:px-6 lg:px-8 scrollbar-hide"
+                >
+                    {displayList.map((country, i) => renderCard(country, country.id || i))}
+                </div>
+
+                {/* PREV / NEXT FLOATING BUTTONS */}
+                <button
+                    type="button"
+                    onClick={handlePrev}
+                    disabled={!canPrev}
+                    aria-label="Previous destinations"
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-700 dark:disabled:hover:bg-slate-800 dark:disabled:hover:text-slate-200 ${hasOverflow ? '' : 'hidden'}`}
+                >
+                    <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!canNext}
+                    aria-label="Next destinations"
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-slate-700 dark:disabled:hover:bg-slate-800 dark:disabled:hover:text-slate-200 ${hasOverflow ? '' : 'hidden'}`}
+                >
+                    <ChevronRight className="w-6 h-6" />
+                </button>
+            </div>
 
         </section>
     );
