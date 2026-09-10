@@ -307,7 +307,7 @@ export default function BookCallModal({ isOpen, onClose }) {
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => handleFieldChange('name', e.target.value)}
-                                        placeholder="e.g. Hasan Uz Zaman"
+                                        placeholder="e.g. John Doe"
                                         className="w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                     <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
@@ -343,7 +343,7 @@ export default function BookCallModal({ isOpen, onClose }) {
                                         type="tel"
                                         value={formData.phone}
                                         onChange={(e) => handleFieldChange('phone', e.target.value)}
-                                        placeholder="e.g. +880 1700 000000"
+                                        placeholder="e.g. +10 700 00000"
                                         className="w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                     <Phone className="w-5 h-5 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
