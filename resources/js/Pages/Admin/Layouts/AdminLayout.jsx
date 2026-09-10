@@ -28,21 +28,30 @@ import {
     HelpCircle,
     Layers,
     MessageSquare,
-    UserCheck
+    UserCheck,
+    BellOff,
+    CheckCheck
 } from 'lucide-react';
+import axios from 'axios';
 
 export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     const { url, props } = usePage();
     const { theme, toggleTheme } = useTheme();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [isMarkingRead, setIsMarkingRead] = useState(false);
     const userMenuRef = useRef(null);
+    const notificationsRef = useRef(null);
 
-    // Close user dropdown menu when clicking outside
+    // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
                 setIsUserMenuOpen(false);
+            }
+            if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+                setIsNotificationsOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -50,6 +59,51 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     }, []);
 
     const currentUser = props?.auth?.user;
+    const unreadNotifications = currentUser?.unreadNotifications || [];
+    const unreadCount = unreadNotifications.length;
+
+    const formatRelativeTime = (dateString) => {
+        if (!dateString) return '';
+        try {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+
+            if (diffInSeconds < 60) return 'Just now';
+            const diffInMinutes = Math.floor(diffInSeconds / 60);
+            if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            if (diffInHours < 24) return `${diffInHours}h ago`;
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays < 7) return `${diffInDays}d ago`;
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        } catch {
+            return '';
+        }
+    };
+
+    const handleMarkAllAsRead = async () => {
+        if (isMarkingRead || unreadCount === 0) return;
+        setIsMarkingRead(true);
+        try {
+            await (window.axios || axios).post('/admin/notifications/mark-read');
+            router.reload({ only: ['auth'] });
+        } catch (error) {
+            console.error('Failed to mark notifications as read', error);
+        } finally {
+            setIsMarkingRead(false);
+        }
+    };
+
+    const handleNotificationClick = async (notification) => {
+        setIsNotificationsOpen(false);
+        try {
+            await (window.axios || axios).post('/admin/notifications/mark-read', { id: notification.id });
+            router.reload({ only: ['auth'] });
+        } catch (error) {
+            console.error('Failed to mark notification as read', error);
+        }
+    };
     const adminName = currentUser?.name || 'Administrator';
     const adminEmail = currentUser?.email || 'admin@kampusedu.com';
     const isSuperAdmin = currentUser?.is_super_admin || currentUser?.roles?.includes('Super Admin') || currentUser?.id === 1;
@@ -238,11 +292,138 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                     {/* Right: Theme Toggle, Admin User Profile & Logout */}
                     <div className="flex items-center gap-3 sm:gap-4">
 
-                        {/* Notification Bell */}
-                        <button className="p-2 rounded-full text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 relative">
-                            <Bell className="w-5 h-5" />
-                            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                        </button>
+                        {/* Interactive Notification Bell Dropdown */}
+                        <div className="relative" ref={notificationsRef}>
+                            <button
+                                type="button"
+                                onClick={() => setIsNotificationsOpen((prev) => !prev)}
+                                className={`p-2 rounded-full transition-colors cursor-pointer relative focus:outline-none ${
+                                    isNotificationsOpen
+                                        ? 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400'
+                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                                }`}
+                                aria-label="Notifications"
+                                title="Notifications"
+                            >
+                                <Bell className="w-5 h-5" />
+                                {unreadCount > 0 && (
+                                    <>
+                                        <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping opacity-75" />
+                                        <span className="absolute -top-1 -right-1 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center shadow-sm ring-2 ring-white dark:ring-slate-900 leading-none">
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </span>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Floating Notifications Dropdown Menu */}
+                            {isNotificationsOpen && (
+                                <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                                    {/* Dropdown Header */}
+                                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/90">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                                                Notifications
+                                            </h3>
+                                            {unreadCount > 0 ? (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">
+                                                    {unreadCount} new
+                                                </span>
+                                            ) : (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                                                    0 unread
+                                                </span>
+                                            )}
+                                        </div>
+                                        {unreadCount > 0 && (
+                                            <button
+                                                type="button"
+                                                onClick={handleMarkAllAsRead}
+                                                disabled={isMarkingRead}
+                                                className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline cursor-pointer disabled:opacity-50 transition-colors flex items-center gap-1"
+                                            >
+                                                {isMarkingRead ? (
+                                                    <span>Marking...</span>
+                                                ) : (
+                                                    <>
+                                                        <CheckCheck className="w-3.5 h-3.5" />
+                                                        <span>Mark all read</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* Dropdown Notification List */}
+                                    <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
+                                        {unreadNotifications.length === 0 ? (
+                                            <div className="py-10 px-4 text-center">
+                                                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400 dark:text-slate-500">
+                                                    <BellOff className="w-6 h-6" />
+                                                </div>
+                                                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                                    No new notifications
+                                                </p>
+                                                <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+                                                    You're all caught up with leads & applications!
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            unreadNotifications.map((notif) => {
+                                                const data = notif.data || {};
+                                                const title = data.title || 'Notification';
+                                                const message = data.message || '';
+                                                const targetUrl = data.url || '/admin/inquiries';
+                                                const timeAgo = formatRelativeTime(notif.created_at);
+
+                                                return (
+                                                    <Link
+                                                        key={notif.id}
+                                                        href={targetUrl}
+                                                        onClick={() => handleNotificationClick(notif)}
+                                                        className="group flex items-start gap-3 p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
+                                                    >
+                                                        <div className="mt-0.5 w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-200/60 dark:border-blue-800/60 group-hover:scale-105 transition-transform">
+                                                            <Bell className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center justify-between gap-1 mb-0.5">
+                                                                <p className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                                    {title}
+                                                                </p>
+                                                                {timeAgo && (
+                                                                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium shrink-0">
+                                                                        {timeAgo}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-[11px] text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                                                                {message}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
+                                                    </Link>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+
+                                    {/* Dropdown Footer */}
+                                    {unreadNotifications.length > 0 && (
+                                        <div className="p-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-center">
+                                            <button
+                                                type="button"
+                                                onClick={handleMarkAllAsRead}
+                                                disabled={isMarkingRead}
+                                                className="w-full py-1.5 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+                                            >
+                                                {isMarkingRead ? 'Processing...' : 'Mark all as read'}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         {/* Dark / Light Mode Toggle Button */}
                         <button

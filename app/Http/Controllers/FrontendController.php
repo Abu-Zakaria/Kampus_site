@@ -6,7 +6,9 @@ use App\Models\ContactMessage;
 use App\Models\Course;
 use App\Models\StudentApplication;
 use App\Models\User;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class FrontendController extends Controller
 {
@@ -34,6 +36,17 @@ class FrontendController extends Controller
             'message' => "Level of Study: {$validated['level_of_study']}\nPreferred Date: {$validated['date']}\nPreferred Time: {$validated['time']}\nCountry of Residence: {$validated['country']}\n\n[Automated Call Booking Request]",
             'is_read' => false,
         ]);
+
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Call Booking Request',
+                "{$validated['name']} requested a consultation call for {$validated['destination']}.",
+                route('admin.inquiries.index')
+            ));
+        }
 
         return response()->json([
             'success' => true,
@@ -164,6 +177,17 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Course Matcher Lead',
+                'A new student lead was generated from the AI Matcher: ' . $validated['name'],
+                route('admin.inquiries.index')
+            ));
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Your shortlist has been recorded! Our admissions team will email you the full course brochures shortly.',
@@ -249,6 +273,17 @@ class FrontendController extends Controller
                 ]
             ],
         ]);
+
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Student Application: ' . $appNo,
+                "{$validated['name']} submitted an application for {$validated['course_title']}.",
+                route('admin.student-applications.index')
+            ));
+        }
 
         return response()->json([
             'success' => true,

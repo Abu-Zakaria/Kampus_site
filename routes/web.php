@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentApplicationController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use Illuminate\Http\Request;
 
@@ -175,12 +176,8 @@ Route::middleware(['auth'])->prefix('student')->group(function () {
 
 // SECURED ADMIN CMS ROUTES (Protected by 'auth' and 'EnsurePartnerPasswordSet' middleware)
 Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function (Request $request) {
-        if ($request->user()->isStudent()) {
-            return redirect()->route('student.dashboard');
-        }
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/notifications/mark-read', [AdminDashboardController::class, 'markNotificationsRead'])->name('admin.notifications.mark-read');
 
     // Global Settings Routes
     Route::middleware('can:manage-settings')->group(function () {
