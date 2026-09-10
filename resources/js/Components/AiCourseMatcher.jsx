@@ -108,6 +108,7 @@ export default function AiCourseMatcher({ isOpen, onClose }) {
                 ...leadForm,
                 ...answers,
                 results_count: results.length,
+                course_ids: results.map((course) => course.id),
             };
 
             const response = await fetch('/api/course-matcher-lead', {
