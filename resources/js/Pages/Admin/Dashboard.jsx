@@ -2,6 +2,7 @@ import React from 'react';
 import { Head, usePage, Link } from '@inertiajs/react';
 import AdminLayout from './Layouts/AdminLayout';
 import {
+    Building,
     Building2,
     BookOpen,
     Handshake,
@@ -17,27 +18,26 @@ import {
     Compass
 } from 'lucide-react';
 
-export default function Dashboard() {
+export default function Dashboard({ stats }) {
     const { props } = usePage();
     const currentUser = props?.auth?.user;
     const isSuperAdmin = currentUser?.is_super_admin;
     const isPartner = currentUser?.roles?.includes('Partner') && !isSuperAdmin;
 
-    const adminStats = [
-        { title: 'Total Universities', value: '150+', change: '+12 this month', icon: Building2, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-950' },
-        { title: 'Active Courses', value: '1,240', change: '+45 added', icon: BookOpen, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-100 dark:bg-indigo-950' },
-        { title: 'Partner Applications', value: '84', change: '12 pending review', icon: Handshake, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-950' },
-        { title: 'Inquiries Received', value: '342', change: '+24 today', icon: Mail, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-950' },
-    ];
+    // Use stats prop or Inertia page props with robust default fallbacks
+    const dynamicStats = stats || props?.stats || {
+        universities: { total: 0, this_month: 0 },
+        courses: { total: 0, this_month: 0 },
+        applications: { total: 0, pending: 0 },
+        inquiries: { total: 0, today: 0 },
+    };
 
     const partnerStats = [
-        { title: 'Participating Universities', value: '150+', change: 'Global Network', icon: Building2, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-950' },
-        { title: 'Available Courses', value: '1,240', change: 'Updated Weekly', icon: BookOpen, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-100 dark:bg-indigo-950' },
+        { title: 'Participating Universities', value: dynamicStats.universities?.total ?? 0, change: 'Global Network', icon: Building, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-950' },
+        { title: 'Available Courses', value: dynamicStats.courses?.total ?? 0, change: 'Updated Weekly', icon: BookOpen, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-100 dark:bg-indigo-950' },
         { title: 'Partnership Status', value: 'Active', change: 'Official Partner', icon: CheckCircle2, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-950' },
         { title: 'Directory Access', value: 'Full Access', change: 'Institutions & Courses', icon: ShieldCheck, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-950' },
     ];
-
-    const stats = isPartner ? partnerStats : adminStats;
 
     return (
         <AdminLayout title={isPartner ? 'Partner Portal Dashboard' : 'CMS Overview & Dashboard'}>
@@ -64,34 +64,102 @@ export default function Dashboard() {
                 </div>
 
                 {/* 4 STATS METRIC CARDS */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {stats.map((item, idx) => {
-                        const IconComp = item.icon;
-                        return (
-                            <div
-                                key={idx}
-                                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-start justify-between"
-                            >
-                                <div className="space-y-1">
-                                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                        {item.title}
-                                    </span>
-                                    <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                                        {item.value}
+                {isPartner ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        {partnerStats.map((item, idx) => {
+                            const IconComp = item.icon;
+                            return (
+                                <div
+                                    key={idx}
+                                    className="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 shadow-xs flex items-start justify-between"
+                                >
+                                    <div className="space-y-1">
+                                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                            {item.title}
+                                        </span>
+                                        <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+                                            {item.value}
+                                        </div>
+                                        <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 pt-1">
+                                            <TrendingUp className="w-3.5 h-3.5" />
+                                            <span>{item.change}</span>
+                                        </span>
                                     </div>
-                                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 pt-1">
-                                        <TrendingUp className="w-3.5 h-3.5" />
-                                        <span>{item.change}</span>
-                                    </span>
-                                </div>
 
-                                <div className={`p-3 rounded-2xl ${item.bg} ${item.color}`}>
-                                    <IconComp className="w-6 h-6" />
+                                    <div className={`p-3 rounded-xl ${item.bg} ${item.color}`}>
+                                        <IconComp className="w-6 h-6" />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        {/* Card 1: Total Universities */}
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-xs flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Total Universities</p>
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{dynamicStats.universities?.total ?? 0}</h3>
+                                </div>
+                                <div className="p-3 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl">
+                                    <Building size={24} />
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
+                            <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center">
+                                <TrendingUp className="mr-1" size={16} /> +{dynamicStats.universities?.this_month ?? 0} this month
+                            </p>
+                        </div>
+
+                        {/* Card 2: Active Courses */}
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-xs flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Active Courses</p>
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{dynamicStats.courses?.total ?? 0}</h3>
+                                </div>
+                                <div className="p-3 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl">
+                                    <BookOpen size={24} />
+                                </div>
+                            </div>
+                            <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center">
+                                <TrendingUp className="mr-1" size={16} /> +{dynamicStats.courses?.this_month ?? 0} added this month
+                            </p>
+                        </div>
+
+                        {/* Card 3: Partner/Student Applications */}
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-xs flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Partner Applications</p>
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{dynamicStats.applications?.total ?? 0}</h3>
+                                </div>
+                                <div className="p-3 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl">
+                                    <Handshake size={24} />
+                                </div>
+                            </div>
+                            <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center">
+                                <TrendingUp className="mr-1" size={16} /> {dynamicStats.applications?.pending ?? 0} pending review
+                            </p>
+                        </div>
+
+                        {/* Card 4: Inquiries Received */}
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-xs flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-1">Inquiries Received</p>
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{dynamicStats.inquiries?.total ?? 0}</h3>
+                                </div>
+                                <div className="p-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                                    <Mail size={24} />
+                                </div>
+                            </div>
+                            <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center">
+                                <TrendingUp className="mr-1" size={16} /> +{dynamicStats.inquiries?.today ?? 0} today
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {/* SHORTCUTS & GUIDANCE */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

@@ -3,6 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ContactMessage;
+use App\Models\Course;
+use App\Models\PartnerApplication;
+use App\Models\StudentApplication;
+use App\Models\University;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,7 +24,41 @@ class DashboardController extends Controller
             return redirect()->route('student.dashboard');
         }
 
-        return Inertia::render('Admin/Dashboard');
+        $now = Carbon::now();
+        $startOfMonth = $now->copy()->startOfMonth();
+        $startOfDay = $now->copy()->startOfDay();
+
+        $partnerTotal = PartnerApplication::count();
+        $partnerPending = PartnerApplication::where('status', 'pending')->count();
+        $studentTotal = StudentApplication::count();
+        $studentPending = StudentApplication::where('status', 'pending')->count();
+
+        // Support both Partner and Student applications
+        $applicationsTotal = $partnerTotal + $studentTotal;
+        $applicationsPending = $partnerPending + $studentPending;
+
+        $stats = [
+            'universities' => [
+                'total' => University::count(),
+                'this_month' => University::where('created_at', '>=', $startOfMonth)->count(),
+            ],
+            'courses' => [
+                'total' => Course::count(),
+                'this_month' => Course::where('created_at', '>=', $startOfMonth)->count(),
+            ],
+            'applications' => [
+                'total' => $applicationsTotal,
+                'pending' => $applicationsPending,
+            ],
+            'inquiries' => [
+                'total' => ContactMessage::count(),
+                'today' => ContactMessage::where('created_at', '>=', $startOfDay)->count(),
+            ],
+        ];
+
+        return Inertia::render('Admin/Dashboard', [
+            'stats' => $stats,
+        ]);
     }
 
     /**
