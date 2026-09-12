@@ -10,8 +10,10 @@ use App\Models\StudentApplication;
 use App\Models\StudentConversation;
 use App\Models\StudentMessage;
 use App\Models\User;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class AdminNotificationService
 {
@@ -49,7 +51,7 @@ class AdminNotificationService
             $adminUsers = User::where(function ($query) {
                 $query->where('id', 1)
                     ->orWhereHas('roles', function ($r) {
-                        $r->whereIn('name', ['Super Admin', 'Admin']);
+                        $r->whereIn('name', ['Super Admin', 'Admin', 'admin']);
                     });
             })->whereNotNull('email')->pluck('email')->toArray();
 
@@ -75,7 +77,7 @@ class AdminNotificationService
     }
 
     /**
-     * Send generic admin alert email to all administrators.
+     * Send generic admin alert notification (both database notification and email).
      */
     public static function sendAlert(
         string $subject,
@@ -88,6 +90,29 @@ class AdminNotificationService
         ?string $replyToEmail = null,
         ?string $replyToName = null
     ): void {
+        // 1. Dispatch in-app Database Notification to all administrators
+        try {
+            $adminUsers = User::where('id', 1)
+                ->orWhereHas('roles', function ($r) {
+                    $r->whereIn('name', ['Super Admin', 'Admin', 'admin']);
+                })->get();
+
+            if ($adminUsers->isNotEmpty()) {
+                Notification::send(
+                    $adminUsers,
+                    new AdminAlertNotification(
+                        $title,
+                        $message,
+                        $actionUrl ?: url('/admin/inquiries'),
+                        $details
+                    )
+                );
+            }
+        } catch (\Throwable $e) {
+            Log::error('AdminNotificationService: Failed to save database notification: ' . $e->getMessage());
+        }
+
+        // 2. Dispatch Email notification to administrators
         $recipients = self::getAdminEmails();
         if (empty($recipients)) {
             return;
@@ -304,4 +329,39 @@ class AdminNotificationService
             $application->contact_person
         );
     }
+
+    /**
+     * Trigger database notification and email for course enquiry & direct admission application.
+     */
+    public static function notifyCourseInquiry(ContactMessage $inquiry, StudentApplication $application, array $validated): void
+    {
+        $subject = "[Course Enquiry & Application] {$validated['name']} — {$validated['course_title']}";
+        $title = 'New Course Enquiry: ' . $validated['course_title'];
+        $message = "{$validated['name']} submitted a course enquiry and admission application (Ref: {$application->application_no}).";
+
+        $details = [
+            'Application Ref' => $application->application_no,
+            'Applicant Name' => $validated['name'],
+            'Email Address' => $validated['email'],
+            'Phone Number' => $validated['phone'] ?? 'Not provided',
+            'Course Title' => $validated['course_title'],
+            'University' => $validated['university_name'] ?? 'Partner University',
+            'Intake' => $validated['intake'] ?? 'September 2026',
+            'Level of Study' => $validated['level'] ?? 'Postgraduate',
+            'Notes' => $validated['notes'] ?? 'None',
+        ];
+
+        self::sendAlert(
+            $subject,
+            $title,
+            $message,
+            $details,
+            url('/admin/student-applications'),
+            'Review Student Application',
+            'COURSE ENQUIRY',
+            $validated['email'],
+            $validated['name']
+        );
+    }
 }
+

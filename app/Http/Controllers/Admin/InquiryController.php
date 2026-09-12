@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\InquiryReplyStudentMail;
 use App\Models\ContactMessage;
 use App\Models\User;
 use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
@@ -124,18 +127,8 @@ class InquiryController extends Controller
             'is_read' => false,
         ]);
 
-        // Dispatch email notification to admin(s)
+        // Dispatch email and database notification to admin(s)
         \App\Services\AdminNotificationService::notifyContactMessage($contactMessage);
-        $admins = User::where('id', 1)
-            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
-            ->get();
-        if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminAlertNotification(
-                'New Contact Inquiry',
-                "{$name} submitted an inquiry: {$topic}",
-                route('admin.inquiries.index')
-            ));
-        }
 
         if ($request->expectsJson() || $request->wantsJson()) {
             return response()->json([
@@ -165,6 +158,22 @@ class InquiryController extends Controller
             'replied_by' => auth()->id(),
             'is_read' => true,
         ]);
+
+        // Dispatch email reply directly to the student/inquirer
+        if (!empty($message->email) && filter_var($message->email, FILTER_VALIDATE_EMAIL)) {
+            try {
+                Mail::to($message->email)->send(new InquiryReplyStudentMail(
+                    $message,
+                    $validated['reply_message'],
+                    auth()->user()
+                ));
+            } catch (\Throwable $e) {
+                Log::error('Failed to dispatch inquiry reply email to student: ' . $e->getMessage(), [
+                    'inquiry_id' => $message->id,
+                    'email' => $message->email,
+                ]);
+            }
+        }
 
         return back()->with('success', "Reply successfully sent to {$message->name}.");
     }

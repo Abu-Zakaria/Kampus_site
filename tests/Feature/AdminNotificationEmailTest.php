@@ -183,4 +183,61 @@ class AdminNotificationEmailTest extends TestCase
             return $hasRecipient && $matchesBadge && $matchesSubject;
         });
     }
+
+    public function test_frontend_actions_create_database_notifications_for_admin_bell_section()
+    {
+        Mail::fake();
+
+        // 1. Submit contact inquiry from frontend
+        $this->post('/contact/submit', [
+            'name' => 'Bell Test User',
+            'email' => 'belluser@example.com',
+            'phone' => '+44 7711 998877',
+            'subject' => 'Bell Notification Check',
+            'message' => 'Checking if notification appears in bell dropdown.',
+        ]);
+
+        $this->admin->refresh();
+        $this->assertGreaterThan(0, $this->admin->unreadNotifications()->count());
+        $notification = $this->admin->unreadNotifications()->first();
+        $this->assertStringContainsString('Bell Test User', $notification->data['message'] ?? $notification->data['title']);
+
+        // 2. Mark notification as read
+        $this->actingAs($this->admin)
+            ->post('/admin/notifications/mark-read', ['id' => $notification->id])
+            ->assertOk();
+
+        $this->admin->refresh();
+        $this->assertEquals(0, $this->admin->unreadNotifications()->count());
+        $this->assertEquals(1, $this->admin->notifications()->count());
+    }
+
+    public function test_admin_inquiry_reply_sends_email_to_student()
+    {
+        Mail::fake();
+
+        $inquiry = ContactMessage::create([
+            'name' => 'Amelia Watson',
+            'email' => 'amelia@student.test',
+            'phone' => '+44 7700 900123',
+            'topic' => 'Tuition Fee Payment Schedule',
+            'message' => 'Can I pay the tuition fees in 3 instalments?',
+            'is_read' => false,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post("/admin/inquiries/{$inquiry->id}/reply", [
+                'reply_message' => 'Yes, partner universities allow 2 to 3 semester instalment plans.',
+            ])
+            ->assertSessionHas('success');
+
+        $inquiry->refresh();
+        $this->assertEquals('Yes, partner universities allow 2 to 3 semester instalment plans.', $inquiry->reply_message);
+        $this->assertTrue($inquiry->is_read);
+
+        Mail::assertSent(\App\Mail\InquiryReplyStudentMail::class, function ($mail) {
+            return $mail->hasTo('amelia@student.test');
+        });
+    }
 }
+

@@ -42,7 +42,9 @@ class HandleInertiaRequests extends Middleware
                     'roles' => $request->user()->roles->pluck('name')->toArray(),
                     'permissions' => $request->user()->getAllPermissions()->pluck('name')->toArray(),
                     'is_super_admin' => $request->user()->id === 1 || $request->user()->hasRole('Super Admin'),
-                    'unreadNotifications' => $request->user()->unreadNotifications()->take(10)->get(),
+                    'unreadNotifications' => $request->user()->unreadNotifications()->take(15)->get(),
+                    'notifications' => $request->user()->notifications()->take(15)->get(),
+                    'unread_notifications_count' => $request->user()->unreadNotifications()->count(),
                 ]) : null,
             ],
             'nav_pages' => fn () => Page::where('is_active', true)

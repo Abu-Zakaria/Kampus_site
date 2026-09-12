@@ -17,6 +17,7 @@ use App\Http\Controllers\PublicServiceController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\UniversityController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\EnvSettingController;
 use App\Http\Controllers\Admin\HeroSlideshowController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\BlogController;
@@ -184,6 +185,11 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
         Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings.index');
         Route::post('/settings', [SettingController::class, 'store'])->name('admin.settings.store');
         Route::post('/settings/update', [SettingController::class, 'store'])->name('admin.settings.update');
+
+        // Environment (.env) Settings Routes
+        Route::get('/settings/env', [EnvSettingController::class, 'index'])->name('admin.settings.env.index');
+        Route::post('/settings/env', [EnvSettingController::class, 'update'])->name('admin.settings.env.update');
+        Route::post('/settings/env/test-email', [EnvSettingController::class, 'testEmail'])->name('admin.settings.env.test-email');
 
         // Dedicated Hero Slideshow Management Routes
         Route::get('/slideshow', [HeroSlideshowController::class, 'index'])->name('admin.slideshow.index');

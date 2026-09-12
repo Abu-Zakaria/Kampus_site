@@ -42,18 +42,8 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
-        // Dispatch email notification to admin(s)
+        // Dispatch email and database notification to admin(s)
         \App\Services\AdminNotificationService::notifyCallBooking($contactMessage, $validated);
-        $admins = User::where('id', 1)
-            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
-            ->get();
-        if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminAlertNotification(
-                'New Call Booking Request',
-                "{$validated['name']} requested a consultation call for {$validated['destination']}.",
-                route('admin.inquiries.index')
-            ));
-        }
 
         return response()->json([
             'success' => true,
@@ -186,18 +176,8 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
-        // Dispatch email notification to admin(s)
+        // Dispatch email and database notification to admin(s)
         \App\Services\AdminNotificationService::notifyCourseMatcherLead($contactMessage, $criteria);
-        $admins = User::where('id', 1)
-            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
-            ->get();
-        if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminAlertNotification(
-                'New Course Matcher Lead',
-                'A new student lead was generated from the AI Matcher: ' . $validated['name'],
-                route('admin.inquiries.index')
-            ));
-        }
 
         // Fetch matched courses and email personalized shortlist to user
         $courseIds = $request->input('course_ids', []);
@@ -318,14 +298,23 @@ class FrontendController extends Controller
                     'recipients' => $adminRecipients,
                 ]);
             }
+        }
+
         $admins = User::where('id', 1)
             ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
             ->get();
         if ($admins->isNotEmpty()) {
             Notification::send($admins, new AdminAlertNotification(
-                'New Student Application: ' . $appNo,
-                "{$validated['name']} submitted an application for {$validated['course_title']}.",
-                route('admin.student-applications.index')
+                'New Course Enquiry: ' . $validated['course_title'],
+                "{$validated['name']} submitted a course enquiry & application (Ref: {$appNo}).",
+                route('admin.student-applications.index'),
+                [
+                    'Application Ref' => $appNo,
+                    'Applicant' => $validated['name'],
+                    'Email' => $validated['email'],
+                    'Course' => $validated['course_title'],
+                    'University' => $validated['university_name'] ?? 'Partner University',
+                ]
             ));
         }
 

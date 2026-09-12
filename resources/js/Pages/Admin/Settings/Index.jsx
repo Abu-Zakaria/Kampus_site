@@ -19,7 +19,8 @@ import {
     Layers,
     FileText,
     ArrowUpRight,
-    Trash2
+    Trash2,
+    Sliders
 } from 'lucide-react';
 
 export default function Index({ settings = {} }) {
@@ -111,7 +112,32 @@ export default function Index({ settings = {} }) {
             <Head title="Global Settings — Kampus CMS" />
 
             <div className="max-w-4xl mx-auto space-y-8">
-                
+
+                {/* TABS NAVIGATION */}
+                <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <Link
+                        href="/admin/settings"
+                        className="px-4 py-2 text-sm font-bold rounded-xl bg-blue-600 text-white shadow-sm flex items-center gap-2"
+                    >
+                        <Globe className="w-4 h-4" />
+                        <span>Website & Brand</span>
+                    </Link>
+                    <Link
+                        href="/admin/settings/env"
+                        className="px-4 py-2 text-sm font-bold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2"
+                    >
+                        <Sliders className="w-4 h-4" />
+                        <span>Environment (.env)</span>
+                    </Link>
+                    <Link
+                        href="/admin/slideshow"
+                        className="px-4 py-2 text-sm font-bold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2"
+                    >
+                        <Layers className="w-4 h-4" />
+                        <span>Hero Slideshow</span>
+                    </Link>
+                </div>
+
                 {/* HEADER ROW */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
