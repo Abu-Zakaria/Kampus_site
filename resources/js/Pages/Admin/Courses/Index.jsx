@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
+import BulkUploadModal from '../../../Components/Admin/BulkUploadModal';
 import {
     BookOpen,
     Plus,
@@ -14,12 +15,16 @@ import {
     GraduationCap,
     Filter,
     Eye,
-    EyeOff
+    EyeOff,
+    Download,
+    UploadCloud,
+    FileSpreadsheet
 } from 'lucide-react';
 
 export default function Index({ courses = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [levelFilter, setLevelFilter] = useState('All');
+    const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false);
 
     const levels = ['All', ...new Set(courses.map(c => c.level).filter(Boolean))];
 
@@ -48,8 +53,8 @@ export default function Index({ courses = [] }) {
 
             <div className="space-y-6">
 
-                {/* HEADER BANNER & CREATE BUTTON */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
+                {/* HEADER BANNER & ACTION BUTTONS */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider mb-2">
                             <Sparkles className="w-3.5 h-3.5" />
@@ -63,13 +68,38 @@ export default function Index({ courses = [] }) {
                         </p>
                     </div>
 
-                    <Link
-                        href="/admin/courses/create"
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 transition-all cursor-pointer shrink-0"
-                    >
-                        <Plus className="w-4 h-4" />
-                        <span>Add New Course</span>
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                        {/* Download Demo Excel */}
+                        <a
+                            href="/admin/courses/sample-excel"
+                            download="courses_demo_template.xlsx"
+                            className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-xs"
+                            title="Download demo Excel template with field headers and sample data"
+                        >
+                            <Download className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <span>Demo Excel</span>
+                        </a>
+
+                        {/* Bulk Upload Excel */}
+                        <button
+                            type="button"
+                            onClick={() => setIsBulkUploadOpen(true)}
+                            className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-xs border border-indigo-200 dark:border-indigo-800 transition-all cursor-pointer shadow-xs"
+                            title="Upload populated Excel file for bulk creation"
+                        >
+                            <UploadCloud className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <span>Bulk Upload Excel</span>
+                        </button>
+
+                        {/* Add Single Course */}
+                        <Link
+                            href="/admin/courses/create"
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 transition-all cursor-pointer shrink-0"
+                        >
+                            <Plus className="w-4 h-4" />
+                            <span>Add Course</span>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* SEARCH & FILTER BAR */}
@@ -227,6 +257,18 @@ export default function Index({ courses = [] }) {
                         </table>
                     </div>
                 </div>
+
+                {/* Bulk Upload Modal */}
+                <BulkUploadModal
+                    isOpen={isBulkUploadOpen}
+                    onClose={() => setIsBulkUploadOpen(false)}
+                    title="Bulk Upload Courses"
+                    description="Upload an Excel or CSV file to import multiple degree and diploma courses."
+                    sampleDownloadUrl="/admin/courses/sample-excel"
+                    uploadUrl="/admin/courses/bulk-upload"
+                    entityName="Courses"
+                    sampleFileName="courses_demo_template.xlsx"
+                />
 
             </div>
         </AdminLayout>

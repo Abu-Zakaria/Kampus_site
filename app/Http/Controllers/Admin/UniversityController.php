@@ -228,4 +228,43 @@ class UniversityController extends Controller
         return redirect()->route('admin.universities.index')
             ->with('success', 'University deleted successfully.');
     }
+
+    /**
+     * Download demo Excel template for bulk university uploads.
+     */
+    public function downloadSample(\App\Services\ExcelService $excelService)
+    {
+        return $excelService->generateUniversitiesSample();
+    }
+
+    /**
+     * Bulk upload universities via Excel or CSV file.
+     */
+    public function bulkUpload(Request $request, \App\Services\ExcelService $excelService)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            'update_existing' => 'nullable',
+        ]);
+
+        $updateExisting = $request->boolean('update_existing', true);
+        $result = $excelService->importUniversities($request->file('file'), $updateExisting);
+
+        $msg = sprintf(
+            'Bulk upload finished: %d created, %d updated, %d skipped.',
+            $result['created'],
+            $result['updated'],
+            $result['skipped']
+        );
+
+        if (!empty($result['errors'])) {
+            return redirect()->route('admin.universities.index')
+                ->with('status', $msg)
+                ->with('import_summary', $msg)
+                ->with('import_errors', $result['errors']);
+        }
+
+        return redirect()->route('admin.universities.index')->with('success', $msg);
+    }
 }
+

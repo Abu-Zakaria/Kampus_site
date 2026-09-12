@@ -125,4 +125,43 @@ class CourseController extends Controller
         return redirect()->route('admin.courses.index')
             ->with('success', 'Course deleted successfully.');
     }
+
+    /**
+     * Download demo Excel template for bulk course uploads.
+     */
+    public function downloadSample(\App\Services\ExcelService $excelService)
+    {
+        return $excelService->generateCoursesSample();
+    }
+
+    /**
+     * Bulk upload courses via Excel or CSV file.
+     */
+    public function bulkUpload(Request $request, \App\Services\ExcelService $excelService)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            'update_existing' => 'nullable',
+        ]);
+
+        $updateExisting = $request->boolean('update_existing', true);
+        $result = $excelService->importCourses($request->file('file'), $updateExisting);
+
+        $msg = sprintf(
+            'Bulk upload finished: %d created, %d updated, %d skipped.',
+            $result['created'],
+            $result['updated'],
+            $result['skipped']
+        );
+
+        if (!empty($result['errors'])) {
+            return redirect()->route('admin.courses.index')
+                ->with('status', $msg)
+                ->with('import_summary', $msg)
+                ->with('import_errors', $result['errors']);
+        }
+
+        return redirect()->route('admin.courses.index')->with('success', $msg);
+    }
 }
+

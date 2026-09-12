@@ -555,6 +555,19 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                             {props.flash.error}
                         </div>
                     )}
+                    {Array.isArray(props?.flash?.import_errors) && props.flash.import_errors.length > 0 && (
+                        <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-sm">
+                            <div className="font-bold flex items-center gap-2 mb-2">
+                                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                                <span>Bulk Upload Notice ({props.flash.import_errors.length} issue{props.flash.import_errors.length > 1 ? 's' : ''} detected):</span>
+                            </div>
+                            <ul className="list-disc list-inside space-y-1 text-xs opacity-90 pl-1 max-h-48 overflow-y-auto">
+                                {props.flash.import_errors.map((err, idx) => (
+                                    <li key={idx}>{err}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
                     {children}
                 </main>

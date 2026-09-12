@@ -263,6 +263,12 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
     });
 
     // Countries CRUD Routes
+    Route::get('/countries/sample-excel', [CountryController::class, 'downloadSample'])
+        ->middleware('can:manage-countries')
+        ->name('admin.countries.sample-excel');
+    Route::post('/countries/bulk-upload', [CountryController::class, 'bulkUpload'])
+        ->middleware('can:manage-countries')
+        ->name('admin.countries.bulk-upload');
     Route::resource('countries', CountryController::class)->middleware('can:manage-countries')->names([
         'index' => 'admin.countries.index',
         'create' => 'admin.countries.create',
@@ -273,6 +279,12 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
     ]);
 
     // Universities CRUD Routes
+    Route::get('/universities/sample-excel', [UniversityController::class, 'downloadSample'])
+        ->middleware('can:manage-universities')
+        ->name('admin.universities.sample-excel');
+    Route::post('/universities/bulk-upload', [UniversityController::class, 'bulkUpload'])
+        ->middleware('can:manage-universities')
+        ->name('admin.universities.bulk-upload');
     Route::resource('universities', UniversityController::class)->middleware('can:manage-universities')->names([
         'index' => 'admin.universities.index',
         'create' => 'admin.universities.create',
@@ -283,6 +295,12 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
     ]);
 
     // Courses CRUD Routes
+    Route::get('/courses/sample-excel', [CourseController::class, 'downloadSample'])
+        ->middleware('can:manage-courses')
+        ->name('admin.courses.sample-excel');
+    Route::post('/courses/bulk-upload', [CourseController::class, 'bulkUpload'])
+        ->middleware('can:manage-courses')
+        ->name('admin.courses.bulk-upload');
     Route::resource('courses', CourseController::class)->middleware('can:manage-courses')->names([
         'index' => 'admin.courses.index',
         'create' => 'admin.courses.create',

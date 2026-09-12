@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
+import BulkUploadModal from '../../../Components/Admin/BulkUploadModal';
 import {
     Globe,
     Plus,
@@ -9,11 +10,15 @@ import {
     Trash2,
     Building2,
     Sparkles,
-    MapPin
+    MapPin,
+    Download,
+    UploadCloud,
+    FileSpreadsheet
 } from 'lucide-react';
 
 export default function Index({ countries = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false);
 
     const filteredCountries = countries.filter(c =>
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,8 +37,8 @@ export default function Index({ countries = [] }) {
 
             <div className="space-y-6">
                 
-                {/* HEADER BANNER & CREATE BUTTON */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
+                {/* HEADER BANNER & ACTION BUTTONS */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider mb-2">
                             <Sparkles className="w-3.5 h-3.5" />
@@ -47,13 +52,38 @@ export default function Index({ countries = [] }) {
                         </p>
                     </div>
 
-                    <Link
-                        href="/admin/countries/create"
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 transition-all cursor-pointer shrink-0"
-                    >
-                        <Plus className="w-4 h-4" />
-                        <span>Add New Country</span>
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                        {/* Download Demo Excel */}
+                        <a
+                            href="/admin/countries/sample-excel"
+                            download="countries_demo_template.xlsx"
+                            className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-xs"
+                            title="Download demo Excel template with field headers and sample data"
+                        >
+                            <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <span>Demo Excel</span>
+                        </a>
+
+                        {/* Bulk Upload Excel */}
+                        <button
+                            type="button"
+                            onClick={() => setIsBulkUploadOpen(true)}
+                            className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-xs border border-indigo-200 dark:border-indigo-800 transition-all cursor-pointer shadow-xs"
+                            title="Upload populated Excel file for bulk creation"
+                        >
+                            <UploadCloud className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <span>Bulk Upload Excel</span>
+                        </button>
+
+                        {/* Add Single Country */}
+                        <Link
+                            href="/admin/countries/create"
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 transition-all cursor-pointer shrink-0"
+                        >
+                            <Plus className="w-4 h-4" />
+                            <span>Add Country</span>
+                        </Link>
+                    </div>
                 </div>
 
                 {/* SEARCH FILTER BAR */}
@@ -144,6 +174,18 @@ export default function Index({ countries = [] }) {
                         </table>
                     </div>
                 </div>
+
+                {/* Bulk Upload Modal */}
+                <BulkUploadModal
+                    isOpen={isBulkUploadOpen}
+                    onClose={() => setIsBulkUploadOpen(false)}
+                    title="Bulk Upload Countries"
+                    description="Upload an Excel or CSV file to import multiple study destination countries."
+                    sampleDownloadUrl="/admin/countries/sample-excel"
+                    uploadUrl="/admin/countries/bulk-upload"
+                    entityName="Countries"
+                    sampleFileName="countries_demo_template.xlsx"
+                />
 
             </div>
         </AdminLayout>
