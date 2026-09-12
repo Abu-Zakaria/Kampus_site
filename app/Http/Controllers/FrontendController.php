@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CourseInquiryAdminNotification;
 use App\Mail\CourseShortlistMail;
 use App\Models\ContactMessage;
 use App\Models\Course;
+use App\Models\Setting;
 use App\Models\StudentApplication;
 use App\Models\User;
 use App\Notifications\AdminAlertNotification;
@@ -31,7 +33,7 @@ class FrontendController extends Controller
             'country' => 'required|string|max:255',
         ]);
 
-        ContactMessage::create([
+        $contactMessage = ContactMessage::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
@@ -40,16 +42,8 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
-        $admins = User::where('id', 1)
-            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
-            ->get();
-        if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminAlertNotification(
-                'New Call Booking Request',
-                "{$validated['name']} requested a consultation call for {$validated['destination']}.",
-                route('admin.inquiries.index')
-            ));
-        }
+        // Dispatch email and database notification to admin(s)
+        \App\Services\AdminNotificationService::notifyCallBooking($contactMessage, $validated);
 
         return response()->json([
             'success' => true,
@@ -173,7 +167,7 @@ class FrontendController extends Controller
         }
         $messageContent .= "\n[Captured via Interactive AI Course Matcher]";
 
-        ContactMessage::create([
+        $contactMessage = ContactMessage::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? 'Not provided',
@@ -182,16 +176,8 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
-        $admins = User::where('id', 1)
-            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
-            ->get();
-        if ($admins->isNotEmpty()) {
-            Notification::send($admins, new AdminAlertNotification(
-                'New Course Matcher Lead',
-                'A new student lead was generated from the AI Matcher: ' . $validated['name'],
-                route('admin.inquiries.index')
-            ));
-        }
+        // Dispatch email and database notification to admin(s)
+        \App\Services\AdminNotificationService::notifyCourseMatcherLead($contactMessage, $criteria);
 
         // Fetch matched courses and email personalized shortlist to user
         $courseIds = $request->input('course_ids', []);
@@ -296,14 +282,39 @@ class FrontendController extends Controller
             ],
         ]);
 
+        // Dispatch email notification to Administrator(s)
+        $adminRecipients = $this->getAdminNotificationEmails();
+        if (!empty($adminRecipients)) {
+            try {
+                Mail::to($adminRecipients)->send(new CourseInquiryAdminNotification(
+                    $inquiry,
+                    $application,
+                    $validated
+                ));
+            } catch (\Throwable $e) {
+                Log::error('Failed to dispatch course inquiry notification email to admins: ' . $e->getMessage(), [
+                    'inquiry_id' => $inquiry->id,
+                    'application_no' => $appNo,
+                    'recipients' => $adminRecipients,
+                ]);
+            }
+        }
+
         $admins = User::where('id', 1)
             ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
             ->get();
         if ($admins->isNotEmpty()) {
             Notification::send($admins, new AdminAlertNotification(
-                'New Student Application: ' . $appNo,
-                "{$validated['name']} submitted an application for {$validated['course_title']}.",
-                route('admin.student-applications.index')
+                'New Course Enquiry: ' . $validated['course_title'],
+                "{$validated['name']} submitted a course enquiry & application (Ref: {$appNo}).",
+                route('admin.student-applications.index'),
+                [
+                    'Application Ref' => $appNo,
+                    'Applicant' => $validated['name'],
+                    'Email' => $validated['email'],
+                    'Course' => $validated['course_title'],
+                    'University' => $validated['university_name'] ?? 'Partner University',
+                ]
             ));
         }
 
@@ -313,5 +324,60 @@ class FrontendController extends Controller
             'inquiry' => $inquiry,
             'application' => $application,
         ]);
+    }
+
+    /**
+     * Resolve verified email addresses for administrative notifications.
+     *
+     * @return array<string>
+     */
+    protected function getAdminNotificationEmails(): array
+    {
+        $emails = [];
+
+        // 1. Explicit admin notification email setting or contact email
+        $settingNotificationEmail = Setting::where('key', 'admin_notification_email')->value('value');
+        if (!empty($settingNotificationEmail)) {
+            $splits = preg_split('/[,\s;]+/', $settingNotificationEmail, -1, PREG_SPLIT_NO_EMPTY);
+            foreach ($splits as $email) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $emails[] = strtolower(trim($email));
+                }
+            }
+        }
+
+        $contactEmail = Setting::where('key', 'contact_email')->value('value');
+        if (!empty($contactEmail) && filter_var($contactEmail, FILTER_VALIDATE_EMAIL)) {
+            $emails[] = strtolower(trim($contactEmail));
+        }
+
+        // 2. Administrators & Super Admins registered in the system
+        try {
+            $adminUsers = User::where(function ($query) {
+                $query->where('id', 1)
+                    ->orWhereHas('roles', function ($r) {
+                        $r->whereIn('name', ['Super Admin', 'Admin']);
+                    });
+            })->whereNotNull('email')->pluck('email')->toArray();
+
+            foreach ($adminUsers as $adminEmail) {
+                $trimmed = strtolower(trim($adminEmail));
+                if (!empty($trimmed) && filter_var($trimmed, FILTER_VALIDATE_EMAIL) && !str_ends_with($trimmed, '@placeholder.local')) {
+                    $emails[] = $trimmed;
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Could not query admin role users for notification: ' . $e->getMessage());
+        }
+
+        // 3. Fallback to default system from-address
+        if (empty($emails)) {
+            $fromAddress = config('mail.from.address');
+            if (!empty($fromAddress) && filter_var($fromAddress, FILTER_VALIDATE_EMAIL)) {
+                $emails[] = strtolower(trim($fromAddress));
+            }
+        }
+
+        return array_values(array_unique($emails));
     }
 }

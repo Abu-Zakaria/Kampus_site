@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
 import {
     GraduationCap,
@@ -20,7 +20,8 @@ import {
     Send,
     MessageSquareQuote,
     Check,
-    ArrowUpRight
+    ArrowUpRight,
+    Award
 } from 'lucide-react';
 
 export default function Index({
@@ -366,6 +367,28 @@ export default function Index({
                                 </p>
                             )}
                         </div>
+
+                        {/* Student Portfolio Quick Link */}
+                        {selectedAppModal.user && (
+                            <div className="mb-5 p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 flex items-center justify-between gap-3">
+                                <div>
+                                    <p className="text-xs font-extrabold text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
+                                        <Award className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                                        <span>Student Credentials & Portfolio</span>
+                                    </p>
+                                    <p className="text-[11px] text-purple-700 dark:text-purple-400 mt-0.5">
+                                        {selectedAppModal.user.certificates?.length || 0} Certificates • {selectedAppModal.user.achievements?.length || 0} Achievements
+                                    </p>
+                                </div>
+                                <Link
+                                    href={route('admin.students.index', { search: selectedAppModal.applicant_email })}
+                                    className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition-colors shadow-xs inline-flex items-center gap-1"
+                                >
+                                    <span>View Portfolio</span>
+                                    <ArrowUpRight className="w-3 h-3" />
+                                </Link>
+                            </div>
+                        )}
 
                         <form onSubmit={handleStatusSubmit} className="space-y-4">
                             

@@ -149,10 +149,13 @@ class PartnerController extends Controller
             'message' => 'nullable|string|max:2000',
         ]);
 
-        PartnerApplication::create([
+        $application = PartnerApplication::create([
             ...$validated,
             'status' => 'pending',
         ]);
+
+        // Dispatch email notification to admin(s)
+        \App\Services\AdminNotificationService::notifyPartnerApplication($application);
 
         return back()->with('success', 'Thank you! Your partnership application has been submitted. Our team will contact you shortly.');
     }

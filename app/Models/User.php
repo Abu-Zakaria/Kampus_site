@@ -41,6 +41,38 @@ class User extends Authenticatable
     }
 
     /**
+     * Student personal & academic profile.
+     */
+    public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(StudentProfile::class, 'user_id');
+    }
+
+    /**
+     * Student credentials and certificates.
+     */
+    public function certificates(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudentCertificate::class, 'user_id')->orderBy('issue_date', 'desc');
+    }
+
+    /**
+     * Student extracurricular awards and achievements.
+     */
+    public function achievements(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudentAchievement::class, 'user_id')->orderBy('achievement_date', 'desc');
+    }
+
+    /**
+     * Student admission applications.
+     */
+    public function studentApplications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudentApplication::class, 'user_id');
+    }
+
+    /**
      * Determine if the user is an administrator or staff member.
      */
     public function isAdmin(): bool

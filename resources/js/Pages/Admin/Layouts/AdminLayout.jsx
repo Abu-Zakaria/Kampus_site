@@ -30,7 +30,9 @@ import {
     MessageSquare,
     UserCheck,
     BellOff,
-    CheckCheck
+    CheckCheck,
+    Sliders,
+    Award
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -59,8 +61,10 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     }, []);
 
     const currentUser = props?.auth?.user;
-    const unreadNotifications = currentUser?.unreadNotifications || [];
-    const unreadCount = unreadNotifications.length;
+    const notifications = currentUser?.notifications || currentUser?.unreadNotifications || [];
+    const unreadCount = typeof currentUser?.unread_notifications_count === 'number'
+        ? currentUser.unread_notifications_count
+        : (currentUser?.unreadNotifications?.length || 0);
 
     const formatRelativeTime = (dateString) => {
         if (!dateString) return '';
@@ -97,11 +101,13 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
 
     const handleNotificationClick = async (notification) => {
         setIsNotificationsOpen(false);
-        try {
-            await (window.axios || axios).post('/admin/notifications/mark-read', { id: notification.id });
-            router.reload({ only: ['auth'] });
-        } catch (error) {
-            console.error('Failed to mark notification as read', error);
+        if (!notification.read_at) {
+            try {
+                await (window.axios || axios).post('/admin/notifications/mark-read', { id: notification.id });
+                router.reload({ only: ['auth'] });
+            } catch (error) {
+                console.error('Failed to mark notification as read', error);
+            }
         }
     };
     const adminName = currentUser?.name || 'Administrator';
@@ -113,6 +119,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     const sidebarLinks = [
         { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
         { name: 'Global Settings', href: '/admin/settings', icon: Settings, permission: 'manage-settings' },
+        { name: 'Environment (.env)', href: '/admin/settings/env', icon: Sliders, permission: 'manage-settings' },
         { name: 'Hero Slideshow', href: '/admin/slideshow', icon: Layers, permission: 'manage-settings' },
         { name: 'Pages & SEO', href: '/admin/pages', icon: FileText, permission: 'manage-pages' },
         { name: 'Services', href: '/admin/services', icon: Layers, permission: 'manage-pages' },
@@ -124,9 +131,10 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
-        { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries' },
+        { name: 'Student Profiles', href: '/admin/students', icon: Award, permission: 'manage-inquiries' },
+        { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries', badge: props?.pending_applications_count },
         { name: 'Student Messages', href: '/admin/messages', icon: MessageSquare, permission: 'manage-inquiries', badge: props?.unread_admin_messages_count },
-        { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries' },
+        { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries', badge: props?.unread_admin_inquiries_count },
     ];
 
     const accessControlLinks = [
@@ -142,6 +150,8 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     const visibleAccessLinks = accessControlLinks.filter(link => {
         return isSuperAdmin || userPermissions.includes(link.permission);
     });
+
+    const totalUnreadNotifications = (props?.unread_admin_inquiries_count || 0) + (props?.unread_admin_messages_count || 0) + (props?.pending_applications_count || 0);
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -188,7 +198,9 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
 
                         {visibleSidebarLinks.map((link) => {
                             const IconComp = link.icon;
-                            const isActive = url.startsWith(link.href);
+                            const isActive = link.href === '/admin/settings'
+                                ? (url === '/admin/settings' || url === '/admin/settings/')
+                                : url.startsWith(link.href);
                             return (
                                 <Link
                                     key={link.name}
@@ -297,11 +309,10 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                             <button
                                 type="button"
                                 onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                                className={`p-2 rounded-full transition-colors cursor-pointer relative focus:outline-none ${
-                                    isNotificationsOpen
-                                        ? 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400'
-                                        : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                                }`}
+                                className={`p-2 rounded-full transition-colors cursor-pointer relative focus:outline-none ${isNotificationsOpen
+                                    ? 'bg-blue-50 text-blue-600 dark:bg-slate-800 dark:text-blue-400'
+                                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                                    }`}
                                 aria-label="Notifications"
                                 title="Notifications"
                             >
@@ -356,20 +367,21 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
 
                                     {/* Dropdown Notification List */}
                                     <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
-                                        {unreadNotifications.length === 0 ? (
+                                        {notifications.length === 0 ? (
                                             <div className="py-10 px-4 text-center">
                                                 <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 text-slate-400 dark:text-slate-500">
                                                     <BellOff className="w-6 h-6" />
                                                 </div>
                                                 <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                                                    No new notifications
+                                                    No notifications yet
                                                 </p>
                                                 <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-                                                    You're all caught up with leads & applications!
+                                                    You'll be alerted when new inquiries or applications arrive!
                                                 </p>
                                             </div>
                                         ) : (
-                                            unreadNotifications.map((notif) => {
+                                            notifications.map((notif) => {
+                                                const isUnread = !notif.read_at;
                                                 const data = notif.data || {};
                                                 const title = data.title || 'Notification';
                                                 const message = data.message || '';
@@ -381,14 +393,26 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                                         key={notif.id}
                                                         href={targetUrl}
                                                         onClick={() => handleNotificationClick(notif)}
-                                                        className="group flex items-start gap-3 p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors text-left"
+                                                        className={`group flex items-start gap-3 p-3.5 transition-colors text-left border-l-4 ${
+                                                            isUnread
+                                                                ? 'bg-blue-50/60 dark:bg-blue-950/25 border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40'
+                                                                : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/60 opacity-80 hover:opacity-100'
+                                                        }`}
                                                     >
-                                                        <div className="mt-0.5 w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-200/60 dark:border-blue-800/60 group-hover:scale-105 transition-transform">
+                                                        <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${
+                                                            isUnread
+                                                                ? 'bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 border-blue-200/80 dark:border-blue-800/80'
+                                                                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700'
+                                                        }`}>
                                                             <Bell className="w-4 h-4" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
                                                             <div className="flex items-center justify-between gap-1 mb-0.5">
-                                                                <p className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                                <p className={`text-xs truncate transition-colors ${
+                                                                    isUnread
+                                                                        ? 'font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                                                                        : 'font-semibold text-slate-600 dark:text-slate-300'
+                                                                }`}>
                                                                     {title}
                                                                 </p>
                                                                 {timeAgo && (
@@ -397,11 +421,17 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <p className="text-[11px] text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                                                            <p className={`text-[11px] line-clamp-2 leading-relaxed ${
+                                                                isUnread
+                                                                    ? 'text-slate-700 dark:text-slate-200 font-medium'
+                                                                    : 'text-slate-500 dark:text-slate-400'
+                                                            }`}>
                                                                 {message}
                                                             </p>
                                                         </div>
-                                                        <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
+                                                        {isUnread && (
+                                                            <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0 ring-2 ring-blue-200 dark:ring-blue-900" />
+                                                        )}
                                                     </Link>
                                                 );
                                             })
@@ -409,18 +439,28 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                     </div>
 
                                     {/* Dropdown Footer */}
-                                    {unreadNotifications.length > 0 && (
-                                        <div className="p-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-center">
+                                    <div className="p-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 flex items-center justify-between gap-2 text-xs">
+                                        {unreadCount > 0 ? (
                                             <button
                                                 type="button"
                                                 onClick={handleMarkAllAsRead}
                                                 disabled={isMarkingRead}
-                                                className="w-full py-1.5 px-3 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+                                                className="w-full py-1.5 px-3 rounded-xl font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50 text-center"
                                             >
                                                 {isMarkingRead ? 'Processing...' : 'Mark all as read'}
                                             </button>
-                                        </div>
-                                    )}
+                                        ) : (
+                                            <div className="w-full flex items-center justify-between px-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                                                <Link href="/admin/inquiries" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                                    All Inquiries
+                                                </Link>
+                                                <span className="text-slate-300 dark:text-slate-700">•</span>
+                                                <Link href="/admin/student-applications" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                                    All Applications
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </div>

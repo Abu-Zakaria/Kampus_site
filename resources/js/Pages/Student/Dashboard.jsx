@@ -29,9 +29,13 @@ import {
     HelpCircle,
     RotateCcw
 } from 'lucide-react';
+import StudentPortfolioSection from './Partials/StudentPortfolioSection';
 
 export default function Dashboard({
     student,
+    studentProfile = {},
+    certificates = [],
+    achievements = [],
     applications = [],
     inquiries = [],
     conversations = [],
@@ -65,6 +69,8 @@ export default function Dashboard({
                 setActiveTab('queries');
             } else if (hash === 'applications') {
                 setActiveTab('applications');
+            } else if (hash === 'profile' || hash === 'portfolio') {
+                setActiveTab('profile');
             }
         }
     }, []);
@@ -500,6 +506,23 @@ export default function Dashboard({
                                 activeTab === 'queries' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                             }`}>
                                 {inquiries.length}
+                            </span>
+                        </button>
+
+                        <button
+                            onClick={() => setActiveTab('profile')}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${
+                                activeTab === 'profile'
+                                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <Award className="w-4 h-4" />
+                            <span>My Profile & Portfolio</span>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                                activeTab === 'profile' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                            }`}>
+                                {certificates.length + achievements.length}
                             </span>
                         </button>
                     </div>
@@ -1164,6 +1187,16 @@ export default function Dashboard({
                             )}
 
                         </div>
+                    )}
+
+                    {/* 4. TAB CONTENT: MY PROFILE & PORTFOLIO */}
+                    {activeTab === 'profile' && (
+                        <StudentPortfolioSection
+                            student={student}
+                            studentProfile={studentProfile}
+                            certificates={certificates}
+                            achievements={achievements}
+                        />
                     )}
 
                 </div>

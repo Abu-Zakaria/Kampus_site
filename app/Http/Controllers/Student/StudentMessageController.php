@@ -32,13 +32,16 @@ class StudentMessageController extends Controller
             'last_message_at' => now(),
         ]);
 
-        StudentMessage::create([
+        $studentMessage = StudentMessage::create([
             'conversation_id' => $conversation->id,
             'sender_id' => $user->id,
             'sender_type' => 'student',
             'message' => $validated['message'],
             'is_read' => false,
         ]);
+
+        // Dispatch email notification to admin(s)
+        \App\Services\AdminNotificationService::notifyStudentMessage($conversation, $studentMessage, $user);
 
         return redirect()->route('student.dashboard', ['active_tab' => 'messages', 'conversation_id' => $conversation->id])
             ->with('success', 'Your message has been sent to our admissions counselors! You will receive a response shortly.');
@@ -59,7 +62,7 @@ class StudentMessageController extends Controller
             'message' => 'required|string|max:5000',
         ]);
 
-        StudentMessage::create([
+        $studentMessage = StudentMessage::create([
             'conversation_id' => $conversation->id,
             'sender_id' => $user->id,
             'sender_type' => 'student',
@@ -72,6 +75,9 @@ class StudentMessageController extends Controller
             'admin_unread_count' => $conversation->admin_unread_count + 1,
             'status' => 'open', // Reopen conversation if it was marked resolved
         ]);
+
+        // Dispatch email notification to admin(s)
+        \App\Services\AdminNotificationService::notifyStudentMessage($conversation, $studentMessage, $user);
 
         return back()->with('success', 'Reply sent successfully.');
     }
