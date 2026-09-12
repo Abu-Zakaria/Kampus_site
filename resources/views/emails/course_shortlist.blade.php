@@ -1,3 +1,7 @@
+@php
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,7 +137,7 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>Kampus EduConsult</h1>
+            <h1>{{ $siteName }}</h1>
             <div class="badge">AI Matcher Recommendations</div>
         </div>
 
@@ -185,14 +189,14 @@
 
             <p class="message" style="margin-bottom: 0;">
                 Warm regards,<br>
-                <strong>The Kampus Global Admissions Team</strong><br>
+                <strong>The {{ $siteName }} Global Admissions Team</strong><br>
                 <span style="color: #64748b; font-size: 13px;">Connecting ambitious students to leading global universities</span>
             </p>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            &copy; {{ date('Y') }} Kampus Global Education. All rights reserved.<br>
+            &copy; {{ date('Y') }} {{ $footerName }}. All rights reserved.<br>
             If you have immediate questions, feel free to reply directly to this email or visit our <a href="{{ url('/') }}">Official Website</a>.
         </div>
     </div>

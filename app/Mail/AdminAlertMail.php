@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Setting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -68,6 +69,9 @@ class AdminAlertMail extends Mailable
      */
     public function content(): Content
     {
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $footerName = Setting::get('footer_name', $siteName);
+
         return new Content(
             view: 'emails.admin-alert',
             with: [
@@ -79,6 +83,8 @@ class AdminAlertMail extends Mailable
                 'badgeText' => $this->badgeText,
                 'replyToEmail' => $this->replyToEmail,
                 'replyToName' => $this->replyToName,
+                'siteName' => $siteName,
+                'footerName' => $footerName,
             ],
         );
     }

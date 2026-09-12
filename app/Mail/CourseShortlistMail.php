@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Setting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -31,8 +32,10 @@ class CourseShortlistMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+
         return new Envelope(
-            subject: 'Your Personalized Course Shortlist - Kampus Edu',
+            subject: "Your Personalized Course Shortlist - {$siteName}",
         );
     }
 
@@ -41,8 +44,15 @@ class CourseShortlistMail extends Mailable
      */
     public function content(): Content
     {
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $footerName = Setting::get('footer_name', $siteName);
+
         return new Content(
             view: 'emails.course_shortlist',
+            with: [
+                'siteName' => $siteName,
+                'footerName' => $footerName,
+            ],
         );
     }
 

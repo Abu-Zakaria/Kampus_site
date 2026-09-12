@@ -1,3 +1,7 @@
+@php
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -195,9 +199,9 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p><strong>Kampus Educational Consultancy</strong> &bull; Administrative Notification Center</p>
+                <p><strong>{{ $siteName }}</strong> &bull; Administrative Notification Center</p>
                 <p>Dispatched automatically on {{ now()->format('M d, Y - h:i A') }}</p>
-                <p>&copy; {{ date('Y') }} Kampus. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ $footerName }}. All rights reserved.</p>
             </div>
         </div>
     </div>

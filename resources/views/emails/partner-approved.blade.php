@@ -1,3 +1,7 @@
+@php
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,7 +130,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Kampus Education</h1>
+            <h1>{{ $siteName }}</h1>
             <div class="badge">Official Partner Network</div>
         </div>
         <div class="content">
@@ -135,7 +139,7 @@
                 We are pleased to inform you that your agency partnership application for <strong>{{ $companyName }}</strong> has been officially <strong>approved</strong>!
             </p>
             <p class="message">
-                You now have official access to the Kampus Partner Portal where you can explore participating universities, admission guidelines, course repositories, and study abroad offerings.
+                You now have official access to the {{ $siteName }} Partner Portal where you can explore participating universities, admission guidelines, course repositories, and study abroad offerings.
             </p>
 
             <div class="credentials-card">
@@ -172,7 +176,7 @@
             </div>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} Kampus Group. All rights reserved. <br>
+            &copy; {{ date('Y') }} {{ $footerName }}. All rights reserved. <br>
             If you did not request this account, please contact our support team.
         </div>
     </div>

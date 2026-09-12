@@ -1,3 +1,7 @@
+@php
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,7 +171,7 @@
             <div class="content">
                 <div class="greeting">Hello {{ $studentName }},</div>
                 <p class="intro-text">
-                    An educational advisor from <strong>Kampus</strong> has reviewed your inquiry and provided the following official response:
+                    An educational advisor from <strong>{{ $siteName }}</strong> has reviewed your inquiry and provided the following official response:
                 </p>
 
                 <!-- Counselor Reply -->
@@ -198,7 +202,7 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p><strong>Kampus Education Consultancy</strong></p>
+                <p><strong>{{ $footerName }}</strong></p>
                 <p>This is an automated notification of your inquiry reply. You can track all your admissions and queries inside your student dashboard.</p>
             </div>
         </div>
