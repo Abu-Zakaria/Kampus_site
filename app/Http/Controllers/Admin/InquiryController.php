@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
+use App\Models\User;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class InquiryController extends Controller
@@ -123,6 +126,16 @@ class InquiryController extends Controller
 
         // Dispatch email notification to admin(s)
         \App\Services\AdminNotificationService::notifyContactMessage($contactMessage);
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Contact Inquiry',
+                "{$name} submitted an inquiry: {$topic}",
+                route('admin.inquiries.index')
+            ));
+        }
 
         if ($request->expectsJson() || $request->wantsJson()) {
             return response()->json([

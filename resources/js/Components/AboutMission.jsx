@@ -4,7 +4,6 @@ import {
     HeartHandshake,
     Globe2,
     CheckCircle2,
-    Sparkles,
     Users,
     ShieldCheck
 } from 'lucide-react';
@@ -27,13 +26,6 @@ export default function AboutMission() {
                         {/* Dark Gradient Overlay for Contrast */}
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
 
-                        {/* Floating Feature Badges */}
-                        <div className="absolute top-6 left-6 flex flex-wrap items-center gap-3">
-                            <span className="px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider border border-white/30 shadow-md flex items-center gap-1.5">
-                                <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-                                Global Education Mission
-                            </span>
-                        </div>
 
                         <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-white">
                             <div className="flex items-center gap-3 bg-slate-900/80 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 max-w-md">

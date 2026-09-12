@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { usePage } from '@inertiajs/react';
 import {
@@ -23,12 +23,14 @@ export default function BookCallModal({ isOpen, onClose }) {
     const globalCountries = props?.globalCountries || [];
 
     const destinationOptions = globalCountries.length > 0
-        ? globalCountries.map(c => ({ id: c.name, code: c.country_code || 'GL', name: c.name }))
+        ? globalCountries.map(c => ({ id: c.id || c.name, code: c.country_code || 'GL', name: c.name }))
         : [
-            { id: 'United Kingdom', code: 'GB', name: 'United Kingdom' },
-            { id: 'United States', code: 'US', name: 'United States' },
-            { id: 'Finland', code: 'FI', name: 'Finland' },
-            { id: 'United Arab Emirates', code: 'AE', name: 'Dubai / UAE' }
+            { id: 1, code: 'AU', name: 'Australia' },
+            { id: 2, code: 'CA', name: 'Canada' },
+            { id: 3, code: 'GB', name: 'United Kingdom' },
+            { id: 4, code: 'US', name: 'United States' },
+            { id: 5, code: 'FI', name: 'Finland' },
+            { id: 6, code: 'AE', name: 'Dubai / UAE' }
         ];
 
     const residenceCountries = globalCountries.length > 0
@@ -43,7 +45,7 @@ export default function BookCallModal({ isOpen, onClose }) {
     const todayStr = new Date().toISOString().split('T')[0];
 
     const [formData, setFormData] = useState({
-        destination: destinationOptions[0]?.id || 'United Kingdom',
+        destination: destinationOptions[0]?.name || 'Australia',
         level_of_study: 'Postgraduate (Masters Degree / MSc / MBA)',
         date: todayStr,
         time: 'Morning (09:00 AM - 12:00 PM)',
@@ -52,6 +54,12 @@ export default function BookCallModal({ isOpen, onClose }) {
         phone: '',
         country: residenceCountries[0] || 'Bangladesh',
     });
+
+    useEffect(() => {
+        if (!formData.destination && destinationOptions.length > 0) {
+            setFormData((prev) => ({ ...prev, destination: destinationOptions[0].name }));
+        }
+    }, [destinationOptions]);
 
     const handleFieldChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -171,41 +179,25 @@ export default function BookCallModal({ isOpen, onClose }) {
                                 </p>
                             </div>
 
-                            {/* DESTINATION TOGGLE BUTTONS */}
+                            {/* PREFERRED STUDY DESTINATION DROPDOWN */}
                             <div className="space-y-2">
                                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                                     PREFERRED STUDY DESTINATION
                                 </label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {destinationOptions.slice(0, 6).map((item) => {
-                                        const isSelected = formData.destination === item.id;
-                                        return (
-                                            <button
-                                                key={item.id}
-                                                type="button"
-                                                onClick={() => handleFieldChange('destination', item.id)}
-                                                className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
-                                                    isSelected
-                                                        ? 'bg-blue-50/90 dark:bg-blue-950/60 border-blue-600 text-blue-900 dark:text-blue-100 shadow-xs ring-1 ring-blue-600'
-                                                        : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:border-blue-400'
-                                                }`}
-                                            >
-                                                <div className="flex items-center min-w-0">
-                                                    <div className={`flex items-center justify-center w-9 h-9 rounded-xl text-xs font-bold mr-3 shrink-0 transition-colors ${
-                                                        isSelected
-                                                            ? 'bg-blue-600 text-white shadow-xs'
-                                                            : 'bg-slate-200/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300'
-                                                    }`}>
-                                                        {item.code}
-                                                    </div>
-                                                    <span className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                                                        {item.name}
-                                                    </span>
-                                                </div>
-                                                {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 ml-2" />}
-                                            </button>
-                                        );
-                                    })}
+                                <div className="relative">
+                                    <select
+                                        value={formData.destination}
+                                        onChange={(e) => handleFieldChange('destination', e.target.value)}
+                                        className="w-full pl-11 pr-8 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none truncate cursor-pointer"
+                                    >
+                                        <option value="" disabled>Select target study destination...</option>
+                                        {destinationOptions.map((item) => (
+                                            <option key={item.id} value={item.name}>
+                                                {item.name} {item.code && item.code !== 'GL' ? `(${item.code})` : ''}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <Globe className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" />
                                 </div>
                                 {errors.destination && (
                                     <p className="text-xs font-semibold text-rose-500 pt-1">{errors.destination}</p>
@@ -315,7 +307,7 @@ export default function BookCallModal({ isOpen, onClose }) {
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => handleFieldChange('name', e.target.value)}
-                                        placeholder="e.g. Hasan Uz Zaman"
+                                        placeholder="e.g. John Doe"
                                         className="w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                     <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
@@ -351,7 +343,7 @@ export default function BookCallModal({ isOpen, onClose }) {
                                         type="tel"
                                         value={formData.phone}
                                         onChange={(e) => handleFieldChange('phone', e.target.value)}
-                                        placeholder="e.g. +880 1700 000000"
+                                        placeholder="e.g. +10 700 00000"
                                         className="w-full pl-11 pr-4 py-2.5 sm:py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                     <Phone className="w-5 h-5 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />

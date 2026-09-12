@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CourseInquiryAdminNotification;
+use App\Mail\CourseShortlistMail;
 use App\Models\ContactMessage;
 use App\Models\Course;
 use App\Models\Setting;
 use App\Models\StudentApplication;
 use App\Models\User;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class FrontendController extends Controller
 {
@@ -41,6 +44,16 @@ class FrontendController extends Controller
 
         // Dispatch email notification to admin(s)
         \App\Services\AdminNotificationService::notifyCallBooking($contactMessage, $validated);
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Call Booking Request',
+                "{$validated['name']} requested a consultation call for {$validated['destination']}.",
+                route('admin.inquiries.index')
+            ));
+        }
 
         return response()->json([
             'success' => true,
@@ -145,6 +158,8 @@ class FrontendController extends Controller
             'budget' => 'nullable|string',
             'start_date' => 'nullable|string',
             'english_status' => 'nullable|string',
+            'course_ids' => 'nullable|array',
+            'course_ids.*' => 'integer',
         ]);
 
         $criteria = [
@@ -173,10 +188,37 @@ class FrontendController extends Controller
 
         // Dispatch email notification to admin(s)
         \App\Services\AdminNotificationService::notifyCourseMatcherLead($contactMessage, $criteria);
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Course Matcher Lead',
+                'A new student lead was generated from the AI Matcher: ' . $validated['name'],
+                route('admin.inquiries.index')
+            ));
+        }
+
+        // Fetch matched courses and email personalized shortlist to user
+        $courseIds = $request->input('course_ids', []);
+        $courses = collect();
+        if (!empty($courseIds)) {
+            $courses = Course::with(['university.country'])
+                ->whereIn('id', $courseIds)
+                ->get();
+        }
+
+        if ($courses->isNotEmpty()) {
+            try {
+                Mail::to($validated['email'])->send(new CourseShortlistMail($validated['name'], $courses));
+            } catch (\Throwable $e) {
+                Log::error('Failed to send course shortlist email: ' . $e->getMessage());
+            }
+        }
 
         return response()->json([
             'success' => true,
-            'message' => 'Your shortlist has been recorded! Our admissions team will email you the full course brochures shortly.',
+            'message' => 'Your shortlist has been recorded! Our admissions team has emailed you your personalized recommendations.',
         ]);
     }
 
@@ -276,6 +318,15 @@ class FrontendController extends Controller
                     'recipients' => $adminRecipients,
                 ]);
             }
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Student Application: ' . $appNo,
+                "{$validated['name']} submitted an application for {$validated['course_title']}.",
+                route('admin.student-applications.index')
+            ));
         }
 
         return response()->json([

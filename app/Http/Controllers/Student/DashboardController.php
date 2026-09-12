@@ -9,7 +9,10 @@ use App\Models\StudentApplication;
 use App\Models\StudentConversation;
 use App\Models\StudentMessage;
 use App\Models\University;
+use App\Models\User;
+use App\Notifications\AdminAlertNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -172,6 +175,16 @@ class DashboardController extends Controller
 
         // Dispatch email notification to admin(s)
         \App\Services\AdminNotificationService::notifyStudentApplication($application);
+        $admins = User::where('id', 1)
+            ->orWhereHas('roles', fn($q) => $q->whereIn('name', ['Super Admin', 'Admin', 'admin']))
+            ->get();
+        if ($admins->isNotEmpty()) {
+            Notification::send($admins, new AdminAlertNotification(
+                'New Student Application: ' . $appNo,
+                "{$user->name} applied for {$validated['course_title']} at {$validated['university_name']}.",
+                route('admin.student-applications.index')
+            ));
+        }
 
         return back()->with('success', "Your application #{$appNo} has been submitted! An educational advisor will review your profile shortly.");
     }

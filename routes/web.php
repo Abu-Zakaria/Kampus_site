@@ -22,11 +22,13 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentApplicationController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use Illuminate\Http\Request;
 
@@ -38,7 +40,24 @@ Route::get('/about', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('About', ['page' => $page]); 
+
+    $employees = \App\Models\Employee::where('is_active', true)
+        ->orderBy('sort_order', 'asc')
+        ->orderBy('id', 'asc')
+        ->get();
+
+    $companyStats = [
+        'employee_count' => \App\Models\Setting::where('key', 'company_employee_count')->value('value') ?: ($employees->count() . '+ Global Team Members'),
+        'employee_stat_subtext' => \App\Models\Setting::where('key', 'company_employee_stat_subtext')->value('value') ?: 'Dedicated education consultants, visa case officers, and support staff across 15+ countries worldwide.',
+        'team_heading' => \App\Models\Setting::where('key', 'company_team_heading')->value('value') ?: 'Meet our global education leadership',
+        'team_subheading' => \App\Models\Setting::where('key', 'company_team_subheading')->value('value') ?: 'Driven by ethics, academic expertise, and student success, our multi-disciplinary team brings decades of university admissions experience.',
+    ];
+
+    return Inertia::render('About', [
+        'page' => $page,
+        'employees' => $employees,
+        'companyStats' => $companyStats,
+    ]); 
 })->name('about');
 
 Route::get('/services', [PublicServiceController::class, 'index'])->name('services.index');
@@ -157,12 +176,8 @@ Route::middleware(['auth'])->prefix('student')->group(function () {
 
 // SECURED ADMIN CMS ROUTES (Protected by 'auth' and 'EnsurePartnerPasswordSet' middleware)
 Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function (Request $request) {
-        if ($request->user()->isStudent()) {
-            return redirect()->route('student.dashboard');
-        }
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::post('/notifications/mark-read', [AdminDashboardController::class, 'markNotificationsRead'])->name('admin.notifications.mark-read');
 
     // Global Settings Routes
     Route::middleware('can:manage-settings')->group(function () {
@@ -210,6 +225,18 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
             'destroy' => 'admin.branches.destroy',
         ]);
         Route::patch('/branches/{branch}/toggle-status', [BranchController::class, 'toggleStatus'])->name('admin.branches.toggle-status');
+
+        // Employees & Company Team CRUD Routes
+        Route::post('/employees/settings', [EmployeeController::class, 'updateSettings'])->name('admin.employees.settings');
+        Route::patch('/employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])->name('admin.employees.toggle-status');
+        Route::resource('employees', EmployeeController::class)->names([
+            'index' => 'admin.employees.index',
+            'create' => 'admin.employees.create',
+            'store' => 'admin.employees.store',
+            'edit' => 'admin.employees.edit',
+            'update' => 'admin.employees.update',
+            'destroy' => 'admin.employees.destroy',
+        ]);
     });
 
     // Countries CRUD Routes
