@@ -14,7 +14,13 @@ class StudentApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = StudentApplication::with(['user:id,name,email', 'university:id,name', 'course:id,title'])
+        $query = StudentApplication::with([
+            'user' => function ($uq) {
+                $uq->with(['studentProfile', 'certificates', 'achievements']);
+            },
+            'university:id,name',
+            'course:id,title'
+        ])
             ->orderBy('id', 'desc');
 
         if ($request->filled('search')) {

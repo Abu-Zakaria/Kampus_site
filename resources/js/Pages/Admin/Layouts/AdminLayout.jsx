@@ -31,7 +31,8 @@ import {
     UserCheck,
     BellOff,
     CheckCheck,
-    Sliders
+    Sliders,
+    Award
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -130,6 +131,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
+        { name: 'Student Profiles', href: '/admin/students', icon: Award, permission: 'manage-inquiries' },
         { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries', badge: props?.pending_applications_count },
         { name: 'Student Messages', href: '/admin/messages', icon: MessageSquare, permission: 'manage-inquiries', badge: props?.unread_admin_messages_count },
         { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries', badge: props?.unread_admin_inquiries_count },

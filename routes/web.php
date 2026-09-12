@@ -173,12 +173,29 @@ Route::middleware(['auth'])->prefix('student')->group(function () {
     Route::post('/messages', [\App\Http\Controllers\Student\StudentMessageController::class, 'store'])->name('student.messages.store');
     Route::post('/messages/{id}/reply', [\App\Http\Controllers\Student\StudentMessageController::class, 'reply'])->name('student.messages.reply');
     Route::post('/messages/{id}/read', [\App\Http\Controllers\Student\StudentMessageController::class, 'markAsRead'])->name('student.messages.read');
+
+    // Student Profile, Certificates & Achievements Routes
+    Route::put('/profile', [\App\Http\Controllers\Student\StudentProfileController::class, 'updateProfile'])->name('student.profile.update');
+    Route::post('/certificates', [\App\Http\Controllers\Student\StudentProfileController::class, 'storeCertificate'])->name('student.certificates.store');
+    Route::post('/certificates/{id}', [\App\Http\Controllers\Student\StudentProfileController::class, 'updateCertificate'])->name('student.certificates.update');
+    Route::delete('/certificates/{id}', [\App\Http\Controllers\Student\StudentProfileController::class, 'destroyCertificate'])->name('student.certificates.destroy');
+    Route::post('/achievements', [\App\Http\Controllers\Student\StudentProfileController::class, 'storeAchievement'])->name('student.achievements.store');
+    Route::post('/achievements/{id}', [\App\Http\Controllers\Student\StudentProfileController::class, 'updateAchievement'])->name('student.achievements.update');
+    Route::delete('/achievements/{id}', [\App\Http\Controllers\Student\StudentProfileController::class, 'destroyAchievement'])->name('student.achievements.destroy');
 });
 
 // SECURED ADMIN CMS ROUTES (Protected by 'auth' and 'EnsurePartnerPasswordSet' middleware)
 Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/notifications/mark-read', [AdminDashboardController::class, 'markNotificationsRead'])->name('admin.notifications.mark-read');
+
+    // Student Directory & Portfolio Review Routes
+    Route::middleware('can:manage-inquiries')->group(function () {
+        Route::get('/students', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('admin.students.index');
+        Route::get('/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('admin.students.show');
+        Route::patch('/students/certificates/{id}/verify', [\App\Http\Controllers\Admin\StudentController::class, 'verifyCertificate'])->name('admin.students.certificates.verify');
+        Route::patch('/students/achievements/{id}/verify', [\App\Http\Controllers\Admin\StudentController::class, 'verifyAchievement'])->name('admin.students.achievements.verify');
+    });
 
     // Global Settings Routes
     Route::middleware('can:manage-settings')->group(function () {

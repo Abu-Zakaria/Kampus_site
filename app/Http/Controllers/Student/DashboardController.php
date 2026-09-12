@@ -59,6 +59,11 @@ class DashboardController extends Controller
             }
         }
 
+        // Retrieve student's profile, certificates and achievements
+        $studentProfile = $user->studentProfile;
+        $certificates = $user->certificates()->orderBy('issue_date', 'desc')->get();
+        $achievements = $user->achievements()->orderBy('achievement_date', 'desc')->get();
+
         // Summary statistics
         $stats = [
             'total_applications' => $applications->count(),
@@ -69,6 +74,9 @@ class DashboardController extends Controller
             'pending_replies' => $inquiries->whereNull('reply_message')->count(),
             'total_conversations' => $conversations->count(),
             'unread_messages' => $conversations->sum('student_unread_count'),
+            'total_certificates' => $certificates->count(),
+            'verified_certificates' => $certificates->where('status', 'verified')->count(),
+            'total_achievements' => $achievements->count(),
         ];
 
         // List of partner universities & courses for quick application modal
@@ -84,6 +92,9 @@ class DashboardController extends Controller
                 'email' => $user->email,
                 'created_at' => $user->created_at ? $user->created_at->format('M Y') : 'Member',
             ],
+            'studentProfile' => $studentProfile,
+            'certificates' => $certificates,
+            'achievements' => $achievements,
             'applications' => $applications,
             'inquiries' => $inquiries,
             'conversations' => $conversations,
