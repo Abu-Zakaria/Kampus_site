@@ -68,9 +68,9 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
-        { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries' },
+        { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries', badge: props?.pending_applications_count },
         { name: 'Student Messages', href: '/admin/messages', icon: MessageSquare, permission: 'manage-inquiries', badge: props?.unread_admin_messages_count },
-        { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries' },
+        { name: 'Inquiries & Contact', href: '/admin/inquiries', icon: Mail, permission: 'manage-inquiries', badge: props?.unread_admin_inquiries_count },
     ];
 
     const accessControlLinks = [
@@ -86,6 +86,8 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
     const visibleAccessLinks = accessControlLinks.filter(link => {
         return isSuperAdmin || userPermissions.includes(link.permission);
     });
+
+    const totalUnreadNotifications = (props?.unread_admin_inquiries_count || 0) + (props?.unread_admin_messages_count || 0) + (props?.pending_applications_count || 0);
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -237,10 +239,19 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                     <div className="flex items-center gap-3 sm:gap-4">
 
                         {/* Notification Bell */}
-                        <button className="p-2 rounded-full text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 relative">
+                        <Link
+                            href="/admin/inquiries"
+                            className="p-2 rounded-full text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 relative transition-colors"
+                            title={totalUnreadNotifications > 0 ? `${totalUnreadNotifications} unread inquiry/message notification(s)` : 'No new notifications'}
+                            aria-label="Admin Notifications"
+                        >
                             <Bell className="w-5 h-5" />
-                            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                        </button>
+                            {totalUnreadNotifications > 0 && (
+                                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[9px] font-black rounded-full bg-rose-500 text-white shadow-xs animate-pulse">
+                                    {totalUnreadNotifications > 99 ? '99+' : totalUnreadNotifications}
+                                </span>
+                            )}
+                        </Link>
 
                         {/* Dark / Light Mode Toggle Button */}
                         <button

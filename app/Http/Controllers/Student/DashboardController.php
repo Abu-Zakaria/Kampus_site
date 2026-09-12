@@ -170,6 +170,9 @@ class DashboardController extends Controller
             'is_read' => false,
         ]);
 
+        // Dispatch email notification to admin(s)
+        \App\Services\AdminNotificationService::notifyStudentApplication($application);
+
         return back()->with('success', "Your application #{$appNo} has been submitted! An educational advisor will review your profile shortly.");
     }
 }

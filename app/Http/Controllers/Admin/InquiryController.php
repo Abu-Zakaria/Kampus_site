@@ -121,6 +121,9 @@ class InquiryController extends Controller
             'is_read' => false,
         ]);
 
+        // Dispatch email notification to admin(s)
+        \App\Services\AdminNotificationService::notifyContactMessage($contactMessage);
+
         if ($request->expectsJson() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,

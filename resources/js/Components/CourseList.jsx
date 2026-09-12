@@ -351,10 +351,10 @@ export default function CourseList({
                                     <CheckCircle2 className="w-8 h-8" />
                                 </div>
                                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
-                                    Application Submitted!
+                                    Inquiry Submitted Successfully!
                                 </h3>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
-                                    Thank you! An admissions advisor for <span className="font-bold text-blue-600">{selectedCourseModal.title}</span> will contact you shortly.
+                                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                                    Thank you! Your course inquiry for <span className="font-bold text-blue-600 dark:text-blue-400">{selectedCourseModal.title}</span> has been received. Our admissions team and university counselors will contact you shortly.
                                 </p>
                             </div>
                         ) : (
@@ -438,6 +438,19 @@ export default function CourseList({
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                            Questions / Inquiry Notes (Optional)
+                                        </label>
+                                        <textarea
+                                            rows={3}
+                                            value={formData.notes}
+                                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                            placeholder="Ask about entry requirements, scholarships, intakes, visa guidance, or credit transfers..."
+                                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans"
+                                        />
+                                    </div>
+
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
@@ -446,10 +459,10 @@ export default function CourseList({
                                         {isSubmitting ? (
                                             <>
                                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                                <span>Submitting Application...</span>
+                                                <span>Submitting Inquiry...</span>
                                             </>
                                         ) : (
-                                            <span>Submit Direct Application</span>
+                                            <span>Submit Course Inquiry</span>
                                         )}
                                     </button>
                                 </form>

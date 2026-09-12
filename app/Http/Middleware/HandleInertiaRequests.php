@@ -2,10 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Page;
-use App\Models\Faq;
 use App\Models\Branch;
+use App\Models\ContactMessage;
+use App\Models\Faq;
+use App\Models\Page;
 use App\Models\Setting;
+use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -64,6 +66,8 @@ class HandleInertiaRequests extends Middleware
             'globalSettings' => fn () => Setting::pluck('value', 'key')->toArray(),
             'unread_student_messages_count' => fn () => $request->user() ? (int) \App\Models\StudentConversation::where('user_id', $request->user()->id)->sum('student_unread_count') : 0,
             'unread_admin_messages_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) \App\Models\StudentConversation::where('admin_unread_count', '>', 0)->count() : 0,
+            'unread_admin_inquiries_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) ContactMessage::where('is_read', false)->count() : 0,
+            'pending_applications_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) StudentApplication::where('status', 'pending')->count() : 0,
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
