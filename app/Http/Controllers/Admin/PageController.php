@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Models\Country;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -64,9 +65,11 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::findOrFail($id);
+        $countries = Country::orderBy('name', 'asc')->get(['id', 'name', 'slug', 'country_code']);
 
         return Inertia::render('Admin/Pages/Edit', [
             'page' => $page,
+            'countries' => $countries,
         ]);
     }
 
@@ -113,7 +116,15 @@ class PageController extends Controller
             );
         }
 
-        return redirect()->route('admin.pages.index')
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Page '{$page->name}' updated successfully.",
+                'page' => $page,
+            ]);
+        }
+
+        return redirect()->route('admin.pages.edit', $page->id)
             ->with('success', "Page '{$page->name}' updated successfully.");
     }
 
