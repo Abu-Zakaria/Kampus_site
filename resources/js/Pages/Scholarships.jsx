@@ -12,7 +12,6 @@ import {
     ArrowRight,
     Search,
     DollarSign,
-    ShieldCheck,
     Filter
 } from 'lucide-react';
 
@@ -296,10 +295,6 @@ export default function Scholarships({ page = null }) {
                 <section className="py-14 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white border-y border-slate-800 relative overflow-hidden">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
                         <div className="space-y-2 max-w-2xl">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase border border-emerald-500/30">
-                                <ShieldCheck className="w-3.5 h-3.5" />
-                                1-on-1 Funding Evaluation
-                            </span>
                             <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
                                 Not sure which one you qualify for?
                             </h3>
