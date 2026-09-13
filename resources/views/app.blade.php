@@ -38,6 +38,9 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
+
+        <!-- Custom Admin Header Code (SEO/Analytics) -->
+        {!! $page['props']['globalSettings']['custom_header_code'] ?? ($settings['custom_header_code'] ?? '') !!}
     </head>
     <body class="font-sans antialiased bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
         @inertia

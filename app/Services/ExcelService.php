@@ -94,6 +94,8 @@ class ExcelService
             'cover_image' => 'Cover Photo (URL or paste image in cell)',
             'logo' => 'Logo (URL or paste image in cell)',
             'features' => 'Key Features (Semicolon-separated)',
+            'meta_title' => 'SEO Meta Title (Optional)',
+            'meta_description' => 'SEO Meta Description (Optional)',
             'slug' => 'Slug (Optional - auto generated if empty)',
         ];
 
@@ -107,6 +109,8 @@ class ExcelService
                 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1000&q=80',
                 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?auto=format&fit=crop&w=200&q=80',
                 'QS World Rank #28; Excellence University; Top Engineering Faculty; High Employability',
+                'Technical University of Munich — Study Engineering & Technology',
+                'Explore admissions, world ranking, and study programs at Technical University of Munich.',
                 'technical-university-of-munich'
             ],
             [
@@ -118,6 +122,8 @@ class ExcelService
                 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=1000&q=80',
                 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=200&q=80',
                 'Ranked #1 in Australia; Group of Eight Member; Vibrant Campus Life; High Research Output',
+                'University of Melbourne — Courses & Admissions Guide',
+                'Complete guide to studying at University of Melbourne with scholarships and campus overview.',
                 'university-of-melbourne'
             ],
             [
@@ -129,6 +135,8 @@ class ExcelService
                 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80',
                 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
                 'Ranked #8 Globally; Asian Tech Hub; Comprehensive Financial Aid; Global Academic Partners',
+                'National University of Singapore (NUS) — Overview & Degree Programs',
+                'Discover undergraduate and postgraduate degrees at National University of Singapore.',
                 'national-university-of-singapore'
             ],
         ];
@@ -436,6 +444,9 @@ class ExcelService
                 $features = array_values(array_filter(array_map('trim', preg_split('/[;,]/', (string)$row[$colMap['features']]))));
             }
 
+            $metaTitle = isset($colMap['meta_title']) ? trim((string)$row[$colMap['meta_title']]) : null;
+            $metaDescription = isset($colMap['meta_description']) ? trim((string)$row[$colMap['meta_description']]) : null;
+
             $data = [
                 'country_id' => $countryId,
                 'name' => $name,
@@ -444,6 +455,8 @@ class ExcelService
                 'website' => $website ?: null,
                 'description' => $description ?: null,
                 'features' => !empty($features) ? $features : null,
+                'meta_title' => $metaTitle ?: null,
+                'meta_description' => $metaDescription ?: null,
             ];
 
             if ($coverImage) {
@@ -772,6 +785,10 @@ class ExcelService
                     $map['cover_image'] = $colLetter;
                 } elseif (str_contains($clean, 'feature') || str_contains($clean, 'highlight') || str_contains($clean, 'tag')) {
                     $map['features'] = $colLetter;
+                } elseif (str_contains($clean, 'meta_title') || str_contains($clean, 'metatitle') || (str_contains($clean, 'meta') && str_contains($clean, 'title')) || str_contains($clean, 'seo_title') || str_contains($clean, 'seotitle')) {
+                    $map['meta_title'] = $colLetter;
+                } elseif (str_contains($clean, 'meta_desc') || str_contains($clean, 'metadesc') || (str_contains($clean, 'meta') && str_contains($clean, 'desc')) || str_contains($clean, 'seo_desc') || str_contains($clean, 'seodesc')) {
+                    $map['meta_description'] = $colLetter;
                 } elseif (str_contains($clean, 'description') || str_contains($clean, 'about') || str_contains($clean, 'overview') || str_contains($clean, 'summary')) {
                     $map['description'] = $colLetter;
                 } elseif (str_contains($clean, 'slug')) {

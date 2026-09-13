@@ -16,6 +16,8 @@ class Blog extends Model
         'excerpt',
         'content',
         'image',
+        'meta_title',
+        'meta_description',
         'is_published',
         'is_featured',
     ];

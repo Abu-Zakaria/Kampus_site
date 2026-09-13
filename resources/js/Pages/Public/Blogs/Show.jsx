@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import Layout from '../../../Layouts/Layout';
+import SeoHead from '../../../Components/SeoHead';
 import {
     Calendar,
     ArrowLeft,
@@ -86,7 +87,11 @@ export default function BlogShow({ blog = {}, relatedBlogs = [] }) {
 
     return (
         <Layout>
-            <Head title={`${blog.title || 'Blog Post'} — Kampus EduConsult`} />
+            <SeoHead
+                title={blog.meta_title || blog.title}
+                description={blog.meta_description || blog.excerpt}
+                image={blog.image ? (blog.image.startsWith('http') || blog.image.startsWith('/') ? blog.image : '/storage/' + blog.image) : (blog.featured_image ? '/storage/' + blog.featured_image : null)}
+            />
 
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
                 

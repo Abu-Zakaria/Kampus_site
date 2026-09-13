@@ -39,6 +39,8 @@ export default function Form({ university = null, countries = [] }) {
         features: initialFeatures,
         cover_image: null,
         logo: null,
+        meta_title: university?.meta_title || '',
+        meta_description: university?.meta_description || '',
     });
 
     const handleNameChange = (e) => {
@@ -371,6 +373,57 @@ export default function Form({ university = null, countries = [] }) {
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+
+                    {/* SECTION 4: SEO (SEARCH ENGINE OPTIMIZATION) */}
+                    <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+                        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                            <div className="p-2.5 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400">
+                                <Globe className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                                    SEO (Search Engine Optimization)
+                                </h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    Configure custom metadata for search engine rankings and social sharing
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Meta Title */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Meta Title
+                                    <span className="text-slate-400 font-normal ml-2">(falls back to university name if left blank)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.meta_title}
+                                    onChange={(e) => setData('meta_title', e.target.value)}
+                                    placeholder={data.name || "e.g. University of Oxford — Rankings, Courses & Admissions"}
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                            </div>
+
+                            {/* Meta Description */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Meta Description
+                                    <span className="text-slate-400 font-normal ml-2">(falls back to description overview if left blank)</span>
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    value={data.meta_description}
+                                    onChange={(e) => setData('meta_description', e.target.value)}
+                                    placeholder={data.description || "A targeted summary for search engine snippet results..."}
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                {errors.meta_description && <span className="text-xs text-rose-500 font-semibold">{errors.meta_description}</span>}
+                            </div>
                         </div>
                     </div>
 
