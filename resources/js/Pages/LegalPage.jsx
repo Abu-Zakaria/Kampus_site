@@ -4,7 +4,9 @@ import Layout from '../Layouts/Layout';
 import { ShieldCheck, Calendar } from 'lucide-react';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
-export default function LegalPage({ title, lastUpdated, page = null, children }) {
+export default function LegalPage({ title, lastUpdated, page = null, badge = 'Legal & Compliance', children }) {
+    const isBadgeHidden = page?.slug === 'accreditation' || page?.slug === 'terms-of-service' || page?.slug === 'terms' || page?.slug === 'privacy-policy' || !badge;
+    const displayBadge = isBadgeHidden ? null : badge;
     const displayTitle = page?.meta_title || `${page?.name || title} — Kampus EduConsult`;
     const metaDescription = page?.meta_description || 'Official compliance, terms, and legal documentation for Kampus Educational Consultancy Ltd.';
     const metaKeywords = page?.meta_keywords || 'privacy policy, terms of service, kampus compliance';
@@ -24,10 +26,12 @@ export default function LegalPage({ title, lastUpdated, page = null, children })
                     
                     {/* PAGE HEADER */}
                     <div className="mb-10 pb-8 border-b border-slate-200 dark:border-slate-800 space-y-3">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-200/60 dark:border-blue-800">
-                            <ShieldCheck className="w-3.5 h-3.5" />
-                            <span>Legal & Compliance</span>
-                        </div>
+                        {displayBadge && (
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-200/60 dark:border-blue-800">
+                                <ShieldCheck className="w-3.5 h-3.5" />
+                                <span>{displayBadge}</span>
+                            </div>
+                        )}
 
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                             {page?.name || title}

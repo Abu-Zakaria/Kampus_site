@@ -35,7 +35,7 @@ export default function Accreditation({ page = null }) {
     ];
 
     return (
-        <LegalPage title="Accreditation & Partner Credentials" lastUpdated="August 2026" page={page}>
+        <LegalPage title="Accreditation & Partner Credentials" lastUpdated="August 2026" page={page} badge={null}>
             <p>
                 Kampus Educational Consultancy Ltd is proud to hold official accreditations and certifications from top global education bodies, British government councils, and international agent standards organizations.
             </p>

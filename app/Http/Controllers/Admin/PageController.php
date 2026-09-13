@@ -92,7 +92,7 @@ class PageController extends Controller
         $coreSlugs = [
             '/', 'home', 'about', 'services', 'universities', 'courses', 'blog', 'contact',
             'partner-with-us', 'partner', 'scholarships', 'visa-guide', 'privacy-policy',
-            'terms-of-service', 'terms', 'cookie-preferences', 'accreditation'
+            'terms-of-service', 'terms', 'accreditation'
         ];
 
         if (in_array(strtolower($page->slug), $coreSlugs)) {
@@ -156,7 +156,6 @@ class PageController extends Controller
             'privacy-policy',
             'terms-of-service',
             'terms',
-            'cookie-preferences',
             'accreditation'
         ];
 

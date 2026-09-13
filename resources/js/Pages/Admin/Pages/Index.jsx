@@ -38,7 +38,6 @@ export default function Index({ pages = [] }) {
         'privacy-policy',
         'terms-of-service',
         'terms',
-        'cookie-preferences',
         'accreditation'
     ];
 

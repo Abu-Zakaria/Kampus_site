@@ -129,14 +129,6 @@ Route::get('/terms', function () {
     return redirect()->route('terms-of-service');
 });
 
-Route::get('/cookie-preferences', function () {
-    $page = \App\Models\Page::where('slug', 'cookie-preferences')->first();
-    if ($page && !$page->is_active && !auth()->check()) {
-        abort(404);
-    }
-    return Inertia::render('CookiePreferences', ['page' => $page]); 
-})->name('cookie-preferences');
-
 Route::get('/accreditation', function () {
     $page = \App\Models\Page::where('slug', 'accreditation')->first();
     if ($page && !$page->is_active && !auth()->check()) {

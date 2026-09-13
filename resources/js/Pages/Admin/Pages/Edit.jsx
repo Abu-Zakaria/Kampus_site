@@ -40,12 +40,11 @@ export default function Edit({ page }) {
         'privacy-policy',
         'terms-of-service',
         'terms',
-        'cookie-preferences',
         'accreditation'
     ];
 
     const isCore = coreSlugs.includes(String(page.slug).toLowerCase());
-    const isPolicyPage = ['privacy-policy', 'terms-of-service', 'terms', 'cookie-preferences', 'accreditation'].includes(String(page.slug).toLowerCase());
+    const isPolicyPage = ['privacy-policy', 'terms-of-service', 'terms', 'accreditation'].includes(String(page.slug).toLowerCase());
     const routePath = page.slug === 'home' ? '/' : `/${page.slug}`;
 
     const { data, setData, processing, errors } = useForm({
