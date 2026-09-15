@@ -54,7 +54,8 @@ export default function Edit({ page, countries = [] }) {
         slug: page.slug || '',
         meta_title: page.meta_title || '',
         meta_description: page.meta_description || '',
-        meta_keywords: page.meta_keywords || '',
+        meta_keywords: page.meta_keywords || page.tags || '',
+        tags: page.tags || page.meta_keywords || '',
         is_active: Boolean(page.is_active),
         show_in_navbar: Boolean(page.show_in_navbar),
         show_in_footer: Boolean(page.show_in_footer),
@@ -322,19 +323,44 @@ export default function Edit({ page, countries = [] }) {
                             </div>
                         </div>
 
-                        {/* Meta Title */}
-                        <div>
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                Meta Title Tag <span className="text-slate-400 font-normal">(Recommended 50 - 60 characters)</span>
-                            </label>
-                            <input
-                                type="text"
-                                value={data.meta_title}
-                                onChange={(e) => setData('meta_title', e.target.value)}
-                                placeholder="e.g. Kampus EduConsult — Global Higher Education Advisers"
-                                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
-                            {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                        {/* Meta Title Tag & Tags / Meta Keywords side-by-side */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Meta Title Tag <span className="text-slate-400 font-normal">(Recommended 50 - 60 characters)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.meta_title}
+                                    onChange={(e) => setData('meta_title', e.target.value)}
+                                    placeholder="e.g. Kampus EduConsult — Global Higher Education Advisers"
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Tags / Meta Keywords <span className="text-slate-400 font-normal">(Comma-separated tags)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.meta_keywords || data.tags || ''}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setData(prev => ({
+                                            ...prev,
+                                            meta_keywords: val,
+                                            tags: val,
+                                        }));
+                                    }}
+                                    placeholder="e.g. education, study abroad, consultancy, universities"
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                {(errors.meta_keywords || errors.tags) && (
+                                    <span className="text-xs text-rose-500 font-semibold">{errors.meta_keywords || errors.tags}</span>
+                                )}
+                            </div>
                         </div>
 
                         {/* Meta Description */}
@@ -350,20 +376,6 @@ export default function Edit({ page, countries = [] }) {
                                 className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
                             {errors.meta_description && <span className="text-xs text-rose-500 font-semibold">{errors.meta_description}</span>}
-                        </div>
-
-                        {/* Meta Keywords */}
-                        <div>
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                Meta Keywords <span className="text-slate-400 font-normal">(Comma-separated)</span>
-                            </label>
-                            <input
-                                type="text"
-                                value={data.meta_keywords}
-                                onChange={(e) => setData('meta_keywords', e.target.value)}
-                                placeholder="e.g. study abroad, UK universities, scholarship assistance"
-                                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
                         </div>
                     </div>
 

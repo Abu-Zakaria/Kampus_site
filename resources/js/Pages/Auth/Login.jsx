@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import GuestLayout from '../../Layouts/GuestLayout';
 import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, KeyRound, Eye, EyeOff } from 'lucide-react';
 
 export default function Login({ status, canResetPassword, prefilledEmail = '' }) {
+    const { props } = usePage();
+    const globalSettings = props?.globalSettings || {};
+    const siteName = globalSettings?.site_name || 'Kampus';
+
     const [showPassword, setShowPassword] = useState(false);
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const initialEmail = prefilledEmail || (urlParams ? urlParams.get('email') || '' : '');
@@ -25,7 +29,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
 
     return (
         <GuestLayout>
-            <Head title={isStudent ? "Student Sign In — Kampus" : "Sign In — Kampus Portal"} />
+            <Head title={isStudent ? `Student Sign In — ${siteName}` : `Sign In — ${siteName} Portal`} />
 
             {/* HEADER TYPOGRAPHY */}
             <div className="text-center space-y-2 mb-8">
@@ -35,7 +39,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                 <p className="text-sm text-slate-400">
                     {isStudent
                         ? 'Sign in to monitor applications, admission stages & query replies'
-                        : 'Sign in to manage your student portal or Kampus CMS dashboard'}
+                        : `Sign in to manage your student portal or ${siteName} CMS dashboard`}
                 </p>
             </div>
 
@@ -64,7 +68,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                             value={data.email}
                             autoComplete="username"
                             required
-                            placeholder="admin@kampus.com"
+                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@kampus.com"}
                             onChange={(e) => setData('email', e.target.value)}
                             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />

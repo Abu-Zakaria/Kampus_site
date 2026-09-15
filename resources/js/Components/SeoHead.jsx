@@ -1,6 +1,6 @@
 import { Head, usePage } from '@inertiajs/react';
 
-export default function SeoHead({ title, description, image, url }) {
+export default function SeoHead({ title, description, image, url, keywords }) {
     const { globalSettings } = usePage().props;
     
     const siteName = globalSettings?.site_name || 'Kampus Edu';
@@ -12,6 +12,7 @@ export default function SeoHead({ title, description, image, url }) {
         <Head>
             <title>{metaTitle}</title>
             <meta name="description" content={metaDesc} />
+            {keywords && <meta name="keywords" content={keywords} />}
             <meta property="og:title" content={metaTitle} />
             <meta property="og:description" content={metaDesc} />
             <meta property="og:image" content={metaImage} />

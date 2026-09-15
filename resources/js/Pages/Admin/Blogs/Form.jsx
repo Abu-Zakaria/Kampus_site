@@ -31,6 +31,8 @@ export default function Form({ blog = null, existingCategories = [] }) {
         image: null,
         meta_title: blog?.meta_title || '',
         meta_description: blog?.meta_description || '',
+        tags: blog?.tags || blog?.meta_keywords || '',
+        meta_keywords: blog?.meta_keywords || blog?.tags || '',
         is_published: blog ? Boolean(blog.is_published) : true,
         is_featured: blog ? Boolean(blog.is_featured) : false,
     });
@@ -375,20 +377,46 @@ export default function Form({ blog = null, existingCategories = [] }) {
                         </div>
 
                         <div className="space-y-6">
-                            {/* Meta Title */}
-                            <div>
-                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                    Meta Title
-                                    <span className="text-slate-400 font-normal ml-2">(falls back to post title if left blank)</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    value={data.meta_title}
-                                    onChange={(e) => setData('meta_title', e.target.value)}
-                                    placeholder={data.title || "e.g. Complete Guide to UK Student Visa 2026"}
-                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                />
-                                {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                            {/* Meta Title & Tags */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        Meta Title
+                                        <span className="text-slate-400 font-normal ml-2">(falls back to title if blank)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={data.meta_title}
+                                        onChange={(e) => setData('meta_title', e.target.value)}
+                                        placeholder={data.title || "e.g. Complete Guide to UK Student Visa 2026"}
+                                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                    {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        Tags / Keywords
+                                        <span className="text-slate-400 font-normal ml-2">(Comma-separated tags)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={data.tags || data.meta_keywords || ''}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setData(prev => ({
+                                                ...prev,
+                                                tags: val,
+                                                meta_keywords: val,
+                                            }));
+                                        }}
+                                        placeholder="e.g. student visa, scholarships, uk universities"
+                                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                    {(errors.tags || errors.meta_keywords) && (
+                                        <span className="text-xs text-rose-500 font-semibold">{errors.tags || errors.meta_keywords}</span>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Meta Description */}

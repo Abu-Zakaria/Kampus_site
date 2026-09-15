@@ -54,12 +54,20 @@ class BlogController extends Controller
             'image' => 'nullable|image|max:5120',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
+            'tags' => 'nullable|string|max:1000',
+            'meta_keywords' => 'nullable|string|max:1000',
             'is_published' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
         $validated['is_featured'] = $request->boolean('is_featured');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         // Handle image file upload
         if ($request->hasFile('image')) {
@@ -109,12 +117,20 @@ class BlogController extends Controller
             'image' => 'nullable|image|max:5120',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
+            'tags' => 'nullable|string|max:1000',
+            'meta_keywords' => 'nullable|string|max:1000',
             'is_published' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
         $validated['is_featured'] = $request->boolean('is_featured');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         // Handle image file upload
         if ($request->hasFile('image')) {

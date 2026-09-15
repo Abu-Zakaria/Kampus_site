@@ -1,9 +1,13 @@
 import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import GuestLayout from '../../Layouts/GuestLayout';
 import { Mail, KeyRound, ArrowLeft, Send } from 'lucide-react';
 
 export default function ForgotPassword({ status }) {
+    const { props } = usePage();
+    const globalSettings = props?.globalSettings || {};
+    const siteName = globalSettings?.site_name || 'Kampus';
+
     const { data, setData, post, processing, errors } = useForm({
         email: '',
     });
@@ -15,7 +19,7 @@ export default function ForgotPassword({ status }) {
 
     return (
         <GuestLayout>
-            <Head title="Reset Password — Kampus Admin" />
+            <Head title={`Reset Password — ${siteName} Admin`} />
 
             <div className="text-center space-y-2 mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 mx-auto flex items-center justify-center border border-blue-500/20 mb-3">
@@ -50,7 +54,7 @@ export default function ForgotPassword({ status }) {
                             name="email"
                             value={data.email}
                             required
-                            placeholder="admin@kampus.com"
+                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@kampus.com"}
                             onChange={(e) => setData('email', e.target.value)}
                             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />

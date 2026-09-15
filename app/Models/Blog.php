@@ -18,6 +18,8 @@ class Blog extends Model
         'image',
         'meta_title',
         'meta_description',
+        'tags',
+        'meta_keywords',
         'is_published',
         'is_featured',
     ];

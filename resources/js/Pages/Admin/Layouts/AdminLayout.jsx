@@ -172,12 +172,20 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                     {/* Brand Header */}
                     <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800">
                         <Link href="/admin/dashboard" className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
-                                <GraduationCap className="w-5 h-5" />
-                            </div>
+                            {props?.globalSettings?.site_logo ? (
+                                <img
+                                    src={`/storage/${props.globalSettings.site_logo}`}
+                                    alt={props?.globalSettings?.site_name || 'Logo'}
+                                    className="w-9 h-9 object-contain rounded-xl shadow-md bg-white/5 p-0.5 border border-white/10"
+                                />
+                            ) : (
+                                <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+                                    <GraduationCap className="w-5 h-5" />
+                                </div>
+                            )}
                             <div className="flex flex-col">
                                 <span className="font-extrabold text-base tracking-tight text-white">
-                                    Kampus <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
+                                    {props?.globalSettings?.site_name || 'Kampus'} <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
                                 </span>
                                 <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
                                     {primaryRole === 'Partner' ? 'Partner Portal' : 'Admin Panel'}

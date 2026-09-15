@@ -16,7 +16,8 @@ import {
     Phone,
     Globe,
     GraduationCap,
-    BookMarked
+    BookMarked,
+    Tag
 } from 'lucide-react';
 
 export default function BlogShow({ blog = {}, relatedBlogs = [] }) {
@@ -90,6 +91,7 @@ export default function BlogShow({ blog = {}, relatedBlogs = [] }) {
             <SeoHead
                 title={blog.meta_title || blog.title}
                 description={blog.meta_description || blog.excerpt}
+                keywords={blog.tags || blog.meta_keywords}
                 image={blog.image ? (blog.image.startsWith('http') || blog.image.startsWith('/') ? blog.image : '/storage/' + blog.image) : (blog.featured_image ? '/storage/' + blog.featured_image : null)}
             />
 
@@ -182,8 +184,30 @@ export default function BlogShow({ blog = {}, relatedBlogs = [] }) {
                                     }
                                 `}} />
 
+                                {/* Article Tags */}
+                                {blog.tags && (
+                                    <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-2">
+                                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1 flex items-center gap-1.5">
+                                            <Tag className="w-3.5 h-3.5 text-blue-500" />
+                                            <span>Tags:</span>
+                                        </span>
+                                        {blog.tags.split(',').map((t, idx) => {
+                                            const cleanTag = t.trim();
+                                            if (!cleanTag) return null;
+                                            return (
+                                                <span
+                                                    key={idx}
+                                                    className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500/50 transition-colors"
+                                                >
+                                                    #{cleanTag}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
                                 {/* Bottom Share / CTA Box */}
-                                <div className="mt-14 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="mt-10 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                                     <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
                                         <span>Found this story helpful?</span>
                                     </div>

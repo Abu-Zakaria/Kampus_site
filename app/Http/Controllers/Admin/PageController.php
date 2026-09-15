@@ -43,6 +43,7 @@ class PageController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
             'show_in_footer' => 'nullable|boolean',
@@ -52,6 +53,12 @@ class PageController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['show_in_navbar'] = $request->boolean('show_in_navbar');
         $validated['show_in_footer'] = $request->boolean('show_in_footer');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         $page = Page::create($validated);
 
@@ -86,6 +93,7 @@ class PageController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
             'show_in_footer' => 'nullable|boolean',
@@ -105,6 +113,12 @@ class PageController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['show_in_navbar'] = $request->boolean('show_in_navbar');
         $validated['show_in_footer'] = $request->boolean('show_in_footer');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         $page->update($validated);
 

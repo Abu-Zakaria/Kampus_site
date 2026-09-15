@@ -16,6 +16,7 @@ export default function Create() {
         meta_title: '',
         meta_description: '',
         meta_keywords: '',
+        tags: '',
         is_active: true,
         show_in_navbar: false,
         show_in_footer: false,
@@ -202,17 +203,39 @@ export default function Create() {
                             </div>
                         </div>
 
-                        <div>
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                                Meta Title Tag (SEO)
-                            </label>
-                            <input
-                                type="text"
-                                value={data.meta_title}
-                                onChange={(e) => setData('meta_title', e.target.value)}
-                                placeholder="e.g. Student Support & Resources — Kampus Group"
-                                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                            />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Meta Title Tag (SEO)
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.meta_title}
+                                    onChange={(e) => setData('meta_title', e.target.value)}
+                                    placeholder="e.g. Student Support & Resources — Kampus Group"
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Tags / Meta Keywords (SEO)
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.tags || data.meta_keywords || ''}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setData(prev => ({
+                                            ...prev,
+                                            tags: val,
+                                            meta_keywords: val,
+                                        }));
+                                    }}
+                                    placeholder="e.g. support, counseling, scholarships, admission"
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                            </div>
                         </div>
 
                         <div>

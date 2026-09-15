@@ -1,8 +1,24 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
-import { GraduationCap, ArrowLeft, ShieldCheck, Sparkles } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { GraduationCap, ArrowLeft, ShieldCheck } from 'lucide-react';
 
 export default function GuestLayout({ children }) {
+    const { props } = usePage();
+    const globalSettings = props?.globalSettings || {};
+
+    const siteName = globalSettings?.site_name || 'Kampus Edu';
+    const headerSubtitle = globalSettings?.header_subtitle !== undefined && globalSettings.header_subtitle !== null && globalSettings.header_subtitle !== ''
+        ? globalSettings.header_subtitle
+        : 'Educational Consultancy';
+    const footerName = globalSettings?.footer_name || globalSettings?.site_name || 'Kampus Educational Consultancy Ltd';
+    const siteLogo = globalSettings?.site_logo;
+
+    // Split brand name if multiple words and last word is short (badge style like EDU, HUB, LTD, etc.)
+    const brandWords = siteName.trim().split(/\s+/);
+    const hasBadge = brandWords.length > 1 && brandWords[brandWords.length - 1].length <= 5;
+    const mainTitle = hasBadge ? brandWords.slice(0, -1).join(' ') : siteName;
+    const badgeText = hasBadge ? brandWords[brandWords.length - 1] : null;
+
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans antialiased">
             
@@ -29,21 +45,33 @@ export default function GuestLayout({ children }) {
             {/* BRANDING HEADER */}
             <div className="flex flex-col items-center text-center space-y-3 mb-6 relative z-10">
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/25 group-hover:scale-105 transition-transform duration-300">
-                        <GraduationCap className="w-7 h-7" />
-                    </div>
+                    {siteLogo ? (
+                        <img
+                            src={`/storage/${siteLogo}`}
+                            alt={siteName}
+                            className="w-12 h-12 object-contain rounded-2xl shadow-xl shadow-blue-500/25 group-hover:scale-105 transition-transform duration-300 bg-white/5 p-1 border border-white/10"
+                        />
+                    ) : (
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/25 group-hover:scale-105 transition-transform duration-300">
+                            <GraduationCap className="w-7 h-7" />
+                        </div>
+                    )}
                     <div className="flex flex-col text-left">
                         <div className="flex items-center gap-1.5">
                             <span className="font-extrabold text-2xl tracking-tight text-white">
-                                Kampus
+                                {mainTitle}
                             </span>
-                            <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-sm">
-                                Edu
-                            </span>
+                            {badgeText && (
+                                <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-sm">
+                                    {badgeText}
+                                </span>
+                            )}
                         </div>
-                        <span className="text-xs font-medium text-slate-400 tracking-wide">
-                            Educational Consultancy
-                        </span>
+                        {headerSubtitle && (
+                            <span className="text-xs font-medium text-slate-400 tracking-wide">
+                                {headerSubtitle}
+                            </span>
+                        )}
                     </div>
                 </Link>
             </div>
@@ -55,7 +83,11 @@ export default function GuestLayout({ children }) {
 
             {/* FOOTER COPYRIGHT */}
             <div className="mt-8 text-center text-xs text-slate-500 relative z-10">
-                © {new Date().getFullYear()} <span className="text-slate-400 font-medium">Kampus Educational Consultancy Ltd</span>. All rights reserved.
+                © {new Date().getFullYear()}{' '}
+                <span className="text-slate-400 font-medium">
+                    {footerName}
+                </span>
+                . All rights reserved.
             </div>
 
         </div>
