@@ -31,7 +31,11 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentApplicationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Http\Request;
+
+// XML Sitemap for Search Engines
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Public Dynamic Home Route (Using original HomeController)
 Route::get('/', HomeController::class)->name('home');
