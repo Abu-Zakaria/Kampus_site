@@ -6,11 +6,11 @@ export default function GuestLayout({ children }) {
     const { props } = usePage();
     const globalSettings = props?.globalSettings || {};
 
-    const siteName = globalSettings?.site_name || 'Kampus Edu';
+    const siteName = globalSettings?.site_name || 'RMS Edu';
     const headerSubtitle = globalSettings?.header_subtitle !== undefined && globalSettings.header_subtitle !== null && globalSettings.header_subtitle !== ''
         ? globalSettings.header_subtitle
         : 'Educational Consultancy';
-    const footerName = globalSettings?.footer_name || globalSettings?.site_name || 'Kampus Educational Consultancy Ltd';
+    const footerName = globalSettings?.footer_name || globalSettings?.site_name || 'RMS Educational Consultancy Ltd';
     const siteLogo = globalSettings?.site_logo;
 
     // Split brand name if multiple words and last word is short (badge style like EDU, HUB, LTD, etc.)

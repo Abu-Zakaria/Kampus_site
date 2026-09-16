@@ -376,7 +376,7 @@ export default function Layout({ children }) {
                     {/* Bottom Legal Links */}
                     <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
                         <div>
-                            © {new Date().getFullYear()} <span className="text-white font-medium">Kampus Educational Consultancy Ltd</span>. All rights reserved.
+                            © {new Date().getFullYear()} <span className="text-white font-medium">RMS Educational Consultancy Ltd</span>. All rights reserved.
                         </div>
 
                         <div className="flex flex-wrap items-center gap-6">

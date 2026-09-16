@@ -7,9 +7,9 @@ import DynamicPageSections from '../Components/DynamicPageSections';
 export default function LegalPage({ title, lastUpdated, page = null, badge = 'Legal & Compliance', children }) {
     const isBadgeHidden = page?.slug === 'accreditation' || page?.slug === 'terms-of-service' || page?.slug === 'terms' || page?.slug === 'privacy-policy' || !badge;
     const displayBadge = isBadgeHidden ? null : badge;
-    const displayTitle = page?.meta_title || `${page?.name || title} — Kampus EduConsult`;
-    const metaDescription = page?.meta_description || 'Official compliance, terms, and legal documentation for Kampus Educational Consultancy Ltd.';
-    const metaKeywords = page?.meta_keywords || 'privacy policy, terms of service, kampus compliance';
+    const displayTitle = page?.meta_title || `${page?.name || title} — RMS EduConsult`;
+    const metaDescription = page?.meta_description || 'Official compliance, terms, and legal documentation for RMS Educational Consultancy Ltd.';
+    const metaKeywords = page?.meta_keywords || 'privacy policy, terms of service, RMS compliance';
 
     return (
         <Layout>

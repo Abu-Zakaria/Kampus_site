@@ -107,7 +107,7 @@ class PageSeeder extends Seeder
                 'name' => 'Partner With Us',
                 'slug' => 'partner-with-us',
                 'meta_title' => 'Partner With Us — Kampus Group',
-                'meta_description' => 'Become an official sub-agent or institutional partner with Kampus Educational Consultancy Ltd. Enjoy attractive commissions and dedicated support.',
+                'meta_description' => 'Become an official sub-agent or institutional partner with Rms Educational Consultancy Ltd. Enjoy attractive commissions and dedicated support.',
                 'meta_keywords' => 'become partner, education agent partner, sub-agent program, university partner',
                 'content' => [
                     'hero_heading' => 'Grow with Kampus Group',

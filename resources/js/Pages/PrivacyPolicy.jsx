@@ -5,7 +5,7 @@ export default function PrivacyPolicy({ page = null }) {
     return (
         <LegalPage title="Privacy Policy" lastUpdated="August 2026" page={page} badge={null}>
             <p>
-                At <strong>Kampus Educational Consultancy Ltd</strong> ("Kampus EduConsult", "we", "us", or "our"), we respect your privacy and are committed to protecting the personal data of our prospective students, partner institutions, and site visitors.
+                At <strong>RMS Educational Consultancy Ltd</strong> ("Kampus EduConsult", "we", "us", or "our"), we respect your privacy and are committed to protecting the personal data of our prospective students, partner institutions, and site visitors.
             </p>
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">1. Information We Collect</h2>
