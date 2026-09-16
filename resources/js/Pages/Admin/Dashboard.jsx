@@ -41,7 +41,7 @@ export default function Dashboard({ stats }) {
 
     return (
         <AdminLayout title={isPartner ? 'Partner Portal Dashboard' : 'CMS Overview & Dashboard'}>
-            <Head title={isPartner ? 'Partner Portal — Kampus' : 'Admin Dashboard — Kampus CMS'} />
+            <Head title={isPartner ? 'Partner Portal — RMS' : 'Admin Dashboard — RMS CMS'} />
 
             <div className="space-y-8">
                 
@@ -50,7 +50,7 @@ export default function Dashboard({ stats }) {
                     <div className="relative z-10 space-y-2">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase border border-blue-500/30">
                             <Sparkles className="w-3.5 h-3.5" />
-                            <span>{isPartner ? 'OFFICIAL PARTNER PORTAL' : 'Kampus CMS v2.4'}</span>
+                            <span>{isPartner ? 'OFFICIAL PARTNER PORTAL' : 'RMS CMS v2.4'}</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
                             {isPartner ? `Welcome back, ${currentUser?.name || 'Partner'}` : 'Welcome to your Management Dashboard'}
@@ -219,7 +219,7 @@ export default function Dashboard({ stats }) {
                                 <div className="p-3.5 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-800/50 space-y-1">
                                     <span className="font-bold text-blue-700 dark:text-blue-300 block">Need Assistance or Co-Representation?</span>
                                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                                        For fast-track application processing or institutional inquiries, reach out to <a href="mailto:partners@kampus.com" className="text-blue-600 dark:text-blue-400 underline font-semibold">partners@kampus.com</a>.
+                                        For fast-track application processing or institutional inquiries, reach out to <a href="mailto:partners@RMS.com" className="text-blue-600 dark:text-blue-400 underline font-semibold">partners@RMS.com</a>.
                                     </p>
                                 </div>
                             </div>
