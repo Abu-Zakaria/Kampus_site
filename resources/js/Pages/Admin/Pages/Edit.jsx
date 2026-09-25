@@ -377,13 +377,13 @@ export default function Edit({ page, countries = [] }) {
                             </label>
                         </div>
 
-                        {/* NAVIGATION MENU VISIBILITY TOGGLES */}
+                        {/* NAVIGATION & SECTION VISIBILITY TOGGLES */}
                         <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                                Navigation Placement:
+                                Visibility & Placement:
                             </span>
 
-                            <div className="flex items-center gap-6">
+                            <div className="flex flex-wrap items-center gap-6">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -391,7 +391,7 @@ export default function Edit({ page, countries = [] }) {
                                         onChange={(e) => setData('show_in_navbar', e.target.checked)}
                                         className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                                     />
-                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Show link in Navbar</span>
+                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Show in Navbar</span>
                                 </label>
 
                                 <label className="flex items-center gap-2 cursor-pointer">
@@ -401,7 +401,27 @@ export default function Edit({ page, countries = [] }) {
                                         onChange={(e) => setData('show_in_footer', e.target.checked)}
                                         className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                                     />
-                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Show link in Footer</span>
+                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Show in Footer</span>
+                                </label>
+
+                                <label className="flex items-center gap-2 cursor-pointer border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-700 pt-2 sm:pt-0 sm:pl-6">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.content?.show_faqs !== false && !data.content?.hide_faqs}
+                                        onChange={(e) => {
+                                            const checked = e.target.checked;
+                                            setData('content', {
+                                                ...(data.content || {}),
+                                                show_faqs: checked,
+                                                hide_faqs: !checked,
+                                            });
+                                        }}
+                                        className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
+                                    />
+                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                                        <span>Show FAQ Section</span>
+                                        <HelpCircle className="w-3.5 h-3.5 text-blue-500" />
+                                    </span>
                                 </label>
                             </div>
                         </div>

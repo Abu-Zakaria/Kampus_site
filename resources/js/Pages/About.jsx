@@ -49,8 +49,10 @@ export default function About({ page = null, employees = [], companyStats = {} }
                 {/* 6. OUR COMMITMENT (DARK NAVY ETHICS & ACCREDITATION SECTION) */}
                 <AboutCommitment content={page?.content?.commitment || {}} />
 
-                {/* 6. DYNAMIC FREQUENTLY ASKED QUESTIONS */}
-                <FaqSection />
+                {/* 7. FREQUENTLY ASKED QUESTIONS (CONTROLLED BY CMS ADMIN) */}
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection />
+                )}
             </div>
         </Layout>
     );

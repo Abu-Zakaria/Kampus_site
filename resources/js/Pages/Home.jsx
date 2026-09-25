@@ -74,8 +74,10 @@ export default function Home({ page = null, universities = [], courses = [], cou
                     <DynamicPageSections sections={contentData.sections} />
                 )}
 
-                {/* 7. FAQ ACCORDION SECTION */}
-                <FaqSection faqs={faqs} />
+                {/* 7. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
+                {(contentData?.show_faqs !== false && !contentData?.hide_faqs) && (
+                    <FaqSection faqs={faqs} />
+                )}
 
             </div>
         </Layout>

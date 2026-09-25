@@ -19,7 +19,9 @@ import {
     Lock,
     FileCheck2,
     Building2,
-    Star
+    Star,
+    HelpCircle,
+    ExternalLink
 } from 'lucide-react';
 
 export default function AboutPageManager({ content = {}, onChange }) {
@@ -137,6 +139,7 @@ export default function AboutPageManager({ content = {}, onChange }) {
         { id: 'values', name: 'What We Stand For', icon: Award, badge: 'Section 3' },
         { id: 'commitment', name: 'Ethics & Accreditation', icon: ShieldCheck, badge: 'Section 4' },
         { id: 'team_banner', name: 'Workforce Banner', icon: Users, badge: 'Section 5' },
+        { id: 'faq_settings', name: 'FAQ Section', icon: HelpCircle, badge: 'Visibility' },
     ];
 
     return (
@@ -769,6 +772,89 @@ export default function AboutPageManager({ content = {}, onChange }) {
                                 onChange={(e) => updateSectionField('team', 'employee_stat_subtext', e.target.value)}
                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none"
                             />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB CONTENT 6: FAQ SECTION DISPLAY SETTINGS */}
+            {activeTab === 'faq_settings' && (
+                <div className="space-y-6 animate-in fade-in duration-200">
+                    <div>
+                        <h4 className="text-sm font-extrabold text-slate-900 dark:text-white mb-1">
+                            FAQ Accordion Section Visibility
+                        </h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                            Control whether the dynamic Frequently Asked Questions accordion section appears on the About page.
+                        </p>
+                    </div>
+
+                    <div className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="space-y-1">
+                                <span className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                    <span>Display FAQ Accordion on About Page</span>
+                                </span>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    {content?.show_faqs !== false && !content?.hide_faqs
+                                        ? 'The FAQ section is currently visible to students and visitors.'
+                                        : 'The FAQ section is currently hidden from the About page.'}
+                                </p>
+                            </div>
+
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={content?.show_faqs !== false && !content?.hide_faqs}
+                                    onChange={(e) => {
+                                        const checked = e.target.checked;
+                                        onChange({
+                                            ...content,
+                                            show_faqs: checked,
+                                            hide_faqs: !checked,
+                                        });
+                                    }}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-14 h-7 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+
+                        {/* Status preview banner */}
+                        <div className={`p-4 rounded-2xl border flex items-center gap-3 ${
+                            content?.show_faqs !== false && !content?.hide_faqs
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300'
+                                : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-300'
+                        }`}>
+                            <div className={`p-2 rounded-xl shrink-0 ${
+                                content?.show_faqs !== false && !content?.hide_faqs
+                                    ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600'
+                                    : 'bg-rose-100 dark:bg-rose-900/60 text-rose-600'
+                            }`}>
+                                <CheckCircle2 className="w-4 h-4" />
+                            </div>
+                            <div className="text-xs font-semibold">
+                                {content?.show_faqs !== false && !content?.hide_faqs
+                                    ? 'FAQ section is active. Visitors can browse and expand answers at the bottom of /about.'
+                                    : 'FAQ section is hidden. The page will cleanly end after the accreditation/ethics and dynamic builder blocks.'}
+                            </div>
+                        </div>
+
+                        {/* Link to central FAQs manager */}
+                        <div className="pt-3 border-t border-slate-200/80 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                            <span className="text-slate-500 dark:text-slate-400">
+                                Need to add, update, or reorder questions?
+                            </span>
+                            <a
+                                href="/admin/faqs"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                                <span>Open Central FAQs Manager</span>
+                                <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
                         </div>
                     </div>
                 </div>
