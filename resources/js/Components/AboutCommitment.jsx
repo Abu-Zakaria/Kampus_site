@@ -9,8 +9,13 @@ import {
     Lock
 } from 'lucide-react';
 
-export default function AboutCommitment() {
-    const commitments = [
+export default function AboutCommitment({ content = {} }) {
+    const tagline = content?.tagline || 'Our commitment';
+    const title = content?.title || 'Ethical practice & certified advisors';
+    const description = content?.description || "We're committed to the principles of the AQF and the National Code of Ethical Practice for UK Education Agents, and we follow the Good Practice Guide for UK Education Agents.";
+    const quote = content?.quote || 'Certified counseling guarantees 100% genuine university applications with zero misleading promises.';
+
+    const defaultCommitments = [
         {
             title: 'British Council certified UK agents & counsellors',
             description: 'Officially trained and accredited counselors adhering to rigorous UK higher education standards.',
@@ -34,6 +39,17 @@ export default function AboutCommitment() {
         },
     ];
 
+    const commitments = (content?.items && Array.isArray(content.items) && content.items.length === 3)
+        ? content.items.map((item, idx) => ({
+            ...defaultCommitments[idx],
+            title: item.title || defaultCommitments[idx].title,
+            description: item.description || defaultCommitments[idx].description,
+            icon: defaultCommitments[idx].icon,
+            iconColor: defaultCommitments[idx].iconColor,
+            bgTint: defaultCommitments[idx].bgTint,
+        }))
+        : defaultCommitments;
+
     return (
         <section className="py-16 lg:py-24 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-white relative overflow-hidden border-b border-slate-800">
             {/* Background Glow Graphics */}
@@ -48,25 +64,27 @@ export default function AboutCommitment() {
                         {/* Heading */}
                         <div className="space-y-2">
                             <h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest">
-                                Our commitment
+                                {tagline}
                             </h3>
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                                Ethical practice & certified advisors
+                                {title}
                             </h2>
                         </div>
 
                         {/* Paragraph */}
                         <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-                            We're committed to the principles of the AQF and the National Code of Ethical Practice for UK Education Agents, and we follow the Good Practice Guide for UK Education Agents.
+                            {description}
                         </p>
 
                         {/* Trust Quote Box */}
-                        <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3">
-                            <Lock className="w-5 h-5 text-emerald-400 shrink-0" />
-                            <span className="text-xs text-slate-300">
-                                Certified counseling guarantees 100% genuine university applications with zero misleading promises.
-                            </span>
-                        </div>
+                        {quote && (
+                            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3">
+                                <Lock className="w-5 h-5 text-emerald-400 shrink-0" />
+                                <span className="text-xs text-slate-300">
+                                    {quote}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* RIGHT COLUMN: VISUALLY DISTINCT BADGE CONTAINERS */}

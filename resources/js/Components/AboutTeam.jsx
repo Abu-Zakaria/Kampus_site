@@ -11,12 +11,12 @@ import {
     CheckCircle2
 } from 'lucide-react';
 
-export default function AboutTeam({ employees = [], companyStats = {} }) {
+export default function AboutTeam({ employees = [], companyStats = {}, content = {} }) {
     // If no active employees and no count, still render or fallback gracefully
-    const employeeCount = companyStats?.employee_count || `${employees.length > 0 ? employees.length : 50}+ Global Team Members`;
-    const employeeStatSubtext = companyStats?.employee_stat_subtext || 'Dedicated education consultants, visa case officers, and admissions specialists across 15+ countries worldwide.';
-    const heading = companyStats?.team_heading || 'Meet our global education leadership';
-    const subheading = companyStats?.team_subheading || 'Driven by ethics, academic expertise, and student success, our multi-disciplinary team brings decades of university admissions experience.';
+    const employeeCount = content?.employee_count || companyStats?.employee_count || `${employees.length > 0 ? employees.length : 50}+ Global Team Members`;
+    const employeeStatSubtext = content?.employee_stat_subtext || companyStats?.employee_stat_subtext || 'Dedicated education consultants, visa case officers, and admissions specialists across 15+ countries worldwide.';
+    const heading = content?.heading || companyStats?.team_heading || 'Meet our global education leadership';
+    const subheading = content?.subheading || companyStats?.team_subheading || 'Driven by ethics, academic expertise, and student success, our multi-disciplinary team brings decades of university admissions experience.';
 
     return (
         <section id="team" className="py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 border-b border-slate-200/60 dark:border-slate-800 relative overflow-hidden transition-colors">

@@ -30,13 +30,16 @@ export default function About({ page = null, employees = [], companyStats = {} }
                 <AboutHero content={page?.content || {}} />
 
                 {/* 2. OUR MISSION SECTION */}
-                <AboutMission />
+                <AboutMission content={{
+                    ...(page?.content?.mission || {}),
+                    image: page?.content?.mission?.image || page?.content?.mission_image,
+                }} />
 
                 {/* 3. WHAT WE STAND FOR (VALUES SECTION) */}
-                <AboutValues />
+                <AboutValues content={page?.content?.values || {}} />
 
                 {/* 4. COMPANY WORKFORCE & TEAM SECTION */}
-                <AboutTeam employees={employees} companyStats={companyStats} />
+                <AboutTeam employees={employees} companyStats={companyStats} content={page?.content?.team || {}} />
 
                 {/* 5. DYNAMIC PAGE BUILDER SECTIONS (IF CONFIGURED IN CMS) */}
                 {page?.content?.sections && (
@@ -44,7 +47,7 @@ export default function About({ page = null, employees = [], companyStats = {} }
                 )}
 
                 {/* 6. OUR COMMITMENT (DARK NAVY ETHICS & ACCREDITATION SECTION) */}
-                <AboutCommitment />
+                <AboutCommitment content={page?.content?.commitment || {}} />
 
                 {/* 6. DYNAMIC FREQUENTLY ASKED QUESTIONS */}
                 <FaqSection />
