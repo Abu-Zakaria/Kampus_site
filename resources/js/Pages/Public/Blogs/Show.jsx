@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DOMPurify from 'dompurify';
 import { Head, Link, router } from '@inertiajs/react';
 import Layout from '../../../Layouts/Layout';
 import SeoHead from '../../../Components/SeoHead';
@@ -158,7 +159,7 @@ export default function BlogShow({ blog = {}, relatedBlogs = [] }) {
                                 {/* Article Body: Tailwind Typography Prose with Inline Style Overrides */}
                                 <div
                                     className="prose prose-slate dark:prose-invert prose-lg max-w-none leading-relaxed prose-headings:font-extrabold prose-headings:tracking-tight prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-2xl prose-img:shadow-lg custom-blog-content pt-4"
-                                    dangerouslySetInnerHTML={{ __html: blog.content }}
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content || '') }}
                                 />
 
                                 {/* Override copy-pasted inline styles to preserve dark theme */}

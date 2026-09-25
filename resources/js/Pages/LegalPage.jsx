@@ -1,4 +1,5 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
 import { Head } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
 import { ShieldCheck, Calendar } from 'lucide-react';
@@ -121,7 +122,7 @@ export default function LegalPage({ title, lastUpdated, page = null, badge = 'Le
                         {page?.content?.body && (
                             <div
                                 className="prose prose-slate dark:prose-invert max-w-none whitespace-pre-line mb-8"
-                                dangerouslySetInnerHTML={{ __html: page.content.body }}
+                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content.body || '') }}
                             />
                         )}
                         {(!page?.content?.body || page?.slug === 'accreditation') && children}

@@ -1,5 +1,5 @@
 @php
-    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'RMS Consult'));
     $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
 @endphp
 <!DOCTYPE html>
@@ -158,7 +158,8 @@
                 <strong>{{ $companyName }}</strong> has been officially <strong>approved</strong>!
             </p>
             <p class="message">
-                You now have official access to the {{ $siteName }} Partner Portal where you can explore participating universities, admission guidelines, course repositories, and study abroad offerings.
+                You now have official access to the {{ $siteName }} Partner Portal where you can explore participating
+                universities, admission guidelines, course repositories, and study abroad offerings.
             </p>
 
             <div class="credentials-card">

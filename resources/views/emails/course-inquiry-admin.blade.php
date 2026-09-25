@@ -1,5 +1,5 @@
 @php
-    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'RMS Consult'));
     $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
 @endphp
 <!DOCTYPE html>
@@ -224,14 +224,16 @@
 
             <div class="content">
                 <p class="intro-text">
-                    Hello Administrator, a prospective student has submitted an official course enquiry through the <strong>Courses Directory</strong> on the {{ $siteName }} website.
+                    Hello Administrator, a prospective student has submitted an official course enquiry through the
+                    <strong>Courses Directory</strong> on the {{ $siteName }} website.
                 </p>
 
                 <!-- Course Information Card -->
                 <div class="card">
                     <div class="card-header">Target Programme & University</div>
                     <div class="course-title">
-                        {{ $details['course_title'] ?? $application?->course_title ?? 'Academic Course' }}</div>
+                        {{ $details['course_title'] ?? $application?->course_title ?? 'Academic Course' }}
+                    </div>
                     <div class="uni-name">
                         {{ $details['university_name'] ?? $application?->university_name ?? 'Partner Institution' }}
                     </div>

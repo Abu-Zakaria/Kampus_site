@@ -63,7 +63,7 @@ class CourseInquiryAdminNotification extends Mailable
     {
         $adminInquiriesUrl = url('/admin/inquiries');
         $adminApplicationsUrl = url('/admin/student-applications');
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
         $footerName = Setting::get('footer_name', $siteName);
 
         return new Content(

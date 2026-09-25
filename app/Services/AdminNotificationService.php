@@ -144,7 +144,7 @@ class AdminNotificationService
      */
     public static function notifyContactMessage(ContactMessage $contactMessage): void
     {
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
         $subject = "[New Inquiry] {$contactMessage->name} — " . ($contactMessage->topic ?: 'General Inquiry');
         $title = 'New Student Inquiry / Consultation';
         $message = "A new inquiry message was lodged on the {$siteName} website from {$contactMessage->name}.";
@@ -305,7 +305,7 @@ class AdminNotificationService
      */
     public static function notifyPartnerApplication(PartnerApplication $application): void
     {
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
         $subject = "[New Partner Application] {$application->company_name} — {$application->contact_person}";
         $title = 'New Educational Partnership Application';
         $message = "An agency or institutional representative has applied to partner with {$siteName}.";

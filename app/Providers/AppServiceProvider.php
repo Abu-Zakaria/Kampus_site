@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         // Share dynamic website and brand names with all email templates
         View::composer('emails.*', function ($view) {
             $data = $view->getData();
-            $siteName = $data['siteName'] ?? Setting::get('site_name', config('app.name', 'Kampus Edu'));
+            $siteName = $data['siteName'] ?? Setting::get('site_name', config('app.name', 'RMS Consult'));
             $footerName = $data['footerName'] ?? Setting::get('footer_name', $siteName);
 
             $view->with([

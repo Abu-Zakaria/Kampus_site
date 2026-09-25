@@ -35,7 +35,7 @@ class InquiryReplyStudentMail extends Mailable
     public function envelope(): Envelope
     {
         $topic = $this->contactMessage->topic ?: 'Educational Consultation Inquiry';
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
 
         return new Envelope(
             subject: "Response from {$siteName} Counselor: {$topic}",
@@ -47,7 +47,7 @@ class InquiryReplyStudentMail extends Mailable
      */
     public function content(): Content
     {
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
         $footerName = Setting::get('footer_name', $siteName);
 
         return new Content(

@@ -1,5 +1,5 @@
 @php
-    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'RMS Consult'));
     $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
 @endphp
 <!DOCTYPE html>
@@ -213,14 +213,16 @@
             <p class="message" style="margin-bottom: 0;">
                 Warm regards,<br>
                 <strong>The {{ $siteName }} Global Admissions Team</strong><br>
-                <span style="color: #64748b; font-size: 13px;">Connecting ambitious students to leading global universities</span>
+                <span style="color: #64748b; font-size: 13px;">Connecting ambitious students to leading global
+                    universities</span>
             </p>
         </div>
 
         <!-- Footer -->
         <div class="footer">
             &copy; {{ date('Y') }} {{ $footerName }}. All rights reserved.<br>
-            If you have immediate questions, feel free to reply directly to this email or visit our <a href="{{ url('/') }}">Official Website</a>.
+            If you have immediate questions, feel free to reply directly to this email or visit our <a
+                href="{{ url('/') }}">Official Website</a>.
         </div>
     </div>
 </body>

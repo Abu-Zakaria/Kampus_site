@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Services\HtmlSanitizerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -43,7 +44,7 @@ class BlogController extends Controller
     /**
      * Store a newly created blog post in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, HtmlSanitizerService $sanitizer)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -59,6 +60,11 @@ class BlogController extends Controller
             'is_published' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
         ]);
+
+        $validated['content'] = $sanitizer->sanitize($validated['content']);
+        if (!empty($validated['excerpt'])) {
+            $validated['excerpt'] = strip_tags($validated['excerpt']);
+        }
 
         $validated['is_published'] = $request->boolean('is_published');
         $validated['is_featured'] = $request->boolean('is_featured');
@@ -104,7 +110,7 @@ class BlogController extends Controller
     /**
      * Update the specified blog post in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, HtmlSanitizerService $sanitizer)
     {
         $blog = Blog::findOrFail($id);
 
@@ -122,6 +128,11 @@ class BlogController extends Controller
             'is_published' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
         ]);
+
+        $validated['content'] = $sanitizer->sanitize($validated['content']);
+        if (!empty($validated['excerpt'])) {
+            $validated['excerpt'] = strip_tags($validated['excerpt']);
+        }
 
         $validated['is_published'] = $request->boolean('is_published');
         $validated['is_featured'] = $request->boolean('is_featured');

@@ -52,7 +52,7 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
 
         return new Envelope(
             subject: "Congratulations! Your {$siteName} Partnership Application Has Been Approved",
@@ -74,7 +74,7 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
             ? $this->user->email
             : $this->application->email;
 
-        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $siteName = Setting::get('site_name', config('app.name', 'RMS Consult'));
         $footerName = Setting::get('footer_name', $siteName);
 
         return new Content(

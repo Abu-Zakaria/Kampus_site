@@ -1,5 +1,5 @@
 @php
-    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'RMS Consult'));
     $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
 @endphp
 <!DOCTYPE html>
