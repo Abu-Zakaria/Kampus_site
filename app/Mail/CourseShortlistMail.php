@@ -50,6 +50,8 @@ class CourseShortlistMail extends Mailable
         return new Content(
             view: 'emails.course_shortlist',
             with: [
+                'name' => $this->name,
+                'courses' => $this->courses,
                 'siteName' => $siteName,
                 'footerName' => $footerName,
             ],

@@ -32,14 +32,14 @@ class CourseInquiryNotificationTest extends TestCase
 
         // Create an admin user
         $admin = User::factory()->create([
-            'email' => 'admin@ RMSedu.com',
+            'email' => 'admin@rmsedu.com',
         ]);
         $admin->assignRole('Super Admin');
 
         // Configure admin notification setting
         Setting::create([
             'key' => 'admin_notification_email',
-            'value' => 'admissions@ RMSedu.com',
+            'value' => 'admissions@rmsedu.com',
         ]);
 
         $payload = [
@@ -87,8 +87,8 @@ class CourseInquiryNotificationTest extends TestCase
 
         // 3. Verify CourseInquiryAdminNotification email was dispatched to administrators
         Mail::assertSent(CourseInquiryAdminNotification::class, function ($mail) {
-            $hasAdmissionsRecipient = $mail->hasTo('admissions@ RMSedu.com');
-            $hasAdminUserRecipient = $mail->hasTo('admin@ RMSedu.com');
+            $hasAdmissionsRecipient = $mail->hasTo('admissions@rmsedu.com');
+            $hasAdminUserRecipient = $mail->hasTo('admin@rmsedu.com');
 
             $matchesSubject = str_contains($mail->envelope()->subject, 'Sarah Jenkins') &&
                 str_contains($mail->envelope()->subject, 'MSc Artificial Intelligence & Data Science');

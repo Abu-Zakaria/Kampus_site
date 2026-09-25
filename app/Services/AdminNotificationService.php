@@ -207,7 +207,7 @@ class AdminNotificationService
     /**
      * Trigger email notification for AI course matcher lead.
      */
-    public static function notifyCourseMatcherLead(ContactMessage $contactMessage, array $criteria): void
+    public static function notifyCourseMatcherLead(ContactMessage $contactMessage, array $criteria, $courses = null): void
     {
         $name = $contactMessage->name;
         $subject = "[Course Matcher Lead] {$name} — " . ($criteria['Field of Study'] ?? 'Academic Guidance');
@@ -217,9 +217,27 @@ class AdminNotificationService
         $details = [
             'Student Name' => $name,
             'Email Address' => $contactMessage->email,
-            'Phone Number' => $contactMessage->phone,
+            'Phone Number' => $contactMessage->phone ?: 'Not provided',
             ...$criteria,
         ];
+
+        // Format and append the recommended courses list if available
+        if (!empty($courses) && (is_countable($courses) ? count($courses) > 0 : !empty($courses))) {
+            $courseSummary = [];
+            foreach ($courses as $i => $c) {
+                $cTitle = is_object($c) ? ($c->title ?? $c->name ?? '') : ($c['title'] ?? $c['name'] ?? '');
+                $uni = is_object($c) ? ($c->university->name ?? 'Partner Institution') : ($c['university']['name'] ?? 'Partner Institution');
+                $country = is_object($c) ? ($c->university->country->name ?? '') : ($c['university']['country']['name'] ?? '');
+                $location = $country ? "{$uni}, {$country}" : $uni;
+                $level = is_object($c) ? ($c->level ?? '') : ($c['level'] ?? '');
+                $showFee = is_object($c) ? ($c->show_tuition_fee ?? true) : ($c['show_tuition_fee'] ?? true);
+                $fee = is_object($c) ? ($c->tuition_fee ?? '') : ($c['tuition_fee'] ?? '');
+                $feeStr = ($showFee && !empty($fee)) ? " | {$fee}" : "";
+                $courseSummary[] = ($i + 1) . ". {$cTitle} ({$location})" . ($level ? " [{$level}]" : "") . $feeStr;
+            }
+            $details['Recommended Shortlist'] = implode("\n", $courseSummary);
+            $details['_courses'] = $courses;
+        }
 
         self::sendAlert(
             $subject,

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import {
     Sparkles,
     X,
@@ -56,20 +57,8 @@ export default function AiCourseMatcher({ isOpen, onClose }) {
             setIsLoading(true);
             setErrorMessage('');
             try {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                const response = await fetch('/api/course-matcher', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '',
-                    },
-                    body: JSON.stringify(updatedAnswers),
-                });
-
-                if (!response.ok) throw new Error('Failed to match courses');
-                const data = await response.json();
-                setResults(data.results || []);
+                const response = await (window.axios || axios).post('/api/course-matcher', updatedAnswers);
+                setResults(response.data.results || []);
                 setStep(7);
             } catch (err) {
                 console.error(err);
@@ -103,25 +92,15 @@ export default function AiCourseMatcher({ isOpen, onClose }) {
         e.preventDefault();
         setIsSubmittingLead(true);
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const payload = {
                 ...leadForm,
                 ...answers,
                 results_count: results.length,
-                course_ids: results.map((course) => course.id),
+                course_ids: results.map((course) => course.id).filter(Boolean),
+                courses: results,
             };
 
-            const response = await fetch('/api/course-matcher-lead', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '',
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!response.ok) throw new Error('Failed to submit shortlist request');
+            await (window.axios || axios).post('/api/course-matcher-lead', payload);
             setLeadSubmitted(true);
         } catch (err) {
             console.error(err);

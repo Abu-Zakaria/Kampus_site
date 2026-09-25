@@ -110,6 +110,7 @@ Route::get('/scholarships', function () {
 })->name('scholarships');
 
 Route::post('/scholarships/apply', [\App\Http\Controllers\ScholarshipApplicationPublicController::class, 'store'])
+    ->middleware(['throttle:public-form'])
     ->name('scholarships.apply');
 
 Route::get('/visa-guide', function () {
@@ -148,18 +149,36 @@ Route::get('/accreditation', function () {
     return Inertia::render('Accreditation', ['page' => $page]);
 })->name('accreditation');
 
-// Public Partner Application, Contact & Call Booking Submission Routes
-Route::post('/partner/apply', [PartnerController::class, 'store'])->name('partner.apply');
-Route::post('/contact/submit', [InquiryController::class, 'store'])->name('contact.submit');
-Route::post('/book-call', [FrontendController::class, 'bookCall'])->name('book-call.submit');
-Route::post('/course-enquiry', [FrontendController::class, 'enquireCourse'])->name('course.enquiry');
+// Public Partner Application, Contact & Call Booking Submission Routes (Throttled)
+Route::post('/partner/apply', [PartnerController::class, 'store'])
+    ->middleware(['throttle:public-form'])
+    ->name('partner.apply');
 
-// AI Course Matcher API Routes
-Route::post('/api/course-matcher', [FrontendController::class, 'matchCourses'])->name('api.course-matcher');
-Route::post('/api/course-matcher-lead', [FrontendController::class, 'saveMatcherLead'])->name('api.course-matcher-lead');
+Route::post('/contact/submit', [InquiryController::class, 'store'])
+    ->middleware(['throttle:public-form'])
+    ->name('contact.submit');
 
-// Global Index Search API (Laravel Scout)
-Route::get('/api/global-search', [SearchController::class, 'search'])->name('api.global-search');
+Route::post('/book-call', [FrontendController::class, 'bookCall'])
+    ->middleware(['throttle:lead-capture'])
+    ->name('book-call.submit');
+
+Route::post('/course-enquiry', [FrontendController::class, 'enquireCourse'])
+    ->middleware(['throttle:lead-capture'])
+    ->name('course.enquiry');
+
+// AI Course Matcher API Routes (Throttled)
+Route::post('/api/course-matcher', [FrontendController::class, 'matchCourses'])
+    ->middleware(['throttle:course-matcher'])
+    ->name('api.course-matcher');
+
+Route::post('/api/course-matcher-lead', [FrontendController::class, 'saveMatcherLead'])
+    ->middleware(['throttle:lead-capture'])
+    ->name('api.course-matcher-lead');
+
+// Global Index Search API (Laravel Scout, Throttled)
+Route::get('/api/global-search', [SearchController::class, 'search'])
+    ->middleware(['throttle:global-search'])
+    ->name('api.global-search');
 
 // General Dashboard Redirect Route (Smart redirect based on user role)
 Route::get('/dashboard', function (Request $request) {

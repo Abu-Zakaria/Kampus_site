@@ -32,13 +32,13 @@ class AdminNotificationEmailTest extends TestCase
 
         // Create admin recipient
         $this->admin = User::factory()->create([
-            'email' => 'admin.chief@ RMSedu.com',
+            'email' => 'admin.chief@rmsedu.com',
         ]);
         $this->admin->assignRole('Super Admin');
 
         Setting::create([
             'key' => 'admin_notification_email',
-            'value' => 'alerts@ RMSedu.com',
+            'value' => 'alerts@rmsedu.com',
         ]);
     }
 
@@ -57,7 +57,7 @@ class AdminNotificationEmailTest extends TestCase
         $response->assertSessionHas('success');
 
         Mail::assertSent(AdminAlertMail::class, function ($mail) {
-            $hasAlertRecipient = $mail->hasTo('alerts@ RMSedu.com') || $mail->hasTo('admin.chief@ RMSedu.com');
+            $hasAlertRecipient = $mail->hasTo('alerts@rmsedu.com') || $mail->hasTo('admin.chief@rmsedu.com');
             $matchesSubject = str_contains($mail->envelope()->subject, 'David Miller');
             $matchesBadge = $mail->badgeText === 'NEW INQUIRY';
 
@@ -101,7 +101,7 @@ class AdminNotificationEmailTest extends TestCase
         $response->assertStatus(200);
 
         Mail::assertSent(AdminAlertMail::class, function ($mail) {
-            $hasRecipient = $mail->hasTo('alerts@ RMSedu.com') || $mail->hasTo('admin.chief@ RMSedu.com');
+            $hasRecipient = $mail->hasTo('alerts@rmsedu.com') || $mail->hasTo('admin.chief@rmsedu.com');
             $matchesBadge = $mail->badgeText === 'CALL BOOKING';
             $matchesDetails = isset($mail->details['Destination']) && $mail->details['Destination'] === 'United Kingdom';
 
@@ -125,7 +125,7 @@ class AdminNotificationEmailTest extends TestCase
         $response->assertStatus(200);
 
         Mail::assertSent(AdminAlertMail::class, function ($mail) {
-            $hasRecipient = $mail->hasTo('alerts@ RMSedu.com') || $mail->hasTo('admin.chief@ RMSedu.com');
+            $hasRecipient = $mail->hasTo('alerts@rmsedu.com') || $mail->hasTo('admin.chief@rmsedu.com');
             $matchesBadge = $mail->badgeText === 'COURSE MATCHER LEAD';
 
             return $hasRecipient && $matchesBadge;
@@ -151,7 +151,7 @@ class AdminNotificationEmailTest extends TestCase
         $response->assertSessionHas('success');
 
         Mail::assertSent(AdminAlertMail::class, function ($mail) {
-            $hasRecipient = $mail->hasTo('alerts@ RMSedu.com') || $mail->hasTo('admin.chief@ RMSedu.com');
+            $hasRecipient = $mail->hasTo('alerts@rmsedu.com') || $mail->hasTo('admin.chief@rmsedu.com');
             $matchesBadge = $mail->badgeText === 'STUDENT MESSAGE';
             $matchesSubject = str_contains($mail->envelope()->subject, 'Scholarship Application Documents');
 
@@ -176,7 +176,7 @@ class AdminNotificationEmailTest extends TestCase
         $response->assertSessionHas('success');
 
         Mail::assertSent(AdminAlertMail::class, function ($mail) {
-            $hasRecipient = $mail->hasTo('alerts@ RMSedu.com') || $mail->hasTo('admin.chief@ RMSedu.com');
+            $hasRecipient = $mail->hasTo('alerts@rmsedu.com') || $mail->hasTo('admin.chief@rmsedu.com');
             $matchesBadge = $mail->badgeText === 'PARTNER APPLICATION';
             $matchesSubject = str_contains($mail->envelope()->subject, 'Global Horizon Edu');
 

@@ -124,6 +124,32 @@ class EnvEditorService
     }
 
     /**
+     * Get the list of allowed configurable keys.
+     * When running in production, critical DB credentials are removed from the whitelist to prevent outages.
+     *
+     * @return array
+     */
+    public function getAllowedKeys(): array
+    {
+        $keys = $this->allowedKeys;
+        $isProduction = app()->environment('production') || (env('APP_ENV') === 'production');
+
+        if ($isProduction) {
+            $criticalDbKeys = [
+                'DB_CONNECTION',
+                'DB_HOST',
+                'DB_PORT',
+                'DB_DATABASE',
+                'DB_USERNAME',
+                'DB_PASSWORD',
+            ];
+            $keys = array_values(array_diff($keys, $criticalDbKeys));
+        }
+
+        return $keys;
+    }
+
+    /**
      * Update environment variables safely.
      *
      * @param array $newValues Key-value pairs of variables to update
@@ -143,8 +169,20 @@ class EnvEditorService
         $lines = explode("\n", $content);
         $updatedKeys = [];
 
-        // Filter incoming values against the whitelist
-        $filteredValues = array_intersect_key($newValues, array_flip($this->allowedKeys));
+        // Filter incoming values against the environment-aware whitelist
+        $allowedKeys = $this->getAllowedKeys();
+        $filteredValues = array_intersect_key($newValues, array_flip($allowedKeys));
+
+        // Security: Never overwrite or wipe secrets when submitted as empty string, null, or placeholder
+        $secretKeys = ['MAIL_PASSWORD', 'DB_PASSWORD', 'AWS_SECRET_ACCESS_KEY', 'REDIS_PASSWORD'];
+        foreach ($secretKeys as $secretKey) {
+            if (array_key_exists($secretKey, $filteredValues)) {
+                $val = $filteredValues[$secretKey];
+                if ($val === null || trim((string) $val) === '' || str_contains((string) $val, '••••••')) {
+                    unset($filteredValues[$secretKey]);
+                }
+            }
+        }
 
         foreach ($lines as $index => $line) {
             $trimmed = trim($line);

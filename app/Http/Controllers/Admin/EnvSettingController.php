@@ -22,6 +22,8 @@ class EnvSettingController extends Controller
         $appKey = $rawVars['APP_KEY'] ?? config('app.key', '');
         $maskedKey = $appKey ? (substr($appKey, 0, 14) . '••••••••••••••••••••••••' . substr($appKey, -4)) : 'Not set';
 
+        $isProduction = app()->environment('production') || (($rawVars['APP_ENV'] ?? config('app.env')) === 'production');
+
         $envData = [
             // App settings
             'APP_NAME' => $rawVars['APP_NAME'] ?? config('app.name', ' RMS Edu'),
@@ -32,23 +34,26 @@ class EnvSettingController extends Controller
             'APP_FALLBACK_LOCALE' => $rawVars['APP_FALLBACK_LOCALE'] ?? config('app.fallback_locale', 'en'),
             'APP_KEY_MASKED' => $maskedKey,
 
-            // Mail settings
+            // Mail settings (Secrets masked with boolean presence flags)
             'MAIL_MAILER' => $rawVars['MAIL_MAILER'] ?? config('mail.default', 'smtp'),
             'MAIL_HOST' => $rawVars['MAIL_HOST'] ?? config('mail.mailers.smtp.host', ''),
             'MAIL_PORT' => (string) ($rawVars['MAIL_PORT'] ?? config('mail.mailers.smtp.port', '587')),
             'MAIL_USERNAME' => $rawVars['MAIL_USERNAME'] ?? config('mail.mailers.smtp.username', ''),
-            'MAIL_PASSWORD' => $rawVars['MAIL_PASSWORD'] ?? '',
+            'MAIL_PASSWORD' => '',
+            'HAS_MAIL_PASSWORD' => !empty($rawVars['MAIL_PASSWORD']),
             'MAIL_ENCRYPTION' => $rawVars['MAIL_ENCRYPTION'] ?? config('mail.mailers.smtp.encryption', 'tls'),
             'MAIL_FROM_ADDRESS' => $rawVars['MAIL_FROM_ADDRESS'] ?? config('mail.from.address', 'hello@ RMS.com'),
             'MAIL_FROM_NAME' => $rawVars['MAIL_FROM_NAME'] ?? config('mail.from.name', ' RMS Edu'),
 
-            // Database settings
+            // Database settings (Secrets masked and locked in production)
             'DB_CONNECTION' => $rawVars['DB_CONNECTION'] ?? config('database.default', 'mysql'),
             'DB_HOST' => $rawVars['DB_HOST'] ?? config('database.connections.mysql.host', '127.0.0.1'),
             'DB_PORT' => (string) ($rawVars['DB_PORT'] ?? config('database.connections.mysql.port', '3306')),
             'DB_DATABASE' => $rawVars['DB_DATABASE'] ?? config('database.connections.mysql.database', ' RMS'),
             'DB_USERNAME' => $rawVars['DB_USERNAME'] ?? config('database.connections.mysql.username', 'root'),
-            'DB_PASSWORD' => $rawVars['DB_PASSWORD'] ?? '',
+            'DB_PASSWORD' => '',
+            'HAS_DB_PASSWORD' => !empty($rawVars['DB_PASSWORD']),
+            'IS_DB_LOCKED' => $isProduction,
 
             // Session, Cache, Queue & Storage
             'SESSION_DRIVER' => $rawVars['SESSION_DRIVER'] ?? config('session.driver', 'database'),
@@ -59,7 +64,8 @@ class EnvSettingController extends Controller
 
             // AWS S3
             'AWS_ACCESS_KEY_ID' => $rawVars['AWS_ACCESS_KEY_ID'] ?? '',
-            'AWS_SECRET_ACCESS_KEY' => $rawVars['AWS_SECRET_ACCESS_KEY'] ?? '',
+            'AWS_SECRET_ACCESS_KEY' => '',
+            'HAS_AWS_SECRET' => !empty($rawVars['AWS_SECRET_ACCESS_KEY']),
             'AWS_DEFAULT_REGION' => $rawVars['AWS_DEFAULT_REGION'] ?? 'us-east-1',
             'AWS_BUCKET' => $rawVars['AWS_BUCKET'] ?? '',
             'AWS_USE_PATH_STYLE_ENDPOINT' => filter_var($rawVars['AWS_USE_PATH_STYLE_ENDPOINT'] ?? false, FILTER_VALIDATE_BOOLEAN),
@@ -71,7 +77,8 @@ class EnvSettingController extends Controller
             // Redis
             'REDIS_HOST' => $rawVars['REDIS_HOST'] ?? '127.0.0.1',
             'REDIS_PORT' => (string) ($rawVars['REDIS_PORT'] ?? '6379'),
-            'REDIS_PASSWORD' => $rawVars['REDIS_PASSWORD'] ?? '',
+            'REDIS_PASSWORD' => '',
+            'HAS_REDIS_PASSWORD' => !empty($rawVars['REDIS_PASSWORD']),
         ];
 
         return Inertia::render('Admin/Settings/Environment', [
@@ -81,6 +88,8 @@ class EnvSettingController extends Controller
                 'laravel_version' => app()->version(),
                 'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'PHP CLI / Web Server',
                 'env_writable' => is_writable(base_path('.env')),
+                'is_production' => $isProduction,
+                'admin_email' => auth()->user()?->email,
             ],
         ]);
     }
@@ -146,6 +155,31 @@ class EnvSettingController extends Controller
             $validated['MAIL_ENCRYPTION'] = 'null';
         }
 
+        // Security Step 3: Skip any secret submitted as null, empty string, or placeholder dots
+        $secretKeys = ['MAIL_PASSWORD', 'DB_PASSWORD', 'AWS_SECRET_ACCESS_KEY', 'REDIS_PASSWORD'];
+        foreach ($secretKeys as $secretKey) {
+            $val = $request->input($secretKey);
+            if ($val === null || trim((string)$val) === '' || str_contains((string)$val, '••••••')) {
+                unset($validated[$secretKey]);
+            }
+        }
+
+        // Security Step 5: Prevent database configuration tampering in production
+        $isProduction = app()->environment('production') || (env('APP_ENV') === 'production');
+        if ($isProduction) {
+            $criticalDbKeys = [
+                'DB_CONNECTION',
+                'DB_HOST',
+                'DB_PORT',
+                'DB_DATABASE',
+                'DB_USERNAME',
+                'DB_PASSWORD',
+            ];
+            foreach ($criticalDbKeys as $dbKey) {
+                unset($validated[$dbKey]);
+            }
+        }
+
         $success = $envEditor->update($validated);
 
         if (!$success) {
@@ -157,7 +191,7 @@ class EnvSettingController extends Controller
     }
 
     /**
-     * Send a test email to verify SMTP settings.
+     * Send a test email to verify SMTP settings with Mail relay protection.
      */
     public function testEmail(Request $request): RedirectResponse
     {
@@ -165,7 +199,21 @@ class EnvSettingController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
-        $recipient = $request->input('email');
+        $recipient = strtolower(trim($request->input('email')));
+        $adminUser = $request->user();
+        $adminEmail = $adminUser ? strtolower(trim($adminUser->email)) : '';
+        $fromEmail = strtolower(trim(config('mail.from.address', '')));
+
+        // Security Step 5: Anti-relay abuse restriction
+        // Only allow dispatching test emails to authenticated administrator or configured MAIL_FROM_ADDRESS
+        $allowedRecipients = array_values(array_filter([$adminEmail, $fromEmail]));
+
+        if (!in_array($recipient, $allowedRecipients, true)) {
+            $allowedList = implode(' or ', array_filter([$adminEmail ? "your admin email ({$adminEmail})" : null, $fromEmail ? "the configured sender address ({$fromEmail})" : null]));
+            return redirect()->back()
+                ->with('error', "Security Restriction: For anti-abuse and anti-relay protection, test emails may only be dispatched to {$allowedList}.");
+        }
+
         $appName = config('app.name', ' RMS Edu');
 
         try {

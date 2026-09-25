@@ -52,20 +52,34 @@ class FrontendController extends Controller
     }
 
     /**
-     * AI Course Matcher search API.
+     * Resolve recommended courses for a user given explicit IDs or search criteria.
      */
-    public function matchCourses(Request $request)
+    protected function resolveMatchedCourses(array $criteria = [], ?array $courseIds = null)
     {
-        $destination = $request->input('destination');
-        $level = $request->input('level');
-        $field = $request->input('field');
-        $budget = $request->input('budget');
-        $startDate = $request->input('start_date');
-        $englishStatus = $request->input('english_status');
+        // 1. If explicit course IDs are provided, load them in the specified order
+        if (!empty($courseIds)) {
+            $courses = Course::with(['university.country'])
+                ->whereIn('id', $courseIds)
+                ->get()
+                ->sortBy(function ($course) use ($courseIds) {
+                    $index = array_search($course->id, $courseIds);
+                    return $index !== false ? $index : 999;
+                })
+                ->values();
+
+            if ($courses->isNotEmpty()) {
+                return $courses;
+            }
+        }
+
+        // 2. Otherwise run matching query based on search criteria
+        $destination = $criteria['destination'] ?? $criteria['Preferred Destination'] ?? null;
+        $level = $criteria['level'] ?? $criteria['Level of Study'] ?? null;
+        $field = $criteria['field'] ?? $criteria['Field of Study'] ?? null;
 
         $query = Course::with(['university.country']);
 
-        // 1. Destination Filter
+        // Destination Filter
         if (!empty($destination) && !in_array(strtolower(trim($destination)), ['anywhere', 'all', 'any', 'flexible'])) {
             $query->whereHas('university.country', function ($q) use ($destination) {
                 $q->where('name', 'like', "%{$destination}%")
@@ -73,13 +87,13 @@ class FrontendController extends Controller
             });
         }
 
-        // 2. Level of Study Filter
+        // Level of Study Filter
         if (!empty($level) && !in_array(strtolower(trim($level)), ['not sure yet', 'all', 'any', 'flexible'])) {
             $query->where('level', 'like', "%{$level}%");
         }
 
-        // 3. Field of Study Filter
-        if (!empty($field) && !in_array(strtolower(trim($field)), ['not sure', 'all', 'any', 'flexible'])) {
+        // Field of Study Filter
+        if (!empty($field) && !in_array(strtolower(trim($field)), ['not sure', 'all', 'any', 'flexible', 'not specified'])) {
             $keywords = match (strtolower(trim($field))) {
                 'business' => ['business', 'mba', 'management', 'finance', 'marketing', 'accounting'],
                 'engineering' => ['engineering', 'beng', 'meng', 'mechanical', 'civil', 'electrical', 'software', 'technology'],
@@ -100,10 +114,10 @@ class FrontendController extends Controller
 
         $results = $query->take(5)->get();
 
-        // If fewer than 4 results found, complement with related courses
+        // If fewer than 4 results found, complement with related courses from same destination
         if ($results->count() < 4) {
             $supplementQuery = Course::with(['university.country']);
-            if (!empty($destination) && !in_array(strtolower(trim($destination)), ['anywhere', 'all', 'any'])) {
+            if (!empty($destination) && !in_array(strtolower(trim($destination)), ['anywhere', 'all', 'any', 'flexible'])) {
                 $supplementQuery->whereHas('university.country', function ($q) use ($destination) {
                     $q->where('name', 'like', "%{$destination}%");
                 });
@@ -113,14 +127,24 @@ class FrontendController extends Controller
             $results = $results->merge($additional);
         }
 
-        // Final fallback if empty
+        // Final fallback to top published courses if empty
         if ($results->count() === 0) {
-            $results = Course::with(['university.country'])->inRandomOrder()->take(5)->get();
+            $results = Course::with(['university.country'])->take(5)->get();
         }
+
+        return $results->values();
+    }
+
+    /**
+     * AI Course Matcher search API.
+     */
+    public function matchCourses(Request $request)
+    {
+        $results = $this->resolveMatchedCourses($request->all());
 
         // Calculate match percentage for realistic UI presentation
         $percentages = [98, 95, 92, 89, 86];
-        $formattedResults = $results->values()->map(function ($course, $index) use ($percentages) {
+        $formattedResults = $results->map(function ($course, $index) use ($percentages) {
             $courseArray = $course->toArray();
             $courseArray['match_percentage'] = $percentages[$index] ?? (85 - ($index * 2));
             return $courseArray;
@@ -134,7 +158,7 @@ class FrontendController extends Controller
     }
 
     /**
-     * Save AI Course Matcher Shortlist Lead as ContactMessage.
+     * Save AI Course Matcher Shortlist Lead as ContactMessage and email shortlist.
      */
     public function saveMatcherLead(Request $request)
     {
@@ -161,9 +185,26 @@ class FrontendController extends Controller
             'English Proficiency' => $request->input('english_status', 'Not specified'),
         ];
 
+        // Resolve matched courses either from explicit course_ids or dynamically from criteria
+        $courseIds = $request->input('course_ids', []);
+        $courses = $this->resolveMatchedCourses($request->all(), $courseIds);
+
+        // Build human-readable shortlist summary
+        $courseLines = [];
+        foreach ($courses as $idx => $course) {
+            $uniName = $course->university->name ?? 'Partner Institution';
+            $countryName = $course->university->country->name ?? '';
+            $locationStr = $countryName ? "{$uniName} ({$countryName})" : $uniName;
+            $feeStr = (!empty($course->tuition_fee) && ($course->show_tuition_fee ?? true)) ? $course->tuition_fee : 'Tuition on request';
+            $courseLines[] = ($idx + 1) . ". {$course->title} — {$locationStr} | Level: {$course->level} | Tuition: {$feeStr}";
+        }
+
         $messageContent = "AI Course Matcher Shortlist Delivery Request:\n\n";
         foreach ($criteria as $key => $val) {
             $messageContent .= "• {$key}: {$val}\n";
+        }
+        if (!empty($courseLines)) {
+            $messageContent .= "\nShortlisted Courses Generated:\n" . implode("\n", $courseLines) . "\n";
         }
         $messageContent .= "\n[Captured via Interactive AI Course Matcher]";
 
@@ -176,18 +217,10 @@ class FrontendController extends Controller
             'is_read' => false,
         ]);
 
-        // Dispatch email and database notification to admin(s)
-        \App\Services\AdminNotificationService::notifyCourseMatcherLead($contactMessage, $criteria);
+        // Dispatch email and database notification to admin(s) with full shortlist details
+        \App\Services\AdminNotificationService::notifyCourseMatcherLead($contactMessage, $criteria, $courses);
 
-        // Fetch matched courses and email personalized shortlist to user
-        $courseIds = $request->input('course_ids', []);
-        $courses = collect();
-        if (!empty($courseIds)) {
-            $courses = Course::with(['university.country'])
-                ->whereIn('id', $courseIds)
-                ->get();
-        }
-
+        // Email personalized shortlist directly to prospective student
         if ($courses->isNotEmpty()) {
             try {
                 Mail::to($validated['email'])->send(new CourseShortlistMail($validated['name'], $courses));
@@ -199,6 +232,7 @@ class FrontendController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Your shortlist has been recorded! Our admissions team has emailed you your personalized recommendations.',
+            'shortlist_count' => $courses->count(),
         ]);
     }
 
