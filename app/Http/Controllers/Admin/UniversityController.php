@@ -125,6 +125,8 @@ class UniversityController extends Controller
             'features' => 'nullable|array',
             'cover_image' => 'nullable',
             'logo' => 'nullable',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
         // Handle cover_image file upload
@@ -178,6 +180,8 @@ class UniversityController extends Controller
             'features' => 'nullable|array',
             'cover_image' => 'nullable',
             'logo' => 'nullable',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
         ]);
 
         // Handle cover_image file upload

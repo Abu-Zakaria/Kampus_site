@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\AdminAlertMail;
 use App\Models\ContactMessage;
 use App\Models\PartnerApplication;
+use App\Models\ScholarshipApplication;
 use App\Models\Setting;
 use App\Models\StudentApplication;
 use App\Models\StudentConversation;
@@ -363,6 +364,44 @@ class AdminNotificationService
             'COURSE ENQUIRY',
             $validated['email'],
             $validated['name']
+        );
+    }
+
+    /**
+     * Trigger database notification and email for new scholarship applications.
+     */
+    public static function notifyScholarshipApplication(ScholarshipApplication $application): void
+    {
+        $subject = "[Scholarship Application] {$application->full_name} — {$application->scholarship_name}";
+        $title = 'New Scholarship Application: ' . $application->scholarship_name;
+        $destination = $application->destination_country ? " ({$application->destination_country})" : '';
+        $message = "{$application->full_name} submitted an application for {$application->scholarship_name}{$destination}. Ref: {$application->application_no}";
+
+        $details = [
+            'Application Ref' => $application->application_no,
+            'Scholarship' => $application->scholarship_name,
+            'Destination Country' => $application->destination_country ?: 'International',
+            'Applicant Name' => $application->full_name,
+            'Email Address' => $application->email,
+            'Phone Number' => $application->phone,
+            'Nationality' => $application->nationality ?: 'Not specified',
+            'Highest Qualification' => $application->highest_qualification ?: 'Not specified',
+            'GPA / Grade' => $application->gpa ?: 'Not specified',
+            'Desired Intake' => $application->desired_intake ?: 'Not specified',
+            'Notes / Statement' => $application->notes ?: 'None provided',
+            'Submitted At' => $application->created_at ? $application->created_at->format('M d, Y h:i A') : now()->format('M d, Y h:i A'),
+        ];
+
+        self::sendAlert(
+            $subject,
+            $title,
+            $message,
+            $details,
+            url('/admin/scholarship-applications'),
+            'Review Scholarship Application',
+            'SCHOLARSHIP APPLICATION',
+            $application->email,
+            $application->full_name
         );
     }
 }

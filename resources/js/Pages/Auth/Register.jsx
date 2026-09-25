@@ -1,9 +1,13 @@
 import React from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import GuestLayout from '../../Layouts/GuestLayout';
 import { User, Mail, Lock, ShieldCheck, UserPlus, ArrowRight } from 'lucide-react';
 
 export default function Register() {
+    const { props } = usePage();
+    const globalSettings = props?.globalSettings || {};
+    const siteName = globalSettings?.site_name || 'Kampus';
+
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const isAdmin = urlParams ? urlParams.get('type') === 'admin' : false;
 
@@ -23,7 +27,7 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title={isAdmin ? "Create Account — Kampus Admin" : "Student Registration — Kampus"} />
+            <Head title={isAdmin ? `Create Account — ${siteName} Admin` : `Student Registration — ${siteName}`} />
 
             {/* HEADER TYPOGRAPHY */}
             <div className="text-center space-y-2 mb-8">
@@ -32,7 +36,7 @@ export default function Register() {
                 </h2>
                 <p className="text-sm text-slate-400">
                     {isAdmin
-                        ? 'Register a new administrator profile for Kampus Group'
+                        ? `Register a new administrator profile for ${siteName} Group`
                         : 'Create your free student account to apply to universities and track replies'}
                 </p>
             </div>

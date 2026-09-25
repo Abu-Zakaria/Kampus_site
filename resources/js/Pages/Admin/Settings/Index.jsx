@@ -20,7 +20,8 @@ import {
     FileText,
     ArrowUpRight,
     Trash2,
-    Sliders
+    Sliders,
+    Search
 } from 'lucide-react';
 
 export default function Index({ settings = {} }) {
@@ -29,6 +30,9 @@ export default function Index({ settings = {} }) {
     const [faviconPreview, setFaviconPreview] = useState(settings.site_favicon ? `/storage/${settings.site_favicon}` : null);
     const [heroBannerPreview, setHeroBannerPreview] = useState(
         settings.home_hero_image ? (settings.home_hero_image.startsWith('http') || settings.home_hero_image.startsWith('/') ? settings.home_hero_image : `/storage/${settings.home_hero_image}`) : null
+    );
+    const [metaImagePreview, setMetaImagePreview] = useState(
+        settings.default_meta_image ? (settings.default_meta_image.startsWith('http') || settings.default_meta_image.startsWith('/') ? settings.default_meta_image : `/storage/${settings.default_meta_image}`) : null
     );
 
     const { data, setData, post, processing } = useForm({
@@ -69,6 +73,11 @@ export default function Index({ settings = {} }) {
         contact_info_phone: settings.contact_info_phone || '020 7423 9333',
         contact_info_hours: settings.contact_info_hours || 'Monday - Friday: 9:00 AM - 6:00 PM GMT',
         contact_map_iframe: settings.contact_map_iframe || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.915783307521!2d-0.05716182337775242!3d51.51478190950346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876033580555555%3A0x123456789abcdef!2sJubilee%20St%2C%20London!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk',
+
+        // Global SEO Settings
+        default_meta_description: settings.default_meta_description || '',
+        default_meta_image: null,
+        custom_header_code: settings.custom_header_code || '',
     });
 
     const extractMapUrl = (input) => {
@@ -778,6 +787,102 @@ export default function Index({ settings = {} }) {
                                     </div>
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    {/* SECTION 7: GLOBAL SEO SETTINGS */}
+                    <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+                        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                            <div className="p-2.5 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400">
+                                <Search className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                                    Global SEO Settings
+                                </h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    Configure global default meta description and default Open Graph (OG) sharing image
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Default Meta Description */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Default Meta Description
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    value={data.default_meta_description}
+                                    onChange={(e) => setData('default_meta_description', e.target.value)}
+                                    placeholder="Enter default meta description for search engines when a specific page description is not set..."
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                                />
+                                <p className="text-[11px] text-slate-400 mt-1">
+                                    Used as the fallback description for Google, Bing, and other search engines across public pages (150-160 characters recommended).
+                                </p>
+                            </div>
+
+                            {/* Default Meta Image (OG Image) */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Default Meta Image (OG Image)
+                                </label>
+                                
+                                {metaImagePreview ? (
+                                    <div className="relative w-full max-w-md h-48 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-700 mb-3">
+                                        <img src={metaImagePreview} alt="Default Meta OG Image Preview" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                        <div className="absolute bottom-3 left-3 text-white text-xs font-mono bg-black/60 px-2.5 py-1 rounded-lg">
+                                            Active OG Image
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="w-full max-w-md h-32 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center p-4 text-center mb-3">
+                                        <ImageIcon className="w-6 h-6 text-slate-400 mb-1" />
+                                        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">No default OG image uploaded</span>
+                                        <span className="text-[10px] text-slate-400">Falls back to /default-og-image.jpg</span>
+                                    </div>
+                                )}
+
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="default_meta_image_input"
+                                        className="hidden"
+                                        onChange={(e) => handleFileChange('default_meta_image', e.target.files[0], setMetaImagePreview)}
+                                    />
+                                    <label
+                                        htmlFor="default_meta_image_input"
+                                        className="py-2.5 px-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-2 cursor-pointer transition-colors shadow-xs"
+                                    >
+                                        <Upload className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                                        <span>{metaImagePreview ? 'Replace OG Image' : 'Upload OG Image'}</span>
+                                    </label>
+                                </div>
+                                <p className="text-[11px] text-slate-400 mt-2">
+                                    Recommended: 1200×630px JPG or PNG for optimal preview cards on Facebook, LinkedIn, Twitter/X, and WhatsApp.
+                                </p>
+                            </div>
+
+                            {/* Custom Header Code (Tracking Scripts & Meta Verification) */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Custom Header Code (Scripts & Meta Verification)
+                                </label>
+                                <textarea
+                                    rows={5}
+                                    value={data.custom_header_code}
+                                    onChange={(e) => setData('custom_header_code', e.target.value)}
+                                    placeholder={'<!-- Paste Google Search Console, Google Analytics (gtag.js), or Meta Pixel code here -->\n<meta name="google-site-verification" content="..." />'}
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono text-xs focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                                />
+                                <p className="text-[11px] text-slate-400 mt-1">
+                                    Paste your Google Search Console meta tags, Google Analytics scripts, or Facebook Pixel code here. It will be injected into the &lt;head&gt; of all pages.
+                                </p>
+                            </div>
                         </div>
                     </div>
 

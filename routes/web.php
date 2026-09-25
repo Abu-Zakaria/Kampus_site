@@ -31,7 +31,11 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StudentApplicationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Http\Request;
+
+// XML Sitemap for Search Engines
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Public Dynamic Home Route (Using original HomeController)
 Route::get('/', HomeController::class)->name('home');
@@ -98,8 +102,15 @@ Route::get('/scholarships', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('Scholarships', ['page' => $page]); 
+    $countries = \App\Models\Country::orderBy('name', 'asc')->get(['id', 'name', 'slug', 'country_code']);
+    return Inertia::render('Scholarships', [
+        'page' => $page,
+        'countries' => $countries,
+    ]); 
 })->name('scholarships');
+
+Route::post('/scholarships/apply', [\App\Http\Controllers\ScholarshipApplicationPublicController::class, 'store'])
+    ->name('scholarships.apply');
 
 Route::get('/visa-guide', function () {
     $page = \App\Models\Page::where('slug', 'visa-guide')->first();
@@ -128,14 +139,6 @@ Route::get('/terms-of-service', function () {
 Route::get('/terms', function () {
     return redirect()->route('terms-of-service');
 });
-
-Route::get('/cookie-preferences', function () {
-    $page = \App\Models\Page::where('slug', 'cookie-preferences')->first();
-    if ($page && !$page->is_active && !auth()->check()) {
-        abort(404);
-    }
-    return Inertia::render('CookiePreferences', ['page' => $page]); 
-})->name('cookie-preferences');
 
 Route::get('/accreditation', function () {
     $page = \App\Models\Page::where('slug', 'accreditation')->first();
@@ -226,6 +229,23 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
         Route::get('/pages/{id}/edit', [PageController::class, 'edit'])->name('admin.pages.edit');
         Route::put('/pages/{id}', [PageController::class, 'update'])->name('admin.pages.update');
         Route::delete('/pages/{id}', [PageController::class, 'destroy'])->name('admin.pages.destroy');
+
+        // Scholarships Direct Admin Route
+        Route::get('/scholarships', function () {
+            $page = \App\Models\Page::firstOrCreate(
+                ['slug' => 'scholarships'],
+                [
+                    'name' => 'Scholarships',
+                    'meta_title' => 'International Scholarships Finder — Kampus EduConsult',
+                    'meta_description' => 'Explore merit-based, need-based, and government-funded scholarships to study abroad.',
+                    'is_active' => true,
+                    'show_in_navbar' => true,
+                    'show_in_footer' => true,
+                    'content' => [],
+                ]
+            );
+            return redirect()->route('admin.pages.edit', $page->id);
+        })->name('admin.scholarships.index');
 
         // FAQs CRUD Routes
         Route::resource('faqs', FaqController::class)->names([
@@ -368,6 +388,16 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
     Route::delete('student-applications/{id}', [StudentApplicationController::class, 'destroy'])
         ->middleware('can:manage-inquiries')
         ->name('admin.student-applications.destroy');
+
+    // Scholarship Applications Management Routes (admin management)
+    Route::middleware('can:manage-inquiries')->group(function () {
+        Route::get('scholarship-applications', [\App\Http\Controllers\Admin\ScholarshipApplicationController::class, 'index'])
+            ->name('admin.scholarship-applications.index');
+        Route::patch('scholarship-applications/{id}/status', [\App\Http\Controllers\Admin\ScholarshipApplicationController::class, 'updateStatus'])
+            ->name('admin.scholarship-applications.update-status');
+        Route::delete('scholarship-applications/{id}', [\App\Http\Controllers\Admin\ScholarshipApplicationController::class, 'destroy'])
+            ->name('admin.scholarship-applications.destroy');
+    });
 
     // Student Messages Workstation Routes (admin management)
     Route::middleware('can:manage-inquiries')->group(function () {

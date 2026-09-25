@@ -110,7 +110,7 @@ export default function Layout({ children }) {
     ];
 
     // Combine static footer links with dynamic footer pages enabled by Admin (excluding legal/policy pages which belong in bottom copyright bar)
-    const legalPages = ['privacy-policy', 'terms-of-service', 'terms', 'cookie-preferences', 'accreditation'];
+    const legalPages = ['privacy-policy', 'terms-of-service', 'terms', 'accreditation'];
     const dynamicFooterLinks = (footer_pages || []).map(p => ({
         name: p.name,
         href: p.slug === 'home' || p.slug === '/' ? '/' : `/${p.slug.replace(/^\//, '')}`
@@ -376,16 +376,15 @@ export default function Layout({ children }) {
                     {/* Bottom Legal Links */}
                     <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
                         <div>
-                            © {new Date().getFullYear()} <span className="text-white font-medium">Kampus Educational Consultancy Ltd</span>. All rights reserved.
+                            © {new Date().getFullYear()} <span className="text-white font-medium">RMS Educational Consultancy Ltd</span>. All rights reserved.
                         </div>
 
                         <div className="flex flex-wrap items-center gap-6">
                             <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
                             <Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
-                            <Link href="/cookie-preferences" className="hover:text-white transition-colors">Cookie Preferences</Link>
                             <Link href="/accreditation" className="hover:text-white transition-colors">Accreditation</Link>
                             {dynamicFooterLinks
-                                .filter(d => !['/', '/about', '/services', '/universities', '/courses', '/scholarships', '/visa-guide', '/privacy-policy', '/terms-of-service', '/terms', '/cookie-preferences', '/accreditation'].includes(d.href.toLowerCase()))
+                                .filter(d => !['/', '/about', '/services', '/universities', '/courses', '/scholarships', '/visa-guide', '/privacy-policy', '/terms-of-service', '/terms', '/accreditation'].includes(d.href.toLowerCase()))
                                 .map(p => (
                                     <Link key={p.name} href={p.href} className="hover:text-blue-400 text-slate-300 font-medium transition-colors">
                                         {p.name}

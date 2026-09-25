@@ -22,6 +22,8 @@ class University extends Model
         'cover_image',
         'logo',
         'features',
+        'meta_title',
+        'meta_description',
     ];
 
     protected $casts = [

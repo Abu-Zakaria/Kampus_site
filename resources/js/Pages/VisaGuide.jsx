@@ -4,7 +4,6 @@ import Layout from '../Layouts/Layout';
 import JourneyProcess from '../Components/JourneyProcess';
 import FaqSection from '../Components/FaqSection';
 import {
-    Plane,
     FileCheck,
     Clock,
     CheckCircle2,
@@ -27,7 +26,6 @@ export default function VisaGuide({ page = null }) {
 
     const heroHeading = page?.content?.hero_heading || page?.content?.hero?.title;
     const heroSubtitle = page?.content?.hero_subtitle || page?.content?.hero?.subtitle;
-    const heroBadge = page?.content?.badge_text || page?.content?.hero?.badge;
 
     const [activeTab, setActiveTab] = useState('UK');
     const [openFaqIndex, setOpenFaqIndex] = useState(0);
@@ -168,13 +166,6 @@ export default function VisaGuide({ page = null }) {
                     </div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-                        <div>
-                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/90 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-widest border border-blue-200/80 dark:border-blue-800 shadow-2xs backdrop-blur-md">
-                                <Plane className="w-3.5 h-3.5" />
-                                <span>{heroBadge || 'STUDENT VISA GUIDANCE'}</span>
-                            </span>
-                        </div>
-
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight max-w-4xl mx-auto">
                             {heroHeading ? (
                                 heroHeading

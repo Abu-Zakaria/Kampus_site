@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Models\Country;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -42,6 +43,7 @@ class PageController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
             'show_in_footer' => 'nullable|boolean',
@@ -51,6 +53,12 @@ class PageController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['show_in_navbar'] = $request->boolean('show_in_navbar');
         $validated['show_in_footer'] = $request->boolean('show_in_footer');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         $page = Page::create($validated);
 
@@ -64,9 +72,11 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::findOrFail($id);
+        $countries = Country::orderBy('name', 'asc')->get(['id', 'name', 'slug', 'country_code']);
 
         return Inertia::render('Admin/Pages/Edit', [
             'page' => $page,
+            'countries' => $countries,
         ]);
     }
 
@@ -83,6 +93,7 @@ class PageController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:1000',
             'meta_keywords' => 'nullable|string|max:1000',
+            'tags' => 'nullable|string|max:1000',
             'is_active' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
             'show_in_footer' => 'nullable|boolean',
@@ -92,7 +103,7 @@ class PageController extends Controller
         $coreSlugs = [
             '/', 'home', 'about', 'services', 'universities', 'courses', 'blog', 'contact',
             'partner-with-us', 'partner', 'scholarships', 'visa-guide', 'privacy-policy',
-            'terms-of-service', 'terms', 'cookie-preferences', 'accreditation'
+            'terms-of-service', 'terms', 'accreditation'
         ];
 
         if (in_array(strtolower($page->slug), $coreSlugs)) {
@@ -102,6 +113,12 @@ class PageController extends Controller
         $validated['is_active'] = $request->boolean('is_active');
         $validated['show_in_navbar'] = $request->boolean('show_in_navbar');
         $validated['show_in_footer'] = $request->boolean('show_in_footer');
+
+        if (!empty($validated['tags']) && empty($validated['meta_keywords'])) {
+            $validated['meta_keywords'] = $validated['tags'];
+        } elseif (!empty($validated['meta_keywords']) && empty($validated['tags'])) {
+            $validated['tags'] = $validated['meta_keywords'];
+        }
 
         $page->update($validated);
 
@@ -113,7 +130,15 @@ class PageController extends Controller
             );
         }
 
-        return redirect()->route('admin.pages.index')
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Page '{$page->name}' updated successfully.",
+                'page' => $page,
+            ]);
+        }
+
+        return redirect()->route('admin.pages.edit', $page->id)
             ->with('success', "Page '{$page->name}' updated successfully.");
     }
 
@@ -156,7 +181,6 @@ class PageController extends Controller
             'privacy-policy',
             'terms-of-service',
             'terms',
-            'cookie-preferences',
             'accreditation'
         ];
 

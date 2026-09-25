@@ -1,6 +1,6 @@
 import React from 'react';
-import { Head } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import SeoHead from '../Components/SeoHead';
 import UniversityHeader from '../Components/UniversityHeader';
 import UniversityTabs from '../Components/UniversityTabs';
 import JourneyProcess from '../Components/JourneyProcess';
@@ -64,7 +64,11 @@ export default function UniversityDetails({ university = null, slug = 'universit
 
     return (
         <Layout>
-            <Head title={`${currentUniversity.name} — Kampus EduConsult`} />
+            <SeoHead
+                title={university?.meta_title || currentUniversity.name}
+                description={university?.meta_description || currentUniversity.description}
+                image={university?.cover_image ? (university.cover_image.startsWith('http') || university.cover_image.startsWith('/') ? university.cover_image : `/storage/${university.cover_image}`) : null}
+            />
 
             {/* MAIN CONTAINER WRAPPED IN LAYOUT WITH SECTION SPACING */}
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">

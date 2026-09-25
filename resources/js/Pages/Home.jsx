@@ -1,6 +1,6 @@
 import React from 'react';
-import { Head } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import SeoHead from '../Components/SeoHead';
 import HeroSection from '../Components/HeroSection';
 import ServicesGrid from '../Components/ServicesGrid';
 import Destinations from '../Components/Destinations';
@@ -39,14 +39,10 @@ export default function Home({ page = null, universities = [], courses = [], cou
     return (
         <Layout>
             {/* DYNAMIC INERTIA SEO HEAD COMPONENT */}
-            <Head>
-                <title>{metaTitle}</title>
-                <meta name="description" content={metaDescription} />
-                <meta name="keywords" content={metaKeywords} />
-                <meta property="og:title" content={metaTitle} />
-                <meta property="og:description" content={metaDescription} />
-                <meta property="og:type" content="website" />
-            </Head>
+            <SeoHead
+                title={page?.meta_title}
+                description={page?.meta_description}
+            />
 
             {/* MAIN HOMEPAGE CONTAINER WITH CLEAN SECTION SPACING */}
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">

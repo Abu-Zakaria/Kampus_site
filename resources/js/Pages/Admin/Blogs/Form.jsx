@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Head, useForm, router, Link } from '@inertiajs/react';
 import QuillEditor from '../../../Components/QuillEditor';
 import AdminLayout from '../Layouts/AdminLayout';
@@ -14,7 +14,8 @@ import {
     Image,
     CheckSquare,
     Plus,
-    X
+    X,
+    Globe
 } from 'lucide-react';
 
 export default function Form({ blog = null, existingCategories = [] }) {
@@ -28,11 +29,75 @@ export default function Form({ blog = null, existingCategories = [] }) {
         excerpt: blog?.excerpt || '',
         content: blog?.content || '',
         image: null,
+        meta_title: blog?.meta_title || '',
+        meta_description: blog?.meta_description || '',
+        tags: blog?.tags || blog?.meta_keywords || '',
+        meta_keywords: blog?.meta_keywords || blog?.tags || '',
         is_published: blog ? Boolean(blog.is_published) : true,
         is_featured: blog ? Boolean(blog.is_featured) : false,
     });
 
-    const [imagePreview, setImagePreview] = React.useState(blog?.image || '');
+    const [focusKeyword, setFocusKeyword] = useState(blog?.focus_keyword || '');
+    const [imagePreview, setImagePreview] = useState(blog?.image || '');
+
+    const calculateSEO = () => {
+        let score = 0;
+        let checks = [];
+        const title = data.meta_title || data.title || '';
+        const desc = data.meta_description || '';
+        const content = data.content || '';
+        const keyword = focusKeyword.toLowerCase().trim();
+
+        // 1. Title Length
+        if (title.length > 30 && title.length <= 60) {
+            score += 20;
+            checks.push({ text: 'Title length is perfect (30-60 characters)', pass: true });
+        } else {
+            checks.push({ text: 'Title should be between 30-60 characters', pass: false });
+        }
+
+        // 2. Description Length
+        if (desc.length > 120 && desc.length <= 160) {
+            score += 20;
+            checks.push({ text: 'Meta description length is good (120-160 characters)', pass: true });
+        } else {
+            checks.push({ text: 'Meta description should be 120-160 characters', pass: false });
+        }
+
+        // 3. Content Length
+        const wordCount = content.replace(/<[^>]*>?/gm, '').split(/\s+/).filter(word => word.length > 0).length;
+        if (wordCount >= 300) {
+            score += 20;
+            checks.push({ text: `Content is long enough (${wordCount} words)`, pass: true });
+        } else {
+            checks.push({ text: `Content is too short (${wordCount} words). Aim for 300+`, pass: false });
+        }
+
+        // Keyword Checks (Only if keyword is provided)
+        if (keyword) {
+            // 4. Keyword in Title
+            if (title.toLowerCase().includes(keyword)) {
+                score += 20;
+                checks.push({ text: 'Focus keyword found in SEO title', pass: true });
+            } else {
+                checks.push({ text: 'Add focus keyword to the SEO title', pass: false });
+            }
+
+            // 5. Keyword in Description
+            if (desc.toLowerCase().includes(keyword)) {
+                score += 20;
+                checks.push({ text: 'Focus keyword found in meta description', pass: true });
+            } else {
+                checks.push({ text: 'Add focus keyword to the meta description', pass: false });
+            }
+        } else {
+            checks.push({ text: 'Set a focus keyword to get a complete score', pass: false });
+        }
+
+        return { score, checks };
+    };
+
+    const seoResults = calculateSEO();
 
     const defaultCategories = ['Study Abroad', 'Destinations', 'Career Outcomes', 'Academic Writing', 'Scholarships', 'Visa Guide', 'Success Stories'];
     const initialCategories = Array.from(new Set([...defaultCategories, ...(existingCategories || []), ...(blog?.category ? [blog.category] : [])]));
@@ -352,6 +417,134 @@ export default function Form({ blog = null, existingCategories = [] }) {
                                 </div>
                                 <p className="text-[11px] text-slate-400 mt-2">Recommended: 1200×630px, JPG or PNG, max 5MB.</p>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* SECTION 3: SEO (SEARCH ENGINE OPTIMIZATION) */}
+                    <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+                        <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                            <div className="p-2.5 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400">
+                                <Globe className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                                    SEO (Search Engine Optimization)
+                                </h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    Configure custom metadata for search engine rankings and social sharing
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            {/* Meta Title & Tags */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        Meta Title
+                                        <span className="text-slate-400 font-normal ml-2">(falls back to title if blank)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={data.meta_title}
+                                        onChange={(e) => setData('meta_title', e.target.value)}
+                                        placeholder={data.title || "e.g. Complete Guide to UK Student Visa 2026"}
+                                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                    {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                        Tags / Keywords
+                                        <span className="text-slate-400 font-normal ml-2">(Comma-separated tags)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={data.tags || data.meta_keywords || ''}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setData(prev => ({
+                                                ...prev,
+                                                tags: val,
+                                                meta_keywords: val,
+                                            }));
+                                        }}
+                                        placeholder="e.g. student visa, scholarships, uk universities"
+                                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                    />
+                                    {(errors.tags || errors.meta_keywords) && (
+                                        <span className="text-xs text-rose-500 font-semibold">{errors.tags || errors.meta_keywords}</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Meta Description */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    Meta Description
+                                    <span className="text-slate-400 font-normal ml-2">(falls back to excerpt if left blank)</span>
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    value={data.meta_description}
+                                    onChange={(e) => setData('meta_description', e.target.value)}
+                                    placeholder={data.excerpt || "A targeted summary for search engine snippet results..."}
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
+                                {errors.meta_description && <span className="text-xs text-rose-500 font-semibold">{errors.meta_description}</span>}
+                            </div>
+                        </div>
+
+                        {/* Real-time SEO Analyzer */}
+                        <div className="mt-8 p-6 bg-slate-900 rounded-2xl border border-slate-700 shadow-md">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-blue-400" />
+                                    <span>SEO Analyzer</span>
+                                </h3>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${
+                                    seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 
+                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
+                                    'bg-red-500/20 text-red-400 border border-red-500/30'
+                                }`}>
+                                    {seoResults.score >= 80 ? 'Good SEO' : seoResults.score >= 50 ? 'Needs Improvement' : 'Poor SEO'}
+                                </span>
+                            </div>
+                            
+                            <div className="mb-4">
+                                <label className="block mb-2 text-sm font-bold text-slate-300">Focus Keyword</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                    placeholder="e.g. study in UK"
+                                    value={focusKeyword}
+                                    onChange={(e) => setFocusKeyword(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-6">
+                                <div className="flex justify-between mb-1">
+                                    <span className="text-sm font-medium text-slate-300">Overall SEO Score</span>
+                                    <span className={`text-sm font-bold ${seoResults.score >= 80 ? 'text-emerald-500' : seoResults.score >= 50 ? 'text-yellow-500' : 'text-red-500'}`}>{seoResults.score}/100</span>
+                                </div>
+                                <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                                    <div className={`h-2.5 rounded-full transition-all duration-500 ${seoResults.score >= 80 ? 'bg-emerald-500' : seoResults.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${seoResults.score}%` }}></div>
+                                </div>
+                            </div>
+
+                            <ul className="space-y-2">
+                                {seoResults.checks.map((check, index) => (
+                                    <li key={index} className="flex items-start text-sm">
+                                        {check.pass ? (
+                                            <span className="text-emerald-500 mr-2 font-bold shrink-0">✔</span>
+                                        ) : (
+                                            <span className="text-red-500 mr-2 font-bold shrink-0">✖</span>
+                                        )}
+                                        <span className={check.pass ? 'text-slate-300' : 'text-slate-400'}>{check.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
 

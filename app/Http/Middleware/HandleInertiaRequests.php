@@ -71,6 +71,7 @@ class HandleInertiaRequests extends Middleware
             'unread_admin_messages_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) \App\Models\StudentConversation::where('admin_unread_count', '>', 0)->count() : 0,
             'unread_admin_inquiries_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) ContactMessage::where('is_read', false)->count() : 0,
             'pending_applications_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) StudentApplication::where('status', 'pending')->count() : 0,
+            'pending_scholarship_applications_count' => fn () => $request->user() && ($request->user()->can('manage-inquiries') || $request->user()->id === 1) ? (int) \App\Models\ScholarshipApplication::where('status', 'pending')->count() : 0,
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

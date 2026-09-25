@@ -49,6 +49,10 @@ class SettingController extends Controller
                 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=1200&q=80',
                 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80',
             ]),
+            // Global SEO Settings
+            'default_meta_description' => 'Global higher education consultancy services empowering ambitious students to access top-tier universities worldwide.',
+            'default_meta_image' => '',
+            'custom_header_code' => '',
         ];
 
         foreach ($defaults as $key => $value) {
@@ -102,6 +106,14 @@ class SettingController extends Controller
                     }
                 }
             }
+        }
+
+        // Explicitly handle custom_header_code to allow clearing to empty string
+        if ($request->has('custom_header_code')) {
+            Setting::updateOrCreate(
+                ['key' => 'custom_header_code'],
+                ['value' => $request->input('custom_header_code') ?? '']
+            );
         }
 
         return redirect()->route('admin.settings.index')

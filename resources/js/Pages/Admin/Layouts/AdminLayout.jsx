@@ -122,6 +122,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Environment (.env)', href: '/admin/settings/env', icon: Sliders, permission: 'manage-settings' },
         { name: 'Hero Slideshow', href: '/admin/slideshow', icon: Layers, permission: 'manage-settings' },
         { name: 'Pages & SEO', href: '/admin/pages', icon: FileText, permission: 'manage-pages' },
+        { name: 'Scholarships', href: '/admin/scholarships', icon: Award, permission: 'manage-pages' },
         { name: 'Services', href: '/admin/services', icon: Layers, permission: 'manage-pages' },
         { name: 'FAQs', href: '/admin/faqs', icon: HelpCircle, permission: 'manage-pages' },
         { name: 'Global Branches', href: '/admin/branches', icon: Globe2, permission: 'manage-pages' },
@@ -131,6 +132,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         { name: 'Courses', href: '/admin/courses', icon: BookOpen, permission: 'manage-courses' },
         { name: 'Blog Posts', href: '/admin/blog', icon: Newspaper, permission: 'manage-blogs' },
         { name: 'Partner Applications', href: '/admin/partners', icon: Handshake, permission: 'manage-partners' },
+        { name: 'Scholarship Applications', href: '/admin/scholarship-applications', icon: Award, permission: 'manage-inquiries', badge: props?.pending_scholarship_applications_count },
         { name: 'Student Profiles', href: '/admin/students', icon: Award, permission: 'manage-inquiries' },
         { name: 'Student Applications', href: '/admin/student-applications', icon: GraduationCap, permission: 'manage-inquiries', badge: props?.pending_applications_count },
         { name: 'Student Messages', href: '/admin/messages', icon: MessageSquare, permission: 'manage-inquiries', badge: props?.unread_admin_messages_count },
@@ -151,7 +153,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         return isSuperAdmin || userPermissions.includes(link.permission);
     });
 
-    const totalUnreadNotifications = (props?.unread_admin_inquiries_count || 0) + (props?.unread_admin_messages_count || 0) + (props?.pending_applications_count || 0);
+    const totalUnreadNotifications = (props?.unread_admin_inquiries_count || 0) + (props?.unread_admin_messages_count || 0) + (props?.pending_applications_count || 0) + (props?.pending_scholarship_applications_count || 0);
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -170,12 +172,20 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                     {/* Brand Header */}
                     <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800">
                         <Link href="/admin/dashboard" className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
-                                <GraduationCap className="w-5 h-5" />
-                            </div>
+                            {props?.globalSettings?.site_logo ? (
+                                <img
+                                    src={`/storage/${props.globalSettings.site_logo}`}
+                                    alt={props?.globalSettings?.site_name || 'Logo'}
+                                    className="w-9 h-9 object-contain rounded-xl shadow-md bg-white/5 p-0.5 border border-white/10"
+                                />
+                            ) : (
+                                <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+                                    <GraduationCap className="w-5 h-5" />
+                                </div>
+                            )}
                             <div className="flex flex-col">
                                 <span className="font-extrabold text-base tracking-tight text-white">
-                                    Kampus <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
+                                    {props?.globalSettings?.site_name || 'Kampus'} <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
                                 </span>
                                 <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
                                     {primaryRole === 'Partner' ? 'Partner Portal' : 'Admin Panel'}
