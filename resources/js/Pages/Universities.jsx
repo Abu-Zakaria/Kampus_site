@@ -11,8 +11,8 @@ import DynamicPageSections from '../Components/DynamicPageSections';
 export default function Universities() {
     const { universities = {}, destinations = [], quickFilterDestinations = [], filters = {}, page = null } = usePage().props;
 
-    const metaTitle = page?.meta_title || 'Partner Universities — Kampus EduConsult';
-    const metaDescription = page?.meta_description || 'Browse leading higher education institutions across the UK, USA, Canada, Australia, and Europe with official Kampus representation.';
+    const metaTitle = page?.meta_title || 'Partner Universities —  RMS Global Education';
+    const metaDescription = page?.meta_description || 'Browse leading higher education institutions across the UK, USA, Canada, Australia, and Europe with official  RMS representation.';
     const metaKeywords = page?.meta_keywords || 'universities, study abroad partner universities, UK university rankings';
 
     const filtersData = (filters && typeof filters === 'object' && !Array.isArray(filters)) ? filters : {};
@@ -24,7 +24,7 @@ export default function Universities() {
     // Inertia SPA visit handler with preserveState and preserveScroll
     const fetchResults = (searchQuery, countryCode) => {
         const url = typeof route === 'function' ? route('universities.index') : '/universities';
-        
+
         router.get(url, {
             search: searchQuery || undefined,
             country: countryCode === 'All' ? undefined : countryCode

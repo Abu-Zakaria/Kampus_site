@@ -104,10 +104,10 @@ export default function Form({ university = null, countries = [] }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit University: ${university.name}` : 'Add New University'}>
-            <Head title={isEdit ? `Edit ${university.name} — Kampus CMS` : 'Add University — Kampus CMS'} />
+            <Head title={isEdit ? `Edit ${university.name} —  RMS CMS` : 'Add University —  RMS CMS'} />
 
             <div className="max-w-4xl mx-auto space-y-8">
-                
+
                 {/* HEADER ROW */}
                 <div className="flex items-center justify-between">
                     <Link
@@ -129,7 +129,7 @@ export default function Form({ university = null, countries = [] }) {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
-                    
+
                     {/* SECTION 1: BASIC INFORMATION */}
                     <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
                         <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -330,13 +330,13 @@ export default function Form({ university = null, countries = [] }) {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                            
+
                             {/* Logo File Upload */}
                             <div className="space-y-3">
                                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                     University Logo
                                 </label>
-                                
+
                                 {logoPreview && (
                                     <div className="w-24 h-24 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden mb-3 p-2 flex items-center justify-center">
                                         <img src={logoPreview} alt="Logo preview" className="max-w-full max-h-full object-contain" />

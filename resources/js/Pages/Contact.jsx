@@ -9,9 +9,9 @@ import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function Contact({ page = null }) {
-    const metaTitle = page?.meta_title || 'Contact Us — Kampus EduConsult';
+    const metaTitle = page?.meta_title || 'Contact Us —  RMS Global Education';
     const metaDescription = page?.meta_description || 'Reach our London global headquarters or connect with local branch offices across South Asia, Africa, and Europe.';
-    const metaKeywords = page?.meta_keywords || 'contact kampus, education consultants London, student advisory branch';
+    const metaKeywords = page?.meta_keywords || 'contact  RMS, education consultants London, student advisory branch';
 
     return (
         <Layout>

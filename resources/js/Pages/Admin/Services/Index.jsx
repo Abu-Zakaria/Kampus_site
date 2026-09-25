@@ -61,7 +61,7 @@ export default function Index({ services = [] }) {
 
     return (
         <AdminLayout title="Services Management">
-            <Head title="Services Management — Kampus CMS" />
+            <Head title="Services Management —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -107,11 +107,10 @@ export default function Index({ services = [] }) {
                             <button
                                 key={status}
                                 onClick={() => setStatusFilter(status)}
-                                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                                    statusFilter === status
+                                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${statusFilter === status
                                         ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs'
                                         : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-                                }`}
+                                    }`}
                             >
                                 {status}
                             </button>
@@ -147,7 +146,7 @@ export default function Index({ services = [] }) {
 
                                         return (
                                             <tr key={service.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                                
+
                                                 {/* Title & Cover Image */}
                                                 <td className="py-4 px-6">
                                                     <div className="flex items-center gap-3">
@@ -213,11 +212,10 @@ export default function Index({ services = [] }) {
                                                     <button
                                                         type="button"
                                                         onClick={() => handleToggleStatus(service.id)}
-                                                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                                                            service.is_active
+                                                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${service.is_active
                                                                 ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                                                                 : 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         {service.is_active ? (
                                                             <>

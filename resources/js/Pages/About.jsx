@@ -10,9 +10,9 @@ import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function About({ page = null, employees = [], companyStats = {} }) {
-    const metaTitle = page?.meta_title || 'About Us — 24 Years of Educational Excellence | Kampus EduConsult';
-    const metaDescription = page?.meta_description || 'Learn about Kampus Group Ltd, our 24 years of experience, certified counsellors, and global network across 15+ countries.';
-    const metaKeywords = page?.meta_keywords || 'about kampus, study abroad consultants, education agency London';
+    const metaTitle = page?.meta_title || 'About Us — 24 Years of Educational Excellence |  RMS Global Education';
+    const metaDescription = page?.meta_description || 'Learn about  RMS Group Ltd, our 24 years of experience, certified counsellors, and global network across 15+ countries.';
+    const metaKeywords = page?.meta_keywords || 'about  RMS, study abroad consultants, education agency London';
 
     return (
         <Layout>

@@ -11,7 +11,7 @@ import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function Home({ page = null, universities = [], courses = [], countries = [], totalUniversitiesCount = 0, totalCountriesCount = 0, successStories = [], faqs = [] }) {
     // Dynamic SEO values from database with sensible defaults
-    const metaTitle = page?.meta_title || 'Kampus EduConsult — Study Abroad Educational Consultancy';
+    const metaTitle = page?.meta_title || ' RMS Global Education — Study Abroad Educational Consultancy';
     const metaDescription = page?.meta_description || 'Empowering ambitious students worldwide to gain admission into top global universities in UK, USA, Canada, Australia & Europe.';
     const metaKeywords = page?.meta_keywords || 'study abroad, UK universities, student visa guidance, scholarships';
     const contentData = page?.content || {};
@@ -46,7 +46,7 @@ export default function Home({ page = null, universities = [], courses = [], cou
 
             {/* MAIN HOMEPAGE CONTAINER WITH CLEAN SECTION SPACING */}
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
-                
+
                 {/* 1. HERO SECTION WITH DYNAMIC CMS CONTENT */}
                 <HeroSection
                     onOpenAiSearch={handleOpenAiSearch}

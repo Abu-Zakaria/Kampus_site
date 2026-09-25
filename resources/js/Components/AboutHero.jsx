@@ -89,10 +89,9 @@ export default function AboutHero({ content = {} }) {
         : defaultTrustBadges;
 
     return (
-        <section className={`relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-200/60 dark:border-slate-800 transition-colors ${
-            heroImage ? 'bg-slate-950 text-white' : 'bg-gradient-to-b from-blue-50/60 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'
-        }`}>
-            
+        <section className={`relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-200/60 dark:border-slate-800 transition-colors ${heroImage ? 'bg-slate-950 text-white' : 'bg-gradient-to-b from-blue-50/60 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'
+            }`}>
+
             {/* HERO BANNER IMAGE BACKGROUND WITH DYNAMIC CONTRAST OVERLAYS */}
             {heroImage ? (
                 <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -130,18 +129,17 @@ export default function AboutHero({ content = {} }) {
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                
+
                 {/* HERO HEADER & TYPOGRAPHY */}
                 <div className="max-w-3xl space-y-5 text-left">
 
                     {/* Dynamic Hero Badge / Tagline */}
                     {badgeText && (
                         <div>
-                            <span className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase ${
-                                heroImage
-                                    ? 'bg-blue-600/30 text-blue-200 border border-blue-400/40 backdrop-blur-md'
-                                    : 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
-                            }`}>
+                            <span className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase ${heroImage
+                                ? 'bg-blue-600/30 text-blue-200 border border-blue-400/40 backdrop-blur-md'
+                                : 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
+                                }`}>
                                 <Sparkles className="w-3.5 h-3.5 text-blue-400" />
                                 <span>{badgeText}</span>
                             </span>
@@ -149,9 +147,8 @@ export default function AboutHero({ content = {} }) {
                     )}
 
                     {/* Main Heading */}
-                    <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] ${
-                        heroImage ? 'text-white drop-shadow-sm' : 'text-slate-900 dark:text-white'
-                    }`}>
+                    <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] ${heroImage ? 'text-white drop-shadow-sm' : 'text-slate-900 dark:text-white'
+                        }`}>
                         {heading ? (
                             heading
                         ) : (
@@ -165,9 +162,8 @@ export default function AboutHero({ content = {} }) {
                     </h1>
 
                     {/* Main Paragraph */}
-                    <p className={`text-lg sm:text-xl leading-relaxed font-normal max-w-3xl ${
-                        heroImage ? 'text-slate-200 drop-shadow-xs' : 'text-slate-600 dark:text-slate-300'
-                    }`}>
+                    <p className={`text-lg sm:text-xl leading-relaxed font-normal max-w-3xl ${heroImage ? 'text-slate-200 drop-shadow-xs' : 'text-slate-600 dark:text-slate-300'
+                        }`}>
                         {subtitle || 'Kampus Group Ltd is a London-headquartered international student recruitment agency with 24 years of experience and a strong global presence across South Asia, Africa and Europe. We help ambitious students access world-class education — securing placements across law, economics, medicine, engineering and business.'}
                     </p>
 
@@ -178,11 +174,10 @@ export default function AboutHero({ content = {} }) {
                             return (
                                 <div
                                     key={idx}
-                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border shadow-2xs transition-all ${
-                                        heroImage
-                                            ? 'bg-slate-900/80 text-slate-200 border-slate-700/80 backdrop-blur-md'
-                                            : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/80 dark:border-slate-800'
-                                    }`}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border shadow-2xs transition-all ${heroImage
+                                        ? 'bg-slate-900/80 text-slate-200 border-slate-700/80 backdrop-blur-md'
+                                        : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/80 dark:border-slate-800'
+                                        }`}
                                 >
                                     <IconComponent className={`w-4 h-4 ${badge.color}`} />
                                     <span>{badge.text}</span>
@@ -193,43 +188,38 @@ export default function AboutHero({ content = {} }) {
                 </div>
 
                 {/* HORIZONTAL STATS GRID (4 COLUMNS DESKTOP, 2 COLUMNS MOBILE) */}
-                <div className={`mt-14 lg:mt-16 pt-10 border-t ${
-                    heroImage ? 'border-white/15' : 'border-slate-200/80 dark:border-slate-800'
-                }`}>
+                <div className={`mt-14 lg:mt-16 pt-10 border-t ${heroImage ? 'border-white/15' : 'border-slate-200/80 dark:border-slate-800'
+                    }`}>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {stats.map((stat, idx) => {
                             const IconComponent = stat.icon;
                             return (
                                 <div
                                     key={idx}
-                                    className={`p-6 rounded-2xl border transition-all duration-300 group ${
-                                        heroImage
-                                            ? 'bg-slate-900/80 hover:bg-slate-900/95 border-slate-700/70 hover:border-blue-400/50 backdrop-blur-md shadow-xl'
-                                            : 'bg-white dark:bg-slate-900/90 border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-500/40'
-                                    }`}
+                                    className={`p-6 rounded-2xl border transition-all duration-300 group ${heroImage
+                                        ? 'bg-slate-900/80 hover:bg-slate-900/95 border-slate-700/70 hover:border-blue-400/50 backdrop-blur-md shadow-xl'
+                                        : 'bg-white dark:bg-slate-900/90 border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-500/40'
+                                        }`}
                                 >
                                     <div className="flex items-center justify-between mb-4">
                                         <div className={`p-3 rounded-xl ${stat.bgColor} ${stat.color} group-hover:scale-110 transition-transform duration-300`}>
                                             <IconComponent className="w-6 h-6" />
                                         </div>
-                                        <span className={`text-[10px] font-extrabold uppercase tracking-wider ${
-                                            heroImage ? 'text-slate-300' : 'text-slate-400'
-                                        }`}>
+                                        <span className={`text-[10px] font-extrabold uppercase tracking-wider ${heroImage ? 'text-slate-300' : 'text-slate-400'
+                                            }`}>
                                             {stat.suffix}
                                         </span>
                                     </div>
 
                                     {/* Large Bold Number */}
-                                    <div className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
-                                        heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
-                                    }`}>
+                                    <div className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
+                                        }`}>
                                         {stat.number}
                                     </div>
 
                                     {/* Subtle Label */}
-                                    <div className={`text-xs sm:text-sm font-medium mt-1 ${
-                                        heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
-                                    }`}>
+                                    <div className={`text-xs sm:text-sm font-medium mt-1 ${heroImage ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'
+                                        }`}>
                                         {stat.label}
                                     </div>
                                 </div>
@@ -238,7 +228,7 @@ export default function AboutHero({ content = {} }) {
                     </div>
                 </div>
 
-            </div>
-        </section>
+            </div >
+        </section >
     );
 }

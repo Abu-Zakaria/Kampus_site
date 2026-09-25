@@ -16,7 +16,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Home',
                 'slug' => 'home',
-                'meta_title' => 'Kampus EduConsult — Study Abroad & University Placement',
+                'meta_title' => ' RMS Global Education — Study Abroad & University Placement',
                 'meta_description' => 'Empowering ambitious students worldwide to gain admission into top global universities in UK, USA, Canada, Australia & Europe.',
                 'meta_keywords' => 'study abroad, university admission, UKVI student visa, scholarship finder',
                 'content' => [
@@ -34,9 +34,9 @@ class PageSeeder extends Seeder
             [
                 'name' => 'About Us',
                 'slug' => 'about',
-                'meta_title' => 'About Us — Kampus Group',
+                'meta_title' => 'About Us —  RMS Group',
                 'meta_description' => 'Learn about our mission, British Council & ICEF accreditation, global team of education advisers, and student-first commitment.',
-                'meta_keywords' => 'about kampus group, British council agent, ICEF agency, global advisers',
+                'meta_keywords' => 'about  RMS group, British council agent, ICEF agency, global advisers',
                 'content' => [
                     'hero_heading' => 'Your trusted global education partners',
                     'hero_subtitle' => 'Building futures with integrity, transparent guidance, and personalized counseling.'
@@ -46,7 +46,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Services',
                 'slug' => 'services',
-                'meta_title' => 'Our Services — Kampus Group',
+                'meta_title' => 'Our Services —  RMS Group',
                 'meta_description' => 'Comprehensive student services: university placement, scholarship guidance, bank financial proof assistance, SOP review & visa file processing.',
                 'meta_keywords' => 'student services, visa assistance, SOP review, financial proof, university application',
                 'content' => [
@@ -58,7 +58,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Universities',
                 'slug' => 'universities',
-                'meta_title' => 'Partner Universities — Kampus Group',
+                'meta_title' => 'Partner Universities —  RMS Group',
                 'meta_description' => 'Browse over 500+ top-ranked partner universities across the UK, USA, Canada, Australia, Finland, and Dubai.',
                 'meta_keywords' => 'partner universities, UK universities, US Ivy League, Finland degrees, Dubai campuses',
                 'content' => [
@@ -70,7 +70,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Courses',
                 'slug' => 'courses',
-                'meta_title' => 'Degree & Course Finder — Kampus Group',
+                'meta_title' => 'Degree & Course Finder —  RMS Group',
                 'meta_description' => 'Search thousands of undergraduate and postgraduate degrees in Artificial Intelligence, Business, Data Science, Law & Engineering.',
                 'meta_keywords' => 'course finder, Masters in UK, BSc Data Science, MBA USA, undergraduate degrees',
                 'content' => [
@@ -82,7 +82,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Blog',
                 'slug' => 'blog',
-                'meta_title' => 'Latest Articles & Education News — Kampus Group',
+                'meta_title' => 'Latest Articles & Education News —  RMS Group',
                 'meta_description' => 'Stay updated with international student visa policy updates, UKVI rules, scholarship deadlines, and campus life guides.',
                 'meta_keywords' => 'study abroad blog, UKVI updates 2026, scholarship tips, student visa guide',
                 'content' => [
@@ -94,9 +94,9 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Contact Us',
                 'slug' => 'contact',
-                'meta_title' => 'Contact Us — Kampus Group',
+                'meta_title' => 'Contact Us —  RMS Group',
                 'meta_description' => 'Get in touch with our global offices in London, Dhaka, and worldwide for free 1-on-1 higher education counseling.',
-                'meta_keywords' => 'contact kampus, education counselor London, Dhaka office, book appointment',
+                'meta_keywords' => 'contact  RMS, education counselor London, Dhaka office, book appointment',
                 'content' => [
                     'hero_heading' => 'Get in touch with our experts',
                     'hero_subtitle' => 'Book a free 1-on-1 counseling call or visit our global branches today.'
@@ -106,11 +106,11 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Partner With Us',
                 'slug' => 'partner-with-us',
-                'meta_title' => 'Partner With Us — Kampus Group',
+                'meta_title' => 'Partner With Us —  RMS Group',
                 'meta_description' => 'Become an official sub-agent or institutional partner with Rms Educational Consultancy Ltd. Enjoy attractive commissions and dedicated support.',
                 'meta_keywords' => 'become partner, education agent partner, sub-agent program, university partner',
                 'content' => [
-                    'hero_heading' => 'Grow with Kampus Group',
+                    'hero_heading' => 'Grow with  RMS Group',
                     'hero_subtitle' => 'Join our global partner network and empower students with top-tier university admissions.'
                 ],
                 'is_active' => true
@@ -118,7 +118,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Scholarships',
                 'slug' => 'scholarships',
-                'meta_title' => 'Scholarships & Funding — Kampus Group',
+                'meta_title' => 'Scholarships & Funding —  RMS Group',
                 'meta_description' => 'Explore UK GREAT, Chevening, Fulbright, and Finland government tuition waivers to make your study abroad journey affordable.',
                 'meta_keywords' => 'UK GREAT scholarship, Fulbright award, Finland tuition waiver, merit scholarships',
                 'content' => [
@@ -130,7 +130,7 @@ class PageSeeder extends Seeder
             [
                 'name' => 'Visa Guide',
                 'slug' => 'visa-guide',
-                'meta_title' => 'Student Visa Processing & Guide — Kampus Group',
+                'meta_title' => 'Student Visa Processing & Guide —  RMS Group',
                 'meta_description' => 'Step-by-step guidance for UKVI Tier 4, US F-1, Finland residence permits, and Dubai student visas with document checklists.',
                 'meta_keywords' => 'UKVI visa guide, US F-1 checklist, Finland residence permit, Dubai student visa',
                 'content' => [

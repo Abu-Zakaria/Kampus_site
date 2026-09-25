@@ -108,7 +108,7 @@ export default function Index({ messages = [] }) {
 
     return (
         <AdminLayout title="Inquiries & Messages">
-            <Head title="Inquiries — Kampus CMS" />
+            <Head title="Inquiries —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -191,18 +191,16 @@ export default function Index({ messages = [] }) {
                             <button
                                 key={tab.id}
                                 onClick={() => setFilterTab(tab.id)}
-                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
-                                    filterTab === tab.id
+                                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${filterTab === tab.id
                                         ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
                                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 <span>{tab.label}</span>
-                                <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${
-                                    filterTab === tab.id
+                                <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${filterTab === tab.id
                                         ? 'bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300'
                                         : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                                }`}>
+                                    }`}>
                                     {tab.count}
                                 </span>
                             </button>
@@ -262,11 +260,10 @@ export default function Index({ messages = [] }) {
                                     filteredMessages.map((msg) => (
                                         <tr
                                             key={msg.id}
-                                            className={`transition-colors ${
-                                                !msg.is_read
+                                            className={`transition-colors ${!msg.is_read
                                                     ? 'bg-blue-50/60 dark:bg-blue-950/20 hover:bg-blue-50 dark:hover:bg-blue-950/30'
                                                     : 'hover:bg-slate-50/80 dark:hover:bg-slate-800/40'
-                                            }`}
+                                                }`}
                                         >
                                             {/* Name */}
                                             <td className="py-4 px-6">
@@ -274,11 +271,10 @@ export default function Index({ messages = [] }) {
                                                     {!msg.is_read && (
                                                         <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0 animate-pulse" />
                                                     )}
-                                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
-                                                        !msg.is_read
+                                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${!msg.is_read
                                                             ? 'bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800'
                                                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'
-                                                    }`}>
+                                                        }`}>
                                                         <User className="w-4 h-4" />
                                                     </div>
                                                     <span className={`text-sm ${!msg.is_read ? 'font-extrabold text-slate-900 dark:text-white' : 'font-semibold text-slate-700 dark:text-slate-300'}`}>
@@ -371,11 +367,10 @@ export default function Index({ messages = [] }) {
 
                                                 <button
                                                     onClick={() => handleToggleRead(msg.id, msg.is_read)}
-                                                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border ${
-                                                        msg.is_read
+                                                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border ${msg.is_read
                                                             ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 hover:bg-amber-100'
                                                             : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
-                                                    }`}
+                                                        }`}
                                                     title={msg.is_read ? 'Mark as Unread' : 'Mark as Read'}
                                                 >
                                                     {msg.is_read ? <EyeOff className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
@@ -412,13 +407,12 @@ export default function Index({ messages = [] }) {
                         </button>
 
                         <div className="flex items-center gap-3.5 mb-6">
-                            <div className={`p-3 rounded-2xl ${
-                                (messageModal.topic || '').toLowerCase().includes('course enquiry')
+                            <div className={`p-3 rounded-2xl ${(messageModal.topic || '').toLowerCase().includes('course enquiry')
                                     ? 'bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400'
                                     : (messageModal.topic || '').toLowerCase().includes('call booking')
-                                    ? 'bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400'
-                                    : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400'
-                            }`}>
+                                        ? 'bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400'
+                                        : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400'
+                                }`}>
                                 {(messageModal.topic || '').toLowerCase().includes('course enquiry') ? (
                                     <GraduationCap className="w-6 h-6" />
                                 ) : (messageModal.topic || '').toLowerCase().includes('call booking') ? (
@@ -428,18 +422,17 @@ export default function Index({ messages = [] }) {
                                 )}
                             </div>
                             <div>
-                                <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                                    (messageModal.topic || '').toLowerCase().includes('course enquiry')
+                                <span className={`text-[10px] font-bold uppercase tracking-wider ${(messageModal.topic || '').toLowerCase().includes('course enquiry')
                                         ? 'text-blue-600 dark:text-blue-400'
                                         : (messageModal.topic || '').toLowerCase().includes('call booking')
-                                        ? 'text-purple-600 dark:text-purple-400'
-                                        : 'text-emerald-600 dark:text-emerald-400'
-                                }`}>
+                                            ? 'text-purple-600 dark:text-purple-400'
+                                            : 'text-emerald-600 dark:text-emerald-400'
+                                    }`}>
                                     {(messageModal.topic || '').toLowerCase().includes('course enquiry')
                                         ? 'Course Direct Application'
                                         : (messageModal.topic || '').toLowerCase().includes('call booking')
-                                        ? 'Automated Call Booking'
-                                        : 'General Inquiry'}
+                                            ? 'Automated Call Booking'
+                                            : 'General Inquiry'}
                                 </span>
                                 <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">
                                     {messageModal.name}

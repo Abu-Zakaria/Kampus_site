@@ -42,7 +42,7 @@ export default function Index({ faqs = [] }) {
 
     return (
         <AdminLayout title="FAQs Management">
-            <Head title="FAQs Management — Kampus CMS" />
+            <Head title="FAQs Management —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -91,11 +91,10 @@ export default function Index({ faqs = [] }) {
                                     key={status}
                                     type="button"
                                     onClick={() => setStatusFilter(status)}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                        statusFilter === status
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${statusFilter === status
                                             ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
+                                        }`}
                                 >
                                     {status}
                                 </button>
@@ -157,17 +156,15 @@ export default function Index({ faqs = [] }) {
                                                     title="Click to toggle Active / Inactive status"
                                                 >
                                                     <div
-                                                        className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${
-                                                            faq.is_active
+                                                        className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${faq.is_active
                                                                 ? 'bg-emerald-500 justify-end'
                                                                 : 'bg-slate-300 dark:bg-slate-700 justify-start'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         <div className="bg-white w-4 h-4 rounded-full shadow-md" />
                                                     </div>
-                                                    <span className={`text-[11px] font-bold ${
-                                                        faq.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'
-                                                    }`}>
+                                                    <span className={`text-[11px] font-bold ${faq.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'
+                                                        }`}>
                                                         {faq.is_active ? 'Active' : 'Inactive'}
                                                     </span>
                                                 </button>

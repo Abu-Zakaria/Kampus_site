@@ -313,7 +313,7 @@ export default function Dashboard({
 
     return (
         <Layout>
-            <Head title="Student Portal & Dashboard — Kampus" />
+            <Head title="Student Portal & Dashboard —  RMS" />
 
             <div className="min-h-screen bg-slate-50 dark:bg-[#0E0C1B] text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
                 <div className="max-w-7xl mx-auto space-y-8">
@@ -325,7 +325,7 @@ export default function Dashboard({
                         <div className="absolute bottom-0 left-1/3 -mb-24 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
                         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                            
+
                             {/* Profile Info */}
                             <div className="flex items-center gap-4 sm:gap-6">
                                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-500 p-0.5 shadow-xl shrink-0">
@@ -381,7 +381,7 @@ export default function Dashboard({
 
                         {/* STATS TILES */}
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-8 pt-8 border-t border-purple-900/40">
-                            
+
                             {/* 1. Total Applications */}
                             <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/5 flex items-center gap-3.5">
                                 <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-300">
@@ -454,28 +454,25 @@ export default function Dashboard({
                     <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2 overflow-x-auto">
                         <button
                             onClick={() => setActiveTab('applications')}
-                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${
-                                activeTab === 'applications'
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${activeTab === 'applications'
                                     ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
-                            }`}
+                                }`}
                         >
                             <GraduationCap className="w-4 h-4" />
                             <span>Application Status Tracker</span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                                activeTab === 'applications' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'applications' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                }`}>
                                 {applications.length}
                             </span>
                         </button>
 
                         <button
                             onClick={() => setActiveTab('messages')}
-                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${
-                                activeTab === 'messages'
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${activeTab === 'messages'
                                     ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
-                            }`}
+                                }`}
                         >
                             <MessageSquare className="w-4 h-4" />
                             <span>Counselor Messages</span>
@@ -484,9 +481,8 @@ export default function Dashboard({
                                     {stats.unread_messages} unread
                                 </span>
                             ) : (
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                                    activeTab === 'messages' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                                }`}>
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'messages' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                    }`}>
                                     {conversations.length}
                                 </span>
                             )}
@@ -494,34 +490,30 @@ export default function Dashboard({
 
                         <button
                             onClick={() => setActiveTab('queries')}
-                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${
-                                activeTab === 'queries'
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${activeTab === 'queries'
                                     ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
-                            }`}
+                                }`}
                         >
                             <FileText className="w-4 h-4" />
                             <span>Query History & Replies</span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                                activeTab === 'queries' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'queries' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                }`}>
                                 {inquiries.length}
                             </span>
                         </button>
 
                         <button
                             onClick={() => setActiveTab('profile')}
-                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${
-                                activeTab === 'profile'
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap ${activeTab === 'profile'
                                     ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800'
-                            }`}
+                                }`}
                         >
                             <Award className="w-4 h-4" />
                             <span>My Profile & Portfolio</span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                                activeTab === 'profile' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${activeTab === 'profile' ? 'bg-purple-800 text-purple-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                                }`}>
                                 {certificates.length + achievements.length}
                             </span>
                         </button>
@@ -530,7 +522,7 @@ export default function Dashboard({
                     {/* 3. TAB CONTENT: APPLICATION STATUS TRACKER */}
                     {activeTab === 'applications' && (
                         <div className="space-y-6">
-                            
+
                             {/* Search & Header */}
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div>
@@ -640,7 +632,7 @@ export default function Dashboard({
                                                 {/* VISUAL STAGE PROGRESSION BAR */}
                                                 <div className="p-6 sm:p-8 bg-white dark:bg-slate-900/90 border-b border-slate-100 dark:border-slate-800">
                                                     <div className="relative">
-                                                        
+
                                                         {/* Progress line background */}
                                                         <div className="hidden sm:block absolute top-5 left-4 right-4 h-1 bg-slate-200 dark:bg-slate-800 -z-0" />
 
@@ -663,18 +655,17 @@ export default function Dashboard({
 
                                                                 return (
                                                                     <div key={stage.key} className="flex sm:flex-col items-center sm:text-center gap-3 sm:gap-2">
-                                                                        
+
                                                                         {/* Node Icon Circle */}
                                                                         <div
-                                                                            className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs transition-all shrink-0 ${
-                                                                                isCompleted
+                                                                            className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs transition-all shrink-0 ${isCompleted
                                                                                     ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                                                                                     : isCurrent
-                                                                                    ? 'bg-purple-600 text-white ring-4 ring-purple-100 dark:ring-purple-950/80 shadow-lg shadow-purple-600/40 animate-pulse'
-                                                                                    : isRejected
-                                                                                    ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
-                                                                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700'
-                                                                            }`}
+                                                                                        ? 'bg-purple-600 text-white ring-4 ring-purple-100 dark:ring-purple-950/80 shadow-lg shadow-purple-600/40 animate-pulse'
+                                                                                        : isRejected
+                                                                                            ? 'bg-slate-200 dark:bg-slate-800 text-slate-400'
+                                                                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700'
+                                                                                }`}
                                                                         >
                                                                             {isCompleted ? (
                                                                                 <Check className="w-5 h-5 stroke-[2.5]" />
@@ -685,13 +676,12 @@ export default function Dashboard({
 
                                                                         {/* Node Text */}
                                                                         <div className="space-y-0.5">
-                                                                            <p className={`text-xs font-extrabold ${
-                                                                                isCurrent
+                                                                            <p className={`text-xs font-extrabold ${isCurrent
                                                                                     ? 'text-purple-600 dark:text-purple-400'
                                                                                     : isCompleted
-                                                                                    ? 'text-slate-900 dark:text-white'
-                                                                                    : 'text-slate-400 dark:text-slate-500'
-                                                                            }`}>
+                                                                                        ? 'text-slate-900 dark:text-white'
+                                                                                        : 'text-slate-400 dark:text-slate-500'
+                                                                                }`}>
                                                                                 {stage.title}
                                                                             </p>
                                                                             <p className="text-[10px] text-slate-400 hidden sm:block">
@@ -776,7 +766,7 @@ export default function Dashboard({
                     {/* 4. TAB CONTENT: COUNSELOR MESSAGES & LIVE CHAT */}
                     {activeTab === 'messages' && (
                         <div className="space-y-6">
-                            
+
                             {/* Header */}
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div>
@@ -830,7 +820,7 @@ export default function Dashboard({
                                 </div>
                             ) : (
                                 <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg overflow-hidden flex flex-col lg:flex-row h-[680px]">
-                                    
+
                                     {/* Left Threads Column */}
                                     <div className="w-full lg:w-80 xl:w-96 border-r border-slate-200 dark:border-slate-800 flex flex-col h-full bg-slate-50/50 dark:bg-slate-900/60 shrink-0">
                                         <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -856,11 +846,10 @@ export default function Dashboard({
                                                     <div
                                                         key={conv.id}
                                                         onClick={() => handleSelectConversation(conv.id)}
-                                                        className={`p-4 transition-all cursor-pointer ${
-                                                            isSelected
+                                                        className={`p-4 transition-all cursor-pointer ${isSelected
                                                                 ? 'bg-purple-50 dark:bg-purple-950/40 border-l-4 border-purple-600'
                                                                 : 'hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         <div className="space-y-1">
                                                             <div className="flex items-center justify-between gap-2">
@@ -877,11 +866,10 @@ export default function Dashboard({
                                                             </p>
 
                                                             <div className="flex items-center justify-between pt-1">
-                                                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${
-                                                                    conv.status === 'open'
+                                                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${conv.status === 'open'
                                                                         ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
                                                                         : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
-                                                                }`}>
+                                                                    }`}>
                                                                     {conv.status}
                                                                 </span>
 
@@ -901,7 +889,7 @@ export default function Dashboard({
                                     {/* Right Chat Panel */}
                                     {activeConversation ? (
                                         <div className="flex-1 flex flex-col h-full bg-white dark:bg-slate-900">
-                                            
+
                                             {/* Thread Header */}
                                             <div className="p-4 sm:px-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 z-10">
                                                 <div className="space-y-0.5">
@@ -909,16 +897,15 @@ export default function Dashboard({
                                                         <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
                                                             {activeConversation.subject}
                                                         </h3>
-                                                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${
-                                                            activeConversation.status === 'open'
+                                                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${activeConversation.status === 'open'
                                                                 ? 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
                                                                 : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
-                                                        }`}>
+                                                            }`}>
                                                             {activeConversation.status}
                                                         </span>
                                                     </div>
                                                     <p className="text-[11px] text-slate-400">
-                                                        Started {new Date(activeConversation.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })} • Direct line to Kampus Agency Counselors
+                                                        Started {new Date(activeConversation.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })} • Direct line to  RMS Agency Counselors
                                                     </p>
                                                 </div>
                                             </div>
@@ -955,11 +942,10 @@ export default function Dashboard({
                                                                 </div>
 
                                                                 <div
-                                                                    className={`p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-xs ${
-                                                                        isMe
+                                                                    className={`p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-xs ${isMe
                                                                             ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-2xl rounded-tr-sm shadow-purple-600/20 font-medium'
                                                                             : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl rounded-tl-sm border border-slate-200/80 dark:border-slate-700'
-                                                                    }`}
+                                                                        }`}
                                                                 >
                                                                     {msg.message}
                                                                 </div>
@@ -1031,7 +1017,7 @@ export default function Dashboard({
                     {/* 5. TAB CONTENT: QUERY HISTORY & REPLY TRACKING */}
                     {activeTab === 'queries' && (
                         <div className="space-y-6">
-                            
+
                             {/* Query Filters & Header */}
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div>
@@ -1046,25 +1032,22 @@ export default function Dashboard({
                                 <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200 dark:border-slate-800">
                                     <button
                                         onClick={() => setQueryFilter('all')}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${
-                                            queryFilter === 'all' ? 'bg-purple-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                        }`}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${queryFilter === 'all' ? 'bg-purple-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                                            }`}
                                     >
                                         All ({inquiries.length})
                                     </button>
                                     <button
                                         onClick={() => setQueryFilter('replied')}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${
-                                            queryFilter === 'replied' ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                        }`}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${queryFilter === 'replied' ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                                            }`}
                                     >
                                         Replied ({stats.replied_inquiries || 0})
                                     </button>
                                     <button
                                         onClick={() => setQueryFilter('pending')}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${
-                                            queryFilter === 'pending' ? 'bg-amber-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                        }`}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer ${queryFilter === 'pending' ? 'bg-amber-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                                            }`}
                                     >
                                         Awaiting Response ({stats.pending_replies || 0})
                                     </button>
@@ -1153,7 +1136,7 @@ export default function Dashboard({
                                                         <div className="flex items-center justify-between gap-2">
                                                             <p className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                                                                 <MessageSquareQuote className="w-4 h-4" />
-                                                                <span>Official Reply from Kampus Counselor:</span>
+                                                                <span>Official Reply from  RMS Counselor:</span>
                                                             </p>
                                                             {inquiry.replied_at && (
                                                                 <span className="text-[11px] text-slate-400">
@@ -1206,7 +1189,7 @@ export default function Dashboard({
             {isApplyModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto">
-                        
+
                         {/* Close button */}
                         <button
                             onClick={handleCloseApplyModal}
@@ -1230,7 +1213,7 @@ export default function Dashboard({
                         </div>
 
                         <form onSubmit={handleApplySubmit} className="space-y-4">
-                            
+
                             {/* Target University Selection Dropdown */}
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
@@ -1438,7 +1421,7 @@ export default function Dashboard({
             {isNewConvModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto">
-                        
+
                         <button
                             type="button"
                             onClick={() => setIsNewConvModalOpen(false)}
@@ -1482,7 +1465,7 @@ export default function Dashboard({
                         </div>
 
                         <form onSubmit={handleNewConvSubmit} className="space-y-4">
-                            
+
                             {/* Subject */}
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">

@@ -9,8 +9,8 @@ import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function PartnerWithUs({ page = null }) {
-    const metaTitle = page?.meta_title || 'Become a Partner — Kampus EduConsult';
-    const metaDescription = page?.meta_description || 'Partner with Kampus Group to recruit high-caliber international students with our verified agent network and compliance screening.';
+    const metaTitle = page?.meta_title || 'Become a Partner —  RMS Global Education';
+    const metaDescription = page?.meta_description || 'Partner with  RMS Group to recruit high-caliber international students with our verified agent network and compliance screening.';
     const metaKeywords = page?.meta_keywords || 'university partner, education agent partner, student recruitment partner';
 
     return (
@@ -25,7 +25,7 @@ export default function PartnerWithUs({ page = null }) {
 
             {/* MAIN CONTAINER WRAPPED IN LAYOUT WITH DARK MODE & SECTION SPACING */}
             <div className="w-full flex flex-col space-y-0 selection:bg-purple-600 selection:text-white bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-                
+
                 {/* 1. HERO SECTION */}
                 <PartnerHero content={page?.content || {}} />
 

@@ -36,10 +36,10 @@ export default function Index({ universities = [] }) {
 
     return (
         <AdminLayout title="Universities Management">
-            <Head title="Universities — Kampus CMS" />
+            <Head title="Universities —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* HEADER BANNER & ACTION BUTTONS */}
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -125,7 +125,7 @@ export default function Index({ universities = [] }) {
                                 ) : (
                                     filteredUniversities.map((u) => (
                                         <tr key={u.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                            
+
                                             {/* Name & Logo/Cover preview */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

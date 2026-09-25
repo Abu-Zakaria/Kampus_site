@@ -6,7 +6,7 @@ import { Mail, Lock, LogIn, ArrowRight, ShieldCheck, KeyRound, Eye, EyeOff } fro
 export default function Login({ status, canResetPassword, prefilledEmail = '' }) {
     const { props } = usePage();
     const globalSettings = props?.globalSettings || {};
-    const siteName = globalSettings?.site_name || 'Kampus';
+    const siteName = globalSettings?.site_name || ' RMS';
 
     const [showPassword, setShowPassword] = useState(false);
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -51,7 +51,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
             )}
 
             <form onSubmit={submit} className="space-y-5">
-                
+
                 {/* EMAIL ADDRESS INPUT */}
                 <div className="space-y-1.5">
                     <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -68,7 +68,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                             value={data.email}
                             autoComplete="username"
                             required
-                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@kampus.com"}
+                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@ RMS.com"}
                             onChange={(e) => setData('email', e.target.value)}
                             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />
@@ -80,19 +80,9 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
 
                 {/* PASSWORD INPUT */}
                 <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                            Password
-                        </label>
-                        {canResetPassword && (
-                            <Link
-                                href={route('password.request')}
-                                className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                            >
-                                Forgot password?
-                            </Link>
-                        )}
-                    </div>
+                    <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-300">
+                        Password
+                    </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                             <Lock className="w-4 h-4" />
@@ -110,6 +100,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                         />
                         <button
                             type="button"
+                            tabIndex={-1}
                             onClick={() => setShowPassword(!showPassword)}
                             className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
                             aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -122,7 +113,7 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                     )}
                 </div>
 
-                {/* REMEMBER ME CHECKBOX */}
+                {/* REMEMBER ME CHECKBOX & FORGOT PASSWORD */}
                 <div className="flex items-center justify-between pt-1">
                     <label className="flex items-center gap-2.5 cursor-pointer">
                         <input
@@ -136,6 +127,14 @@ export default function Login({ status, canResetPassword, prefilledEmail = '' })
                             Keep me logged in for 24h
                         </span>
                     </label>
+                    {canResetPassword && (
+                        <Link
+                            href={route('password.request')}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                        >
+                            Forgot password?
+                        </Link>
+                    )}
                 </div>
 
                 {/* SUBMIT BRAND BUTTON */}

@@ -4,6 +4,7 @@
 @endphp
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
             padding: 0;
             line-height: 1.6;
         }
+
         .container {
             max-width: 600px;
             margin: 30px auto;
@@ -26,11 +28,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             padding: 36px 32px;
             text-align: center;
         }
+
         .header h1 {
             color: #ffffff;
             font-size: 24px;
@@ -38,6 +42,7 @@
             margin: 0;
             letter-spacing: -0.5px;
         }
+
         .header .badge {
             display: inline-block;
             margin-top: 10px;
@@ -51,21 +56,25 @@
             padding: 4px 12px;
             border-radius: 9999px;
         }
+
         .content {
             padding: 32px;
         }
+
         .greeting {
             font-size: 16px;
             font-weight: 700;
             color: #0f172a;
             margin-bottom: 12px;
         }
+
         .message {
             font-size: 14px;
             color: #475569;
             margin-bottom: 24px;
             line-height: 1.6;
         }
+
         .course-card {
             border: 1px solid #e2e8f0;
             background: #f8fafc;
@@ -74,20 +83,24 @@
             margin-bottom: 16px;
             transition: all 0.2s ease;
         }
+
         .course-title {
             margin: 0 0 6px 0;
             font-size: 16px;
             font-weight: 700;
             color: #0f172a;
         }
+
         .course-meta {
             margin: 4px 0;
             font-size: 13px;
             color: #64748b;
         }
+
         .course-meta strong {
             color: #334155;
         }
+
         .tag-pill {
             display: inline-block;
             background: #e0e7ff;
@@ -99,6 +112,7 @@
             margin-right: 6px;
             margin-top: 6px;
         }
+
         .next-steps-card {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
@@ -107,18 +121,21 @@
             margin-top: 24px;
             margin-bottom: 24px;
         }
+
         .next-steps-card h4 {
             margin: 0 0 8px 0;
             color: #1e40af;
             font-size: 14px;
             font-weight: 700;
         }
+
         .next-steps-card p {
             margin: 0;
             color: #1e3a8a;
             font-size: 13px;
             line-height: 1.5;
         }
+
         .footer {
             background-color: #f1f5f9;
             padding: 20px 32px;
@@ -127,12 +144,14 @@
             font-size: 12px;
             color: #64748b;
         }
+
         .footer a {
             color: #4f46e5;
             text-decoration: none;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -144,46 +163,50 @@
         <!-- Content -->
         <div class="content">
             <div class="greeting">Hello {{ $name }},</div>
-            
+
             <p class="message">
-                Thank you for using our <strong>AI Course Matcher</strong>! Based on your target destination, level of study, and budget preferences, our admissions algorithm has curated the following personalized university shortlist for you:
+                Thank you for using our <strong>AI Course Matcher</strong>! Based on your target destination, level of
+                study, and budget preferences, our admissions algorithm has curated the following personalized
+                university shortlist for you:
             </p>
 
             <!-- Shortlisted Courses List -->
             @foreach($courses as $course)
-            <div class="course-card">
-                <h3 class="course-title">{{ $course->title ?? $course->name }}</h3>
-                <p class="course-meta">
-                    <strong>University:</strong> {{ $course->university->name ?? 'Partner Institution' }} 
-                    @if(!empty($course->university->country->name))
-                        ({{ $course->university->country->name }})
-                    @endif
-                </p>
-                <p class="course-meta">
-                    <strong>Level:</strong> {{ $course->level ?? 'Undergraduate / Postgraduate' }}
-                    @if(!empty($course->duration))
-                        &bull; <strong>Duration:</strong> {{ $course->duration }}
-                    @endif
-                </p>
-                <p class="course-meta">
-                    <strong>Tuition Fee:</strong> 
-                    @if(!empty($course->tuition_fee) && ($course->show_tuition_fee ?? true))
-                        {{ $course->tuition_fee }}
-                    @else
-                        Tuition on request / Scholarship eligible
-                    @endif
-                    @if(!empty($course->intake))
-                        &bull; <strong>Next Intake:</strong> {{ $course->intake }}
-                    @endif
-                </p>
-            </div>
+                <div class="course-card">
+                    <h3 class="course-title">{{ $course->title ?? $course->name }}</h3>
+                    <p class="course-meta">
+                        <strong>University:</strong> {{ $course->university->name ?? 'Partner Institution' }}
+                        @if(!empty($course->university->country->name))
+                            ({{ $course->university->country->name }})
+                        @endif
+                    </p>
+                    <p class="course-meta">
+                        <strong>Level:</strong> {{ $course->level ?? 'Undergraduate / Postgraduate' }}
+                        @if(!empty($course->duration))
+                            &bull; <strong>Duration:</strong> {{ $course->duration }}
+                        @endif
+                    </p>
+                    <p class="course-meta">
+                        <strong>Tuition Fee:</strong>
+                        @if(!empty($course->tuition_fee) && ($course->show_tuition_fee ?? true))
+                            {{ $course->tuition_fee }}
+                        @else
+                            Tuition on request / Scholarship eligible
+                        @endif
+                        @if(!empty($course->intake))
+                            &bull; <strong>Next Intake:</strong> {{ $course->intake }}
+                        @endif
+                    </p>
+                </div>
             @endforeach
 
             <!-- Next Steps Guidance -->
             <div class="next-steps-card">
                 <h4>What Happens Next?</h4>
                 <p>
-                    One of our certified education consultants will reach out to you within 24 hours to provide official course syllabi, verify your scholarship eligibility, and guide you step-by-step through the university application and student visa process.
+                    One of our certified education consultants will reach out to you within 24 hours to provide official
+                    course syllabi, verify your scholarship eligibility, and guide you step-by-step through the
+                    university application and student visa process.
                 </p>
             </div>
 
@@ -201,4 +224,5 @@
         </div>
     </div>
 </body>
+
 </html>

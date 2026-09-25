@@ -4,6 +4,7 @@
 @endphp
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,11 +19,13 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
+
         .wrapper {
             width: 100%;
             background-color: #f1f5f9;
             padding: 30px 15px;
         }
+
         .container {
             max-width: 620px;
             margin: 0 auto;
@@ -32,11 +35,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
         }
+
         .header {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             padding: 32px;
             text-align: center;
         }
+
         .header h1 {
             color: #ffffff;
             font-size: 22px;
@@ -44,6 +49,7 @@
             margin: 10px 0 0 0;
             letter-spacing: -0.5px;
         }
+
         .header .badge {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
@@ -56,15 +62,18 @@
             padding: 4px 12px;
             border-radius: 9999px;
         }
+
         .content {
             padding: 32px;
         }
+
         .greeting {
             font-size: 16px;
             font-weight: 700;
             color: #0f172a;
             margin-bottom: 12px;
         }
+
         .intro-text {
             font-size: 14px;
             color: #475569;
@@ -72,6 +81,7 @@
             margin-bottom: 24px;
             line-height: 1.6;
         }
+
         .reply-card {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
@@ -80,6 +90,7 @@
             padding: 20px;
             margin-bottom: 24px;
         }
+
         .reply-header {
             font-size: 12px;
             font-weight: 800;
@@ -91,6 +102,7 @@
             align-items: center;
             gap: 6px;
         }
+
         .reply-body {
             font-size: 14px;
             color: #14532d;
@@ -98,6 +110,7 @@
             line-height: 1.7;
             font-weight: 500;
         }
+
         .reply-signature {
             margin-top: 14px;
             padding-top: 10px;
@@ -106,6 +119,7 @@
             color: #166534;
             font-weight: 600;
         }
+
         .query-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -113,6 +127,7 @@
             padding: 18px;
             margin-bottom: 28px;
         }
+
         .query-header {
             font-size: 11px;
             font-weight: 700;
@@ -121,18 +136,21 @@
             color: #64748b;
             margin-bottom: 6px;
         }
+
         .query-topic {
             font-size: 13px;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 6px;
         }
+
         .query-body {
             font-size: 13px;
             color: #475569;
             white-space: pre-line;
             line-height: 1.5;
         }
+
         .action-button {
             display: inline-block;
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -145,6 +163,7 @@
             text-align: center;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
         }
+
         .footer {
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
@@ -153,11 +172,13 @@
             font-size: 12px;
             color: #94a3b8;
         }
+
         .footer p {
             margin: 4px 0;
         }
     </style>
 </head>
+
 <body>
     <div class="wrapper">
         <div class="container">
@@ -208,4 +229,5 @@
         </div>
     </div>
 </body>
+
 </html>

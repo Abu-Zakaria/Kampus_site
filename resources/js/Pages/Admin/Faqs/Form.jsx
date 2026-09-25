@@ -31,7 +31,7 @@ export default function Form({ faq = null }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit FAQ: ${faq.question}` : 'Create New FAQ'}>
-            <Head title={`${isEdit ? 'Edit' : 'Create'} FAQ — Kampus CMS`} />
+            <Head title={`${isEdit ? 'Edit' : 'Create'} FAQ —  RMS CMS`} />
 
             <div className="max-w-4xl mx-auto space-y-8">
 

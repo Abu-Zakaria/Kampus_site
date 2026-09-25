@@ -52,10 +52,11 @@ class EnvSettingTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get('/admin/settings/env');
         $response->assertOk();
-        $response->assertInertia(fn ($page) => 
+        $response->assertInertia(
+            fn($page) =>
             $page->component('Admin/Settings/Environment')
-                 ->has('env')
-                 ->has('systemInfo')
+                ->has('env')
+                ->has('systemInfo')
         );
     }
 
@@ -69,7 +70,7 @@ class EnvSettingTest extends TestCase
         $this->app->instance(EnvEditorService::class, $envEditor);
 
         $response = $this->actingAs($this->admin)->post('/admin/settings/env', [
-            'APP_NAME' => 'Kampus Test Platform',
+            'APP_NAME' => ' RMS Test Platform',
             'APP_ENV' => 'local',
             'APP_DEBUG' => true,
             'APP_URL' => 'http://localhost:8000',
@@ -81,12 +82,12 @@ class EnvSettingTest extends TestCase
             'MAIL_USERNAME' => 'test_user',
             'MAIL_PASSWORD' => 'test_pass',
             'MAIL_ENCRYPTION' => 'tls',
-            'MAIL_FROM_ADDRESS' => 'noreply@kampus.test',
-            'MAIL_FROM_NAME' => 'Kampus Notifications',
+            'MAIL_FROM_ADDRESS' => 'noreply@ RMS.test',
+            'MAIL_FROM_NAME' => ' RMS Notifications',
             'DB_CONNECTION' => 'mysql',
             'DB_HOST' => '127.0.0.1',
             'DB_PORT' => 3306,
-            'DB_DATABASE' => 'kampus_test',
+            'DB_DATABASE' => ' RMS_test',
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => 'secret',
             'SESSION_DRIVER' => 'database',
@@ -104,8 +105,8 @@ class EnvSettingTest extends TestCase
 
         // Check that values are updated in the isolated test env
         $updatedVars = $envEditor->getVariables();
-        $this->assertEquals('Kampus Test Platform', $updatedVars['APP_NAME']);
-        $this->assertEquals('noreply@kampus.test', $updatedVars['MAIL_FROM_ADDRESS']);
+        $this->assertEquals(' RMS Test Platform', $updatedVars['APP_NAME']);
+        $this->assertEquals('noreply@ RMS.test', $updatedVars['MAIL_FROM_ADDRESS']);
 
         // Check that backup directory contains backups
         $backupDir = storage_path('app/backups/env');

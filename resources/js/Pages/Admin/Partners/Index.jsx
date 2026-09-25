@@ -100,7 +100,7 @@ export default function Index({ applications = [], partnerModalParagraph: initia
 
     return (
         <AdminLayout title="Partner Applications">
-            <Head title="Partner Applications — Kampus CMS" />
+            <Head title="Partner Applications —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -141,7 +141,7 @@ export default function Index({ applications = [], partnerModalParagraph: initia
                             </div>
                             <div>
                                 <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-                                    "Become a Kampus Partner" Popup Intro Paragraph
+                                    "Become a  RMS Partner" Popup Intro Paragraph
                                 </h3>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
                                     This paragraph is displayed on the public homepage popup, directly beneath the title and above the first form field.
@@ -190,7 +190,7 @@ export default function Index({ applications = [], partnerModalParagraph: initia
                                             <Handshake className="w-4 h-4" />
                                         </div>
                                         <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">
-                                            Become a Kampus Partner
+                                            Become a  RMS Partner
                                         </h4>
                                     </div>
                                     <div className="relative text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line bg-purple-50/50 dark:bg-purple-950/20 p-2.5 pr-7 rounded-lg border border-purple-100/50 dark:border-purple-900/30">

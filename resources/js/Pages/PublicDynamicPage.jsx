@@ -15,8 +15,8 @@ import {
 } from 'lucide-react';
 
 export default function PublicDynamicPage({ page }) {
-    const metaTitle = page?.meta_title || `${page?.name} — Kampus EduConsult`;
-    const metaDescription = page?.meta_description || 'Learn more about Kampus Educational Consultancy services and programs.';
+    const metaTitle = page?.meta_title || `${page?.name} —  RMS Global Education`;
+    const metaDescription = page?.meta_description || 'Learn more about  RMS Educational Consultancy services and programs.';
     const metaKeywords = page?.meta_keywords || 'study abroad, university admission, global education';
 
     const content = page?.content || {};
@@ -39,7 +39,7 @@ export default function PublicDynamicPage({ page }) {
             </Head>
 
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-                
+
                 {/* 1. HERO BANNER */}
                 <div className="relative bg-slate-950 text-white pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden border-b border-slate-800">
                     {/* Background Image with Dark Overlay */}
@@ -57,12 +57,12 @@ export default function PublicDynamicPage({ page }) {
                     )}
 
                     <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-center sm:text-left">
-                        
+
                         {/* Top Badge */}
                         <div className="flex items-center justify-center sm:justify-start gap-3">
                             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-600/90 text-white text-xs font-black uppercase tracking-wider font-mono shadow-md">
                                 <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-                                <span>{hero?.badge || 'KAMPUS EDUCONSULT'}</span>
+                                <span>{hero?.badge || ' RMS Global Education'}</span>
                             </span>
                         </div>
 
@@ -93,17 +93,15 @@ export default function PublicDynamicPage({ page }) {
                     <div className="space-y-16 lg:space-y-24 py-16 lg:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                         {sections.map((sec, idx) => (
                             <div key={sec.id || idx}>
-                                
+
                                 {/* SECTION: IMAGE + CONTENT (SPLIT) */}
                                 {sec.type === 'image_text' && (
-                                    <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${
-                                        sec.image_position === 'left' ? 'lg:flex-row-reverse' : ''
-                                    }`}>
-                                        
-                                        {/* Content Side */}
-                                        <div className={`space-y-5 text-left ${
-                                            sec.image ? (sec.image_position === 'left' ? 'lg:col-span-6 lg:order-2' : 'lg:col-span-6 lg:order-1') : 'lg:col-span-12'
+                                    <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${sec.image_position === 'left' ? 'lg:flex-row-reverse' : ''
                                         }`}>
+
+                                        {/* Content Side */}
+                                        <div className={`space-y-5 text-left ${sec.image ? (sec.image_position === 'left' ? 'lg:col-span-6 lg:order-2' : 'lg:col-span-6 lg:order-1') : 'lg:col-span-12'
+                                            }`}>
                                             {sec.subtitle && (
                                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-200/60 dark:border-blue-800">
                                                     {sec.subtitle}
@@ -139,9 +137,8 @@ export default function PublicDynamicPage({ page }) {
 
                                         {/* Image Side */}
                                         {sec.image && (
-                                            <div className={`${
-                                                sec.image_position === 'left' ? 'lg:col-span-6 lg:order-1' : 'lg:col-span-6 lg:order-2'
-                                            }`}>
+                                            <div className={`${sec.image_position === 'left' ? 'lg:col-span-6 lg:order-1' : 'lg:col-span-6 lg:order-2'
+                                                }`}>
                                                 <div className="relative group overflow-hidden rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-900">
                                                     <img
                                                         src={sec.image}
@@ -171,13 +168,12 @@ export default function PublicDynamicPage({ page }) {
                                             )}
                                         </div>
 
-                                        <div className={`grid gap-6 ${
-                                            sec.columns === 2
-                                                ? 'grid-cols-1 md:grid-cols-2'
-                                                : sec.columns === 4
+                                        <div className={`grid gap-6 ${sec.columns === 2
+                                            ? 'grid-cols-1 md:grid-cols-2'
+                                            : sec.columns === 4
                                                 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
                                                 : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                                        }`}>
+                                            }`}>
                                             {(sec.images || []).map((img, imgIdx) => (
                                                 <div
                                                     key={imgIdx}
@@ -190,7 +186,7 @@ export default function PublicDynamicPage({ page }) {
                                                         loading="lazy"
                                                     />
                                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                                                    
+
                                                     <div className="absolute bottom-0 inset-x-0 p-5 space-y-1 text-left">
                                                         {img.subtitle && (
                                                             <div className="text-[10px] font-black uppercase tracking-wider text-blue-400">

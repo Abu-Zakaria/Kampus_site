@@ -34,7 +34,7 @@ export default function ServicesCta({ onOpenBookCall }) {
 
         router.post('/contact/submit', {
             name: fullName,
-            email: 'assessment@kampusedu.com',
+            email: 'assessment@ RMSedu.com',
             phone: phone,
             country: selectedCountry,
             topic: `Free Assessment for ${selectedCountry}`,
@@ -59,14 +59,14 @@ export default function ServicesCta({ onOpenBookCall }) {
     return (
         <section className="py-16 lg:py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 {/* BANNER CONTAINER WITH DEEP DARK BLUE BRAND BG & ABSTRACT SVG GRAPHICS */}
                 <div className="relative rounded-3xl bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white p-8 sm:p-12 lg:p-16 shadow-2xl border border-blue-500/20 overflow-hidden">
-                    
+
                     {/* ABSTRACT BACKGROUND SVG SHAPES & GLOW ORBS */}
                     <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
                     <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-                    
+
                     {/* Abstract Geometric Grid Lines SVG Overlay */}
                     <svg
                         className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
@@ -120,7 +120,7 @@ export default function ServicesCta({ onOpenBookCall }) {
 
             {/* FREE ASSESSMENT MODAL */}
             {assessmentModalOpen && (
-                <div 
+                <div
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200"
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setAssessmentModalOpen(false);
@@ -174,7 +174,7 @@ export default function ServicesCta({ onOpenBookCall }) {
 
                             <div>
                                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Target Country</label>
-                                <select 
+                                <select
                                     value={targetCountry}
                                     onChange={(e) => setTargetCountry(e.target.value)}
                                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"

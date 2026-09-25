@@ -24,7 +24,7 @@ export default function ContactContent() {
     const contactTitle = globalSettings.contact_info_title || 'Contact Information';
     const contactSubtitle = globalSettings.contact_info_subtitle || 'London Global HQ & Regional Advisory Center';
     const contactAddress = globalSettings.contact_info_address || '1st Floor, Botanical Works, 2 Jubilee Street, London E1 3FU';
-    const contactEmail = globalSettings.contact_info_email || globalSettings.contact_email || 'info@kampus-group.com';
+    const contactEmail = globalSettings.contact_info_email || globalSettings.contact_email || 'info@ RMS-group.com';
     const contactPhone = globalSettings.contact_info_phone || '020 7423 9333';
     const contactHours = globalSettings.contact_info_hours || globalSettings.operating_hours || 'Monday - Friday: 9:00 AM - 6:00 PM GMT';
     const mapSrc = extractMapUrl(globalSettings.contact_map_iframe);
@@ -77,9 +77,9 @@ export default function ContactContent() {
     return (
         <section className="py-16 sm:py-20 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                    
+
                     {/* LEFT COLUMN: THE INQUIRY FORM (7 COLS ON DESKTOP) */}
                     <div className="lg:col-span-7 bg-slate-50 dark:bg-slate-800/60 p-7 sm:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs space-y-8">
                         <div>
@@ -92,7 +92,7 @@ export default function ContactContent() {
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            
+
                             {/* Full Name & Email */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
@@ -193,10 +193,10 @@ export default function ContactContent() {
 
                     {/* RIGHT COLUMN: CONTACT INFORMATION & GOOGLE MAPS (5 COLS ON DESKTOP) */}
                     <div className="lg:col-span-5 space-y-6">
-                        
+
                         {/* DISTINCT CARD CONTAINER */}
                         <div className="bg-slate-50 dark:bg-slate-800/60 p-7 lg:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs space-y-6">
-                            
+
                             <div>
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                                     {contactTitle}
@@ -209,7 +209,7 @@ export default function ContactContent() {
                             </div>
 
                             <div className="space-y-5 text-sm">
-                                
+
                                 {/* Address */}
                                 {contactAddress && (
                                     <div className="flex items-start gap-4">

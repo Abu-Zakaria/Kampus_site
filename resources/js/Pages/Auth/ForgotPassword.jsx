@@ -6,7 +6,7 @@ import { Mail, KeyRound, ArrowLeft, Send } from 'lucide-react';
 export default function ForgotPassword({ status }) {
     const { props } = usePage();
     const globalSettings = props?.globalSettings || {};
-    const siteName = globalSettings?.site_name || 'Kampus';
+    const siteName = globalSettings?.site_name || ' RMS';
 
     const { data, setData, post, processing, errors } = useForm({
         email: '',
@@ -54,7 +54,7 @@ export default function ForgotPassword({ status }) {
                             name="email"
                             value={data.email}
                             required
-                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@kampus.com"}
+                            placeholder={globalSettings?.contact_email ? `e.g. ${globalSettings.contact_email}` : "admin@ RMS.com"}
                             onChange={(e) => setData('email', e.target.value)}
                             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />

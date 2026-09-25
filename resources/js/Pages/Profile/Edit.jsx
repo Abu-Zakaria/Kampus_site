@@ -9,7 +9,7 @@ import { UserCircle, Shield, KeyRound, AlertTriangle } from 'lucide-react';
 export default function Edit({ mustVerifyEmail, status }) {
     return (
         <AdminLayout title="Profile & Account Settings">
-            <Head title="Profile Settings — Kampus CMS" />
+            <Head title="Profile Settings —  RMS CMS" />
 
             <div className="max-w-5xl space-y-6">
                 {/* 1. HEADER BANNER */}

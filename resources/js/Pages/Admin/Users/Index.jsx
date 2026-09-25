@@ -66,10 +66,10 @@ export default function Index({ users = [], roles = [] }) {
 
     return (
         <AdminLayout title="User Management & Roles">
-            <Head title="User Management — Kampus CMS" />
+            <Head title="User Management —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* HEADER BANNER */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -122,7 +122,7 @@ export default function Index({ users = [], roles = [] }) {
                                         const isUserOne = u.id === 1;
                                         return (
                                             <tr key={u.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                                
+
                                                 {/* User Profile */}
                                                 <td className="py-4 px-6">
                                                     <div className="flex items-center gap-3">
@@ -241,19 +241,17 @@ export default function Index({ users = [], roles = [] }) {
                                                 <div
                                                     key={r.id}
                                                     onClick={() => handleToggleRole(r.name)}
-                                                    className={`p-3.5 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${
-                                                        isChecked
+                                                    className={`p-3.5 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${isChecked
                                                             ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-900 dark:text-blue-200'
                                                             : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     <div className="flex items-center gap-3">
                                                         <ShieldCheck className={`w-5 h-5 ${isChecked ? 'text-blue-600' : 'text-slate-400'}`} />
                                                         <span className="text-sm font-extrabold">{r.name}</span>
                                                     </div>
-                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-                                                        isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
-                                                    }`}>
+                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
+                                                        }`}>
                                                         {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                                                     </div>
                                                 </div>

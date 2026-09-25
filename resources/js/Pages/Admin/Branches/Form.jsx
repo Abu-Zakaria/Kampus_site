@@ -52,7 +52,7 @@ export default function Form({ branch = null }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit Branch: ${branch.country_name}` : 'Create Global Branch'}>
-            <Head title={`${isEdit ? 'Edit' : 'Create'} Branch — Kampus CMS`} />
+            <Head title={`${isEdit ? 'Edit' : 'Create'} Branch —  RMS CMS`} />
 
             <div className="max-w-4xl mx-auto space-y-8">
 
@@ -276,7 +276,7 @@ export default function Form({ branch = null }) {
                                         type="email"
                                         value={data.email}
                                         onChange={(e) => setData('email', e.target.value)}
-                                        placeholder="admissions@kampus-group.com"
+                                        placeholder="admissions@ RMS-group.com"
                                         className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                 </div>

@@ -10,7 +10,7 @@ import FaqSection from '../Components/FaqSection';
 export default function Partner() {
     return (
         <Layout>
-            <Head title="Become a Partner — Kampus EduConsult" />
+            <Head title="Become a Partner —  RMS Global Education" />
 
             <div className="w-full flex flex-col space-y-0 selection:bg-purple-600 selection:text-white">
                 {/* 1. PARTNER HERO SECTION */}

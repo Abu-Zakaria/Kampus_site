@@ -22,7 +22,7 @@ class HomeController extends Controller
             $page = Page::create([
                 'name' => 'Home',
                 'slug' => 'home',
-                'meta_title' => 'Kampus EduConsult — Study Abroad & University Placement',
+                'meta_title' => ' RMS Global Education — Study Abroad & University Placement',
                 'meta_description' => 'Empowering ambitious students worldwide to gain admission into top global universities in UK, USA, Canada, Australia & Europe.',
                 'meta_keywords' => 'study abroad, university admission, UKVI student visa, scholarship finder',
                 'content' => [
@@ -235,7 +235,7 @@ class HomeController extends Controller
                     'slug' => 'sarah-dubai-tech-career-journey',
                     'category' => 'Success Stories',
                     'excerpt' => 'Sarah received her unconditional offer and student visa in just 7 days to study AI in Dubai with zero income tax prospects.',
-                    'content' => 'Comprehensive interview with Sarah discussing her internship placements and fast-track student visa experience with Kampus EduConsult.',
+                    'content' => 'Comprehensive interview with Sarah discussing her internship placements and fast-track student visa experience with  RMS Global Education.',
                     'image' => 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
                     'is_published' => true,
                     'is_featured' => true,
@@ -273,7 +273,7 @@ class HomeController extends Controller
                     'is_active' => true,
                 ],
                 [
-                    'question' => 'Are Kampus consultancy services really 100% free?',
+                    'question' => 'Are  RMS consultancy services really 100% free?',
                     'answer' => 'Yes, 100%! Our counseling, university application processing, document review, and visa guidance services are completely free for students. We are officially contracted and funded directly by our partner universities globally.',
                     'sort_order' => 4,
                     'is_active' => true,

@@ -10,12 +10,12 @@ export default function TermsOfService({ page = null }) {
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">1. Scope of Services</h2>
             <p>
-                RMS EduConsult acts as an educational consultancy facilitating student applications to recognized partner universities across the UK, USA, Canada, Australia, Finland, and Dubai. Our services include profile evaluation, document verification, application submission, and visa guidance.
+                RMS Global Education acts as an educational consultancy facilitating student applications to recognized partner universities across the UK, USA, Canada, Australia, Finland, and Dubai. Our services include profile evaluation, document verification, application submission, and visa guidance.
             </p>
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">2. Admission & Visa Guarantees</h2>
             <p>
-                While we maintain a high success rate (98% visa approval rate), final admission decisions and visa grants are solely at the discretion of the respective university admissions boards and government embassy/immigration authorities (UKVI, US Embassy, etc.). RMS EduConsult does not guarantee university admission or visa issuance.
+                While we maintain a high success rate (98% visa approval rate), final admission decisions and visa grants are solely at the discretion of the respective university admissions boards and government embassy/immigration authorities (UKVI, US Embassy, etc.). RMS Global Education does not guarantee university admission or visa issuance.
             </p>
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">3. Student Responsibilities</h2>
@@ -25,7 +25,7 @@ export default function TermsOfService({ page = null }) {
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">4. Fees & Payments</h2>
             <p>
-                Initial counseling and partner university placement guidance provided by RMS EduConsult is free for students. Third-party fees (such as university application fees, UKVI visa fees, SEVIS I-901 fees, and IHS health surcharges) are paid directly to official governing authorities by the student.
+                Initial counseling and partner university placement guidance provided by RMS Global Education is free for students. Third-party fees (such as university application fees, UKVI visa fees, SEVIS I-901 fees, and IHS health surcharges) are paid directly to official governing authorities by the student.
             </p>
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">5. Intellectual Property</h2>

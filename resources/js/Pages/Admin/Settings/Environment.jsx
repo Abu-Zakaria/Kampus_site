@@ -39,7 +39,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
 
     const { data, setData, post, processing, errors } = useForm({
         // Application
-        APP_NAME: env.APP_NAME || 'Kampus Edu',
+        APP_NAME: env.APP_NAME || ' RMS Edu',
         APP_ENV: env.APP_ENV || 'local',
         APP_DEBUG: env.APP_DEBUG !== undefined ? Boolean(env.APP_DEBUG) : true,
         APP_URL: env.APP_URL || 'http://localhost',
@@ -60,7 +60,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
         DB_CONNECTION: env.DB_CONNECTION || 'mysql',
         DB_HOST: env.DB_HOST || '127.0.0.1',
         DB_PORT: env.DB_PORT || '3306',
-        DB_DATABASE: env.DB_DATABASE || 'kampus',
+        DB_DATABASE: env.DB_DATABASE || ' RMS',
         DB_USERNAME: env.DB_USERNAME || 'root',
         DB_PASSWORD: env.DB_PASSWORD || '',
 
@@ -118,7 +118,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
 
     return (
         <AdminLayout title="Environment Configuration (.env)">
-            <Head title="Environment Configuration (.env) — Kampus CMS" />
+            <Head title="Environment Configuration (.env) —  RMS CMS" />
 
             <div className="max-w-5xl mx-auto space-y-6">
 
@@ -254,7 +254,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
                                     value={data.APP_NAME}
                                     onChange={(e) => setData('APP_NAME', e.target.value)}
                                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                                    placeholder="Kampus Edu"
+                                    placeholder=" RMS Edu"
                                     required
                                 />
                                 {errors.APP_NAME && <p className="text-xs text-rose-500 mt-1">{errors.APP_NAME}</p>}
@@ -488,7 +488,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
                                     value={data.MAIL_FROM_ADDRESS}
                                     onChange={(e) => setData('MAIL_FROM_ADDRESS', e.target.value)}
                                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                                    placeholder="notifications@kampusedu.com"
+                                    placeholder="notifications@ RMSedu.com"
                                 />
                             </div>
 
@@ -501,7 +501,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
                                     value={data.MAIL_FROM_NAME}
                                     onChange={(e) => setData('MAIL_FROM_NAME', e.target.value)}
                                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                                    placeholder="Kampus Edu"
+                                    placeholder=" RMS Edu"
                                 />
                             </div>
                         </div>
@@ -614,7 +614,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
                                     value={data.DB_DATABASE}
                                     onChange={(e) => setData('DB_DATABASE', e.target.value)}
                                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                                    placeholder="kampus"
+                                    placeholder=" RMS"
                                 />
                             </div>
 
@@ -841,7 +841,7 @@ export default function Environment({ env = {}, systemInfo = {} }) {
                                     value={data.AWS_BUCKET}
                                     onChange={(e) => setData('AWS_BUCKET', e.target.value)}
                                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-                                    placeholder="my-kampus-bucket"
+                                    placeholder="my- RMS-bucket"
                                 />
                             </div>
 

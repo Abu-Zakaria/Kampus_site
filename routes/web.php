@@ -62,7 +62,7 @@ Route::get('/about', function () {
         'page' => $page,
         'employees' => $employees,
         'companyStats' => $companyStats,
-    ]); 
+    ]);
 })->name('about');
 
 Route::get('/services', [PublicServiceController::class, 'index'])->name('services.index');
@@ -80,7 +80,7 @@ Route::get('/contact', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('Contact', ['page' => $page]); 
+    return Inertia::render('Contact', ['page' => $page]);
 })->name('contact');
 
 Route::get('/courses', [PublicCourseController::class, 'index'])->name('courses.index');
@@ -94,7 +94,7 @@ Route::get('/partner-with-us', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('PartnerWithUs', ['page' => $page]); 
+    return Inertia::render('PartnerWithUs', ['page' => $page]);
 })->name('partner-with-us');
 
 Route::get('/scholarships', function () {
@@ -106,7 +106,7 @@ Route::get('/scholarships', function () {
     return Inertia::render('Scholarships', [
         'page' => $page,
         'countries' => $countries,
-    ]); 
+    ]);
 })->name('scholarships');
 
 Route::post('/scholarships/apply', [\App\Http\Controllers\ScholarshipApplicationPublicController::class, 'store'])
@@ -117,7 +117,7 @@ Route::get('/visa-guide', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('VisaGuide', ['page' => $page]); 
+    return Inertia::render('VisaGuide', ['page' => $page]);
 })->name('visa-guide');
 
 Route::get('/privacy-policy', function () {
@@ -125,7 +125,7 @@ Route::get('/privacy-policy', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('PrivacyPolicy', ['page' => $page]); 
+    return Inertia::render('PrivacyPolicy', ['page' => $page]);
 })->name('privacy-policy');
 
 Route::get('/terms-of-service', function () {
@@ -133,7 +133,7 @@ Route::get('/terms-of-service', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('TermsOfService', ['page' => $page]); 
+    return Inertia::render('TermsOfService', ['page' => $page]);
 })->name('terms-of-service');
 
 Route::get('/terms', function () {
@@ -145,7 +145,7 @@ Route::get('/accreditation', function () {
     if ($page && !$page->is_active && !auth()->check()) {
         abort(404);
     }
-    return Inertia::render('Accreditation', ['page' => $page]); 
+    return Inertia::render('Accreditation', ['page' => $page]);
 })->name('accreditation');
 
 // Public Partner Application, Contact & Call Booking Submission Routes
@@ -236,7 +236,7 @@ Route::middleware(['auth', \App\Http\Middleware\EnsurePartnerPasswordSet::class]
                 ['slug' => 'scholarships'],
                 [
                     'name' => 'Scholarships',
-                    'meta_title' => 'International Scholarships Finder — Kampus EduConsult',
+                    'meta_title' => 'International Scholarships Finder —  RMS Global Education',
                     'meta_description' => 'Explore merit-based, need-based, and government-funded scholarships to study abroad.',
                     'is_active' => true,
                     'show_in_navbar' => true,
@@ -435,7 +435,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Include Breeze Auth Routes (login, register, logout, password.request)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Dynamic Catch-All Public Page Route (Placed at the VERY END)
 Route::get('/{slug}', [PublicPageController::class, 'show'])->name('pages.show');

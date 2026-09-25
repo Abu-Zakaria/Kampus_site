@@ -107,7 +107,7 @@ export default function DetailedServices({ services = [] }) {
     return (
         <section className="py-16 lg:py-24 bg-white dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
+
                 {/* SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-20 space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -132,15 +132,14 @@ export default function DetailedServices({ services = [] }) {
                         return (
                             <div
                                 key={service.id || index}
-                                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${
-                                    isEven ? '' : 'lg:flex-row-reverse'
-                                }`}
+                                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center ${isEven ? '' : 'lg:flex-row-reverse'
+                                    }`}
                             >
                                 {/* IMAGE / ARTWORK COLUMN (ALTERNATING SIDE ON DESKTOP) */}
                                 <div className={`lg:col-span-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
                                     <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 group bg-slate-900">
                                         <div className="h-[320px] sm:h-[380px] w-full relative flex items-center justify-center">
-                                            
+
                                             {/* 1. PHOTOGRAPHIC IMAGE WITH FALLBACK HANDLING */}
                                             {service.image && !hasImgError ? (
                                                 <img
@@ -156,7 +155,7 @@ export default function DetailedServices({ services = [] }) {
                                                     {/* Ambient Background Pattern */}
                                                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent pointer-events-none" />
                                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-                                                    
+
                                                     {/* Top Row: Icon Badge */}
                                                     <div className="relative z-10 flex items-center justify-between">
                                                         <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-lg">
@@ -172,7 +171,7 @@ export default function DetailedServices({ services = [] }) {
                                                     {/* Center Illustration Title */}
                                                     <div className="relative z-10 space-y-2 my-auto text-left">
                                                         <span className="text-white/70 text-xs font-semibold uppercase tracking-widest">
-                                                            Kampus Service {numLabel}
+                                                            RMS Service {numLabel}
                                                         </span>
                                                         <h4 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
                                                             {service.title}
@@ -197,7 +196,7 @@ export default function DetailedServices({ services = [] }) {
                                             {service.image && !hasImgError && (
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none" />
                                             )}
-                                            
+
                                             {/* Badge on Photo Mode */}
                                             {service.image && !hasImgError && service.badge && (
                                                 <div className="absolute top-4 left-4 flex items-center gap-2 z-10">

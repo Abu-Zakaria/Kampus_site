@@ -6,7 +6,7 @@ import { ThemeProvider } from './Contexts/ThemeProvider';
 import './bootstrap';
 import '../css/app.css';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Kampus EduConsult';
+const appName = import.meta.env.VITE_APP_NAME || ' RMS Global Education';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

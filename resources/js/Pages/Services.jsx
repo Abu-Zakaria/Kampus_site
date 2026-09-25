@@ -9,7 +9,7 @@ import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function Services({ services = [], faqs = [], page = null }) {
-    const metaTitle = page?.meta_title || 'Our Services — Kampus EduConsult';
+    const metaTitle = page?.meta_title || 'Our Services —  RMS Global Education';
     const metaDescription = page?.meta_description || 'Comprehensive university admission, scholarship application, student visa processing, and pre-departure briefings.';
     const metaKeywords = page?.meta_keywords || 'university admissions, visa guidance, scholarships, statement of purpose counseling';
 

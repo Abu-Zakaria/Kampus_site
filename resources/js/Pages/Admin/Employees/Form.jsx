@@ -70,7 +70,7 @@ export default function Form({ employee = null }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit Team Member: ${employee.name}` : 'Add New Team Member'}>
-            <Head title={`${isEdit ? 'Edit' : 'Add'} Team Member — Kampus CMS`} />
+            <Head title={`${isEdit ? 'Edit' : 'Add'} Team Member —  RMS CMS`} />
 
             <div className="max-w-5xl mx-auto space-y-8">
 
@@ -143,9 +143,8 @@ export default function Form({ employee = null }) {
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                         placeholder="e.g. Dr. Eleanor Vance, Sarah Jenkins"
-                                        className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${
-                                            errors.name ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                        } text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                        className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${errors.name ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                            } text-slate-900 dark:text-white text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                         required
                                     />
                                     {errors.name && (
@@ -163,9 +162,8 @@ export default function Form({ employee = null }) {
                                             value={data.role}
                                             onChange={(e) => setData('role', e.target.value)}
                                             placeholder="e.g. Head of UK Admissions"
-                                            className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${
-                                                errors.role ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                            } text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                            className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${errors.role ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                                } text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                             required
                                         />
                                         {errors.role && (
@@ -216,9 +214,8 @@ export default function Form({ employee = null }) {
                                     value={data.quote}
                                     onChange={(e) => setData('quote', e.target.value)}
                                     placeholder="e.g. Guiding ambitious students to unlock their true potential at world-class British institutions."
-                                    className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${
-                                        errors.quote ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                    } text-slate-900 dark:text-white text-sm leading-relaxed focus:ring-2 focus:ring-blue-500 focus:outline-none italic`}
+                                    className={`w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border ${errors.quote ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                        } text-slate-900 dark:text-white text-sm leading-relaxed focus:ring-2 focus:ring-blue-500 focus:outline-none italic`}
                                 />
                                 {errors.quote && (
                                     <p className="text-xs text-rose-500 mt-1.5">{errors.quote}</p>
@@ -332,7 +329,7 @@ export default function Form({ employee = null }) {
                                             type="email"
                                             value={data.email}
                                             onChange={(e) => setData('email', e.target.value)}
-                                            placeholder="advisor@kampusedu.com"
+                                            placeholder="advisor@ RMSedu.com"
                                             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                         />
                                     </div>
