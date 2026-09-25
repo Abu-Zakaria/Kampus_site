@@ -4,6 +4,14 @@ import AdminLayout from '../Layouts/AdminLayout';
 import PageBuilder from '../../../Components/Admin/PageBuilder';
 import ScholarshipsManager from '../../../Components/Admin/ScholarshipsManager';
 import AboutPageManager from '../../../Components/Admin/AboutPageManager';
+import HomePageManager from '../../../Components/Admin/HomePageManager';
+import ServicesPageManager from '../../../Components/Admin/ServicesPageManager';
+import UniversitiesPageManager from '../../../Components/Admin/UniversitiesPageManager';
+import CoursesPageManager from '../../../Components/Admin/CoursesPageManager';
+import BlogPageManager from '../../../Components/Admin/BlogPageManager';
+import ContactPageManager from '../../../Components/Admin/ContactPageManager';
+import PartnerPageManager from '../../../Components/Admin/PartnerPageManager';
+import VisaGuideManager from '../../../Components/Admin/VisaGuideManager';
 import {
     Save,
     ArrowLeft,
@@ -52,6 +60,14 @@ export default function Edit({ page, countries = [] }) {
     const isPolicyPage = ['privacy-policy', 'terms-of-service', 'terms', 'accreditation'].includes(String(page.slug).toLowerCase());
     const isScholarshipsPage = String(page.slug).toLowerCase() === 'scholarships';
     const isAboutPage = String(page.slug).toLowerCase() === 'about';
+    const isHomePage = String(page.slug).toLowerCase() === 'home';
+    const isServicesPage = String(page.slug).toLowerCase() === 'services';
+    const isUniversitiesPage = String(page.slug).toLowerCase() === 'universities';
+    const isCoursesPage = String(page.slug).toLowerCase() === 'courses';
+    const isBlogPage = String(page.slug).toLowerCase() === 'blog';
+    const isContactPage = String(page.slug).toLowerCase() === 'contact';
+    const isPartnerPage = ['partner-with-us', 'partner'].includes(String(page.slug).toLowerCase());
+    const isVisaGuidePage = String(page.slug).toLowerCase() === 'visa-guide';
     const routePath = page.slug === 'home' ? '/' : `/${page.slug}`;
 
     const { data, setData, processing, errors } = useForm({
@@ -64,7 +80,14 @@ export default function Edit({ page, countries = [] }) {
         is_active: Boolean(page.is_active),
         show_in_navbar: Boolean(page.show_in_navbar),
         show_in_footer: Boolean(page.show_in_footer),
-        content: page.content || {},
+        content: {
+            ...(page.content || {}),
+            hero_image: page.content?.hero_image || page.content?.hero?.image || '',
+            hero_heading: page.content?.hero_heading || page.content?.hero?.title || '',
+            hero_subtitle: page.content?.hero_subtitle || page.content?.hero?.subtitle || '',
+            badge_text: page.content?.badge_text || page.content?.hero?.badge || '',
+            hero_overlay_opacity: page.content?.hero_overlay_opacity ?? page.content?.hero?.overlay_opacity ?? 75,
+        },
     });
 
     const [focusKeyword, setFocusKeyword] = useState(page?.focus_keyword || '');
@@ -894,6 +917,70 @@ export default function Edit({ page, countries = [] }) {
                     {/* DEDICATED ABOUT PAGE CUSTOMIZATION MANAGER */}
                     {isAboutPage && (
                         <AboutPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED HOME PAGE CUSTOMIZATION MANAGER */}
+                    {isHomePage && (
+                        <HomePageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED SERVICES PAGE CUSTOMIZATION MANAGER */}
+                    {isServicesPage && (
+                        <ServicesPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED UNIVERSITIES PAGE CUSTOMIZATION MANAGER */}
+                    {isUniversitiesPage && (
+                        <UniversitiesPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED COURSES PAGE CUSTOMIZATION MANAGER */}
+                    {isCoursesPage && (
+                        <CoursesPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED BLOG PAGE CUSTOMIZATION MANAGER */}
+                    {isBlogPage && (
+                        <BlogPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED CONTACT PAGE CUSTOMIZATION MANAGER */}
+                    {isContactPage && (
+                        <ContactPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED PARTNER PAGE CUSTOMIZATION MANAGER */}
+                    {isPartnerPage && (
+                        <PartnerPageManager
+                            content={data.content}
+                            onChange={(newContent) => setData('content', newContent)}
+                        />
+                    )}
+
+                    {/* DEDICATED VISA GUIDE PAGE CUSTOMIZATION MANAGER */}
+                    {isVisaGuidePage && (
+                        <VisaGuideManager
                             content={data.content}
                             onChange={(newContent) => setData('content', newContent)}
                         />

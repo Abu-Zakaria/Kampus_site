@@ -28,7 +28,7 @@ const ICON_MAP = {
     Layers
 };
 
-export default function DetailedServices({ services = [] }) {
+export default function DetailedServices({ services = [], content = {} }) {
     const [imgErrors, setImgErrors] = useState({});
 
     const handleImageError = (index) => {
@@ -111,11 +111,11 @@ export default function DetailedServices({ services = [] }) {
                 {/* SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-20 space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        Tailored consultancy services for your journey
+                        {content?.services_title || 'Tailored consultancy services for your journey'}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-400 text-base">
-                        Explore how our counselors guide you from initial inquiry through to campus arrival.
+                        {content?.services_subtitle || 'Explore how our counselors guide you from initial inquiry through to campus arrival.'}
                     </p>
                 </div>
 

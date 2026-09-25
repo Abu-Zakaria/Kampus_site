@@ -99,13 +99,15 @@ export default function Universities() {
                 )}
 
                 {/* 4. DARK SLATE GLOBAL NETWORK STATS BANNER */}
-                <UniversityStatsBanner />
+                <UniversityStatsBanner content={page?.content || {}} />
 
                 {/* 5. ADMISSION ROADMAP */}
-                <JourneyProcess />
+                <JourneyProcess content={page?.content || {}} />
 
-                {/* 6. FAQ ACCORDION */}
-                <FaqSection />
+                {/* 6. FAQ ACCORDION (CONTROLLED BY CMS ADMIN) */}
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection />
+                )}
             </div>
         </Layout>
     );

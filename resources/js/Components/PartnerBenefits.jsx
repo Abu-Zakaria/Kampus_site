@@ -8,8 +8,8 @@ import {
     CheckCircle2
 } from 'lucide-react';
 
-export default function PartnerBenefits() {
-    const benefits = [
+export default function PartnerBenefits({ content = {} }) {
+    const rawBenefits = [
         {
             title: 'Top Tier Institutions',
             description: 'Access to high-ranked universities globally across the UK, USA, Finland, & Dubai with direct admissions agreements.',
@@ -36,6 +36,12 @@ export default function PartnerBenefits() {
         },
     ];
 
+    const benefits = rawBenefits.map((item, idx) => ({
+        ...item,
+        title: content?.benefits_items?.[idx]?.title || item.title,
+        description: content?.benefits_items?.[idx]?.description || item.description,
+    }));
+
     return (
         <section className="py-16 lg:py-24 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,15 +50,15 @@ export default function PartnerBenefits() {
                 <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase tracking-wider border border-purple-200 dark:border-slate-700">
                         <Sparkles className="w-3.5 h-3.5" />
-                        <span>PARTNER ADVANTAGE</span>
+                        <span>{content?.benefits_badge || 'PARTNER ADVANTAGE'}</span>
                     </div>
 
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        Why partner with us?
+                        {content?.benefits_title || 'Why partner with us?'}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
-                        Empower your agency with industry-leading higher education partnerships and seamless application support.
+                        {content?.benefits_subtitle || 'Empower your agency with industry-leading higher education partnerships and seamless application support.'}
                     </p>
                 </div>
 

@@ -27,10 +27,17 @@ export default function VisaGuide({ page = null }) {
     const heroHeading = page?.content?.hero_heading || page?.content?.hero?.title;
     const heroSubtitle = page?.content?.hero_subtitle || page?.content?.hero?.subtitle;
 
-    const [activeTab, setActiveTab] = useState('UK');
-    const [openFaqIndex, setOpenFaqIndex] = useState(0);
+    // Resolve hero image with fallback handling
+    const rawHeroImage = page?.content?.hero_image || page?.content?.hero?.image || page?.content?.hero_banner_image || '';
+    const heroImage = (rawHeroImage && typeof rawHeroImage === 'string' && rawHeroImage.trim().length > 0)
+        ? (rawHeroImage.startsWith('http') || rawHeroImage.startsWith('/') ? rawHeroImage : `/storage/${rawHeroImage}`)
+        : null;
 
-    const visaData = {
+    const overlayOpacity = page?.content?.hero_overlay_opacity !== undefined && page?.content?.hero_overlay_opacity !== null && page?.content?.hero_overlay_opacity !== ''
+        ? Math.max(15, Math.min(95, parseInt(page.content.hero_overlay_opacity, 10)))
+        : 75;
+
+    const defaultVisaData = {
         UK: {
             country: 'United Kingdom',
             flag: '🇬🇧',
@@ -125,6 +132,10 @@ export default function VisaGuide({ page = null }) {
         }
     };
 
+    const visaData = page?.content?.visa_destinations || defaultVisaData;
+    const [activeTab, setActiveTab] = useState(() => Object.keys(visaData)[0] || 'UK');
+    const [openFaqIndex, setOpenFaqIndex] = useState(0);
+
     const visaFaqs = [
         {
             question: 'Can I work while studying on a student visa?',
@@ -144,7 +155,7 @@ export default function VisaGuide({ page = null }) {
         }
     ];
 
-    const currentVisa = visaData[activeTab];
+    const currentVisa = visaData[activeTab] || Object.values(visaData)[0] || defaultVisaData['UK'];
 
     return (
         <Layout>
@@ -159,14 +170,44 @@ export default function VisaGuide({ page = null }) {
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
 
                 {/* 1. HERO SECTION */}
-                <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
-                    {/* Background Ambient Glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] pointer-events-none overflow-hidden">
-                        <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[130px]" />
-                    </div>
+                <section className={`relative overflow-hidden py-16 lg:py-24 border-b border-slate-200/60 dark:border-slate-800 transition-colors ${
+                    heroImage ? 'bg-slate-950 text-white' : 'bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'
+                }`}>
+                    {/* 1. HERO BANNER IMAGE BACKGROUND */}
+                    {heroImage ? (
+                        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                            <img
+                                src={heroImage}
+                                alt="Visa Guide Hero Banner"
+                                className="w-full h-full object-cover object-center scale-[1.02] transform transition-transform duration-1000 ease-out"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                }}
+                            />
+
+                            {/* Dark Scrim with Configurable Opacity */}
+                            <div
+                                className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-900/70"
+                                style={{ opacity: overlayOpacity / 100 }}
+                            />
+
+                            {/* Subtle Vertical Fade Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950/90 pointer-events-none" />
+
+                            {/* Ambient Glow Orbs over banner */}
+                            <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/25 rounded-full blur-[130px] pointer-events-none" />
+                        </div>
+                    ) : (
+                        /* Background Ambient Glow */
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] pointer-events-none overflow-hidden">
+                            <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[130px]" />
+                        </div>
+                    )}
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight max-w-4xl mx-auto">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto ${
+                            heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
+                        }`}>
                             {heroHeading ? (
                                 heroHeading
                             ) : (
@@ -179,7 +220,9 @@ export default function VisaGuide({ page = null }) {
                             )}
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto font-normal">
+                        <p className={`text-lg sm:text-xl leading-relaxed max-w-3xl mx-auto font-normal ${
+                            heroImage ? 'text-slate-200' : 'text-slate-600 dark:text-slate-300'
+                        }`}>
                             {heroSubtitle || 'Step-by-step guidance for your UKVI, US F-1, and other student visas with our certified immigration experts.'}
                         </p>
                     </div>
@@ -191,9 +234,10 @@ export default function VisaGuide({ page = null }) {
 
                         {/* TAB BUTTONS */}
                         <div className="flex items-center justify-center gap-2 sm:gap-4 mb-14 overflow-x-auto pb-2">
-                            {['UK', 'USA', 'Finland', 'Dubai'].map((countryKey) => {
+                            {Object.keys(visaData).map((countryKey) => {
                                 const isActive = activeTab === countryKey;
                                 const countryInfo = visaData[countryKey];
+                                if (!countryInfo) return null;
                                 return (
                                     <button
                                         key={countryKey}
@@ -315,11 +359,13 @@ export default function VisaGuide({ page = null }) {
                 )}
 
                 {/* 4. DYNAMIC VISA FREQUENTLY ASKED QUESTIONS */}
-                <FaqSection
-                    badge="VISA GUIDANCE & FAQS"
-                    title="Frequently Asked Visa & Admission Questions"
-                    subtitle="Comprehensive answers regarding visa processing times, financial requirements, IELTS waivers, and work permits."
-                />
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection
+                        badge="VISA GUIDANCE & FAQS"
+                        title="Frequently Asked Visa & Admission Questions"
+                        subtitle="Comprehensive answers regarding visa processing times, financial requirements, IELTS waivers, and work permits."
+                    />
+                )}
 
             </div>
         </Layout>
