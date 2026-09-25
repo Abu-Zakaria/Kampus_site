@@ -32,14 +32,14 @@ class CourseInquiryNotificationTest extends TestCase
 
         // Create an admin user
         $admin = User::factory()->create([
-            'email' => 'admin@kampusedu.com',
+            'email' => 'admin@ RMSedu.com',
         ]);
         $admin->assignRole('Super Admin');
 
         // Configure admin notification setting
         Setting::create([
             'key' => 'admin_notification_email',
-            'value' => 'admissions@kampusedu.com',
+            'value' => 'admissions@ RMSedu.com',
         ]);
 
         $payload = [
@@ -87,11 +87,11 @@ class CourseInquiryNotificationTest extends TestCase
 
         // 3. Verify CourseInquiryAdminNotification email was dispatched to administrators
         Mail::assertSent(CourseInquiryAdminNotification::class, function ($mail) {
-            $hasAdmissionsRecipient = $mail->hasTo('admissions@kampusedu.com');
-            $hasAdminUserRecipient = $mail->hasTo('admin@kampusedu.com');
+            $hasAdmissionsRecipient = $mail->hasTo('admissions@ RMSedu.com');
+            $hasAdminUserRecipient = $mail->hasTo('admin@ RMSedu.com');
 
             $matchesSubject = str_contains($mail->envelope()->subject, 'Sarah Jenkins') &&
-                              str_contains($mail->envelope()->subject, 'MSc Artificial Intelligence & Data Science');
+                str_contains($mail->envelope()->subject, 'MSc Artificial Intelligence & Data Science');
 
             return ($hasAdmissionsRecipient || $hasAdminUserRecipient) && $matchesSubject;
         });
@@ -129,7 +129,7 @@ class CourseInquiryNotificationTest extends TestCase
     {
         // 1. Create admin with inquiry management permissions
         $admin = User::factory()->create([
-            'email' => 'head.admin@kampus.com',
+            'email' => 'head.admin@ RMS.com',
         ]);
         $admin->assignRole('Super Admin');
 
@@ -146,10 +146,11 @@ class CourseInquiryNotificationTest extends TestCase
         // 3. Admin views inquiries list
         $indexResponse = $this->actingAs($admin)->get('/admin/inquiries');
         $indexResponse->assertStatus(200);
-        $indexResponse->assertInertia(fn ($page) => $page
-            ->component('Admin/Inquiries/Index')
-            ->has('messages', 1)
-            ->where('messages.0.topic', 'Course Enquiry: BEng Software Engineering')
+        $indexResponse->assertInertia(
+            fn($page) => $page
+                ->component('Admin/Inquiries/Index')
+                ->has('messages', 1)
+                ->where('messages.0.topic', 'Course Enquiry: BEng Software Engineering')
         );
 
         // 4. Admin replies to inquiry

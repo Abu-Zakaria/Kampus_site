@@ -127,7 +127,7 @@ export default function Index({ slides = [], defaultSlides = [] }) {
 
     return (
         <AdminLayout title="Hero 3D Card Slideshow">
-            <Head title="Hero Slideshow Images — Kampus CMS" />
+            <Head title="Hero Slideshow Images —  RMS CMS" />
 
             <div className="max-w-6xl mx-auto space-y-8">
 
@@ -215,11 +215,10 @@ export default function Index({ slides = [], defaultSlides = [] }) {
                                     return (
                                         <div
                                             key={idx}
-                                            className={`relative rounded-2xl overflow-hidden border transition-all duration-200 bg-slate-50 dark:bg-slate-800/60 p-3.5 space-y-3 group ${
-                                                isFirst
+                                            className={`relative rounded-2xl overflow-hidden border transition-all duration-200 bg-slate-50 dark:bg-slate-800/60 p-3.5 space-y-3 group ${isFirst
                                                     ? 'border-blue-500 dark:border-blue-500/80 shadow-md shadow-blue-500/10'
                                                     : 'border-slate-200 dark:border-slate-700/80 hover:border-slate-300'
-                                            }`}
+                                                }`}
                                         >
                                             {/* Image Thumbnail Container */}
                                             <div className="relative h-44 rounded-xl overflow-hidden bg-slate-950 border border-slate-200/80 dark:border-slate-700">
@@ -234,11 +233,10 @@ export default function Index({ slides = [], defaultSlides = [] }) {
 
                                                 {/* Top Badge: Slide Position */}
                                                 <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                                                    <span className={`px-2 py-0.5 rounded-lg text-xs font-bold tracking-tight shadow-xs ${
-                                                        isFirst
+                                                    <span className={`px-2 py-0.5 rounded-lg text-xs font-bold tracking-tight shadow-xs ${isFirst
                                                             ? 'bg-blue-600 text-white'
                                                             : 'bg-black/70 backdrop-blur-md text-white'
-                                                    }`}>
+                                                        }`}>
                                                         #{idx + 1} {isFirst ? '— Front Card' : ''}
                                                     </span>
                                                 </div>
@@ -326,9 +324,8 @@ export default function Index({ slides = [], defaultSlides = [] }) {
 
                             <label
                                 htmlFor="slideshow_upload_input"
-                                className={`h-40 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-800/40 hover:bg-blue-50/40 dark:hover:bg-blue-950/20 flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all ${
-                                    uploading ? 'opacity-50 pointer-events-none' : ''
-                                }`}
+                                className={`h-40 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 bg-slate-50 dark:bg-slate-800/40 hover:bg-blue-50/40 dark:hover:bg-blue-950/20 flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all ${uploading ? 'opacity-50 pointer-events-none' : ''
+                                    }`}
                             >
                                 <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 mb-2">
                                     <Plus className="w-5 h-5" />
@@ -387,9 +384,8 @@ export default function Index({ slides = [], defaultSlides = [] }) {
                                         <div
                                             key={idx}
                                             onClick={() => setPreviewIndex(idx)}
-                                            className={`absolute top-0 left-0 w-[80%] h-[180px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 bg-slate-950 transition-all duration-500 cursor-pointer ${
-                                                isActive ? 'ring-2 ring-blue-500 shadow-xl' : 'hover:brightness-110'
-                                            }`}
+                                            className={`absolute top-0 left-0 w-[80%] h-[180px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 bg-slate-950 transition-all duration-500 cursor-pointer ${isActive ? 'ring-2 ring-blue-500 shadow-xl' : 'hover:brightness-110'
+                                                }`}
                                             style={{
                                                 zIndex,
                                                 opacity,

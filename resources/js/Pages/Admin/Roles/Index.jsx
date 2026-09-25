@@ -95,10 +95,10 @@ export default function Index({ roles = [], permissions = [] }) {
 
     return (
         <AdminLayout title="Roles & Permissions Management">
-            <Head title="Roles & Permissions — Kampus CMS" />
+            <Head title="Roles & Permissions —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* HEADER BANNER & CREATE BUTTON */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -139,15 +139,14 @@ export default function Index({ roles = [], permissions = [] }) {
                                     const isSuperAdmin = role.name === 'Super Admin' || role.id === 1;
                                     return (
                                         <tr key={role.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                            
+
                                             {/* Role Name */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border font-bold ${
-                                                        isSuperAdmin 
+                                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border font-bold ${isSuperAdmin
                                                             ? 'bg-purple-100 dark:bg-purple-950 text-purple-600 border-purple-300 dark:border-purple-800'
                                                             : 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 border-blue-200 dark:border-blue-800'
-                                                    }`}>
+                                                        }`}>
                                                         <ShieldCheck className="w-5 h-5" />
                                                     </div>
                                                     <div className="flex flex-col">
@@ -270,16 +269,14 @@ export default function Index({ roles = [], permissions = [] }) {
                                                 <div
                                                     key={perm.id}
                                                     onClick={() => handleToggleCreatePermission(perm.name)}
-                                                    className={`p-3 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${
-                                                        isChecked
+                                                    className={`p-3 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${isChecked
                                                             ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-900 dark:text-blue-200'
                                                             : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     <span className="text-xs font-bold">{perm.name}</span>
-                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-                                                        isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
-                                                    }`}>
+                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
+                                                        }`}>
                                                         {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                                                     </div>
                                                 </div>
@@ -363,16 +360,14 @@ export default function Index({ roles = [], permissions = [] }) {
                                                 <div
                                                     key={perm.id}
                                                     onClick={() => handleToggleEditPermission(perm.name)}
-                                                    className={`p-3 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${
-                                                        isChecked
+                                                    className={`p-3 rounded-2xl border cursor-pointer transition-colors flex items-center justify-between ${isChecked
                                                             ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-900 dark:text-blue-200'
                                                             : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     <span className="text-xs font-bold">{perm.name}</span>
-                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-                                                        isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
-                                                    }`}>
+                                                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${isChecked ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-400'
+                                                        }`}>
                                                         {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                                                     </div>
                                                 </div>

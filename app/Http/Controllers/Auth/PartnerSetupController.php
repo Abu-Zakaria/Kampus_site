@@ -80,6 +80,6 @@ class PartnerSetupController extends Controller
         }
 
         return redirect()->route('admin.dashboard')
-            ->with('success', 'Your password has been successfully configured! Welcome to the Kampus Partner Portal.');
+            ->with('success', 'Your password has been successfully configured! Welcome to the  RMS Partner Portal.');
     }
 }

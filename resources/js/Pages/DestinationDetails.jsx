@@ -47,10 +47,10 @@ export default function DestinationDetails({ country = null }) {
 
     return (
         <Layout>
-            <Head title={`Study in ${currentCountry.name} — Kampus EduConsult`} />
+            <Head title={`Study in ${currentCountry.name} —  RMS Global Education`} />
 
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
-                
+
                 {/* 1. HERO BANNER */}
                 <div className="relative bg-slate-950 text-white pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden border-b border-slate-800">
                     <div className="absolute inset-0 z-0">
@@ -101,7 +101,7 @@ export default function DestinationDetails({ country = null }) {
                 {/* 2. UNIVERSITIES GRID SECTION */}
                 <section className="py-16 lg:py-24 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                        
+
                         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
                             <div>
                                 <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
@@ -143,7 +143,7 @@ export default function DestinationDetails({ country = null }) {
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                                                
+
                                                 <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
                                                     <span className="text-xs font-bold flex items-center gap-1.5">
                                                         <MapPin className="w-3.5 h-3.5 text-blue-400" />

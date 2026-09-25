@@ -20,7 +20,7 @@ import {
 import DynamicPageSections from '../Components/DynamicPageSections';
 
 export default function VisaGuide({ page = null }) {
-    const metaTitle = page?.meta_title || 'Student Visa Guide & Requirements — Kampus EduConsult';
+    const metaTitle = page?.meta_title || 'Student Visa Guide & Requirements —  RMS Global Education';
     const metaDescription = page?.meta_description || 'Comprehensive requirements, checklists, and processing timelines for UK Student Visas, US F-1, and European Study Permits.';
     const metaKeywords = page?.meta_keywords || 'student visa guide, UKVI requirements, CAS deposit, US F1 visa checklist';
 
@@ -139,7 +139,7 @@ export default function VisaGuide({ page = null }) {
             answer: 'UK Priority Visas take 5 working days (standard 3 weeks). US F-1 visas are decided on the day of your interview. Finland residence permits take 4 to 8 weeks. Dubai student visas usually take 2 to 3 weeks.'
         },
         {
-            question: 'What is the visa success rate with Kampus EduConsult?',
+            question: 'What is the visa success rate with  RMS Global Education?',
             answer: 'Our certified counselors maintain a 98% visa approval rate due to meticulous bank document verification, SOP review, and 1-on-1 mock embassy interview sessions before submission.'
         }
     ];
@@ -157,7 +157,7 @@ export default function VisaGuide({ page = null }) {
             </Head>
 
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-                
+
                 {/* 1. HERO SECTION */}
                 <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
                     {/* Background Ambient Glow */}
@@ -188,7 +188,7 @@ export default function VisaGuide({ page = null }) {
                 {/* 2. COUNTRY VISA TABS & CONTENT SECTION */}
                 <section className="py-16 lg:py-24 bg-white dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        
+
                         {/* TAB BUTTONS */}
                         <div className="flex items-center justify-center gap-2 sm:gap-4 mb-14 overflow-x-auto pb-2">
                             {['UK', 'USA', 'Finland', 'Dubai'].map((countryKey) => {
@@ -198,11 +198,10 @@ export default function VisaGuide({ page = null }) {
                                     <button
                                         key={countryKey}
                                         onClick={() => setActiveTab(countryKey)}
-                                        className={`px-6 py-3 rounded-full text-sm font-extrabold transition-all duration-300 flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-                                            isActive
-                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105'
-                                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700'
-                                        }`}
+                                        className={`px-6 py-3 rounded-full text-sm font-extrabold transition-all duration-300 flex items-center gap-2 cursor-pointer whitespace-nowrap ${isActive
+                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105'
+                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700'
+                                            }`}
                                     >
                                         <span className="text-lg">{countryInfo.flag}</span>
                                         <span>{countryInfo.country}</span>
@@ -233,7 +232,7 @@ export default function VisaGuide({ page = null }) {
 
                         {/* 2-COLUMN LAYOUT: CHECKLIST (LEFT) & PROCESSING TIMELINE (RIGHT) */}
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                            
+
                             {/* LEFT: DOCUMENT CHECKLIST CARD */}
                             <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-7 lg:p-8 space-y-6 shadow-sm">
                                 <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-slate-700">

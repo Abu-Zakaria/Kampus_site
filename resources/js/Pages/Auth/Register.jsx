@@ -6,7 +6,7 @@ import { User, Mail, Lock, ShieldCheck, UserPlus, ArrowRight } from 'lucide-reac
 export default function Register() {
     const { props } = usePage();
     const globalSettings = props?.globalSettings || {};
-    const siteName = globalSettings?.site_name || 'Kampus';
+    const siteName = globalSettings?.site_name || ' RMS';
 
     const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const isAdmin = urlParams ? urlParams.get('type') === 'admin' : false;
@@ -42,7 +42,7 @@ export default function Register() {
             </div>
 
             <form onSubmit={submit} className="space-y-4">
-                
+
                 {/* FULL NAME INPUT */}
                 <div className="space-y-1.5">
                     <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -85,7 +85,7 @@ export default function Register() {
                             value={data.email}
                             autoComplete="username"
                             required
-                            placeholder="admin@kampus.com"
+                            placeholder="admin@ RMS.com"
                             onChange={(e) => setData('email', e.target.value)}
                             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                         />

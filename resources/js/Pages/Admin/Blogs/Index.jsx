@@ -43,7 +43,7 @@ export default function Index({ blogs = [] }) {
 
     return (
         <AdminLayout title="Blog Posts Management">
-            <Head title="Blog Posts — Kampus CMS" />
+            <Head title="Blog Posts —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -172,15 +172,13 @@ export default function Index({ blogs = [] }) {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleToggleFeatured(blog.id)}
-                                                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                                                        blog.is_featured ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700'
-                                                    }`}
+                                                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${blog.is_featured ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700'
+                                                        }`}
                                                     title={blog.is_featured ? 'Featured on Home (Click to remove)' : 'Not featured on Home (Click to feature)'}
                                                 >
                                                     <span
-                                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-                                                            blog.is_featured ? 'translate-x-5' : 'translate-x-0'
-                                                        }`}
+                                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${blog.is_featured ? 'translate-x-5' : 'translate-x-0'
+                                                            }`}
                                                     />
                                                 </button>
                                             </td>

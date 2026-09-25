@@ -52,7 +52,7 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Congratulations! Your Kampus Partnership Application Has Been Approved',
+            subject: 'Congratulations! Your  RMS Partnership Application Has Been Approved',
         );
     }
 

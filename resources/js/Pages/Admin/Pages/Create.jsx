@@ -49,7 +49,7 @@ export default function Create() {
         let checks = [];
         const title = data.meta_title || data.name || '';
         const desc = data.meta_description || '';
-        
+
         const extractText = (val) => {
             if (!val) return '';
             if (typeof val === 'string') return val.replace(/<[^>]*>?/gm, ' ');
@@ -117,7 +117,7 @@ export default function Create() {
             ...prev,
             name: val,
             slug: val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-            meta_title: prev.meta_title ? prev.meta_title : `${val} — Kampus EduConsult`,
+            meta_title: prev.meta_title ? prev.meta_title : `${val} —  RMS Global Education`,
             content: {
                 ...prev.content,
                 hero: {
@@ -147,10 +147,10 @@ export default function Create() {
 
     return (
         <AdminLayout title="Create New Page">
-            <Head title="Create New Page — Kampus CMS" />
+            <Head title="Create New Page —  RMS CMS" />
 
             <div className="max-w-5xl mx-auto space-y-8">
-                
+
                 {/* HEADER ROW */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div className="flex items-center gap-3">
@@ -182,7 +182,7 @@ export default function Create() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8">
-                    
+
                     {/* SECTION 1: METADATA, SEO & NAVIGATION TOGGLES */}
                     <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -281,7 +281,7 @@ export default function Create() {
                                     type="text"
                                     value={data.meta_title}
                                     onChange={(e) => setData('meta_title', e.target.value)}
-                                    placeholder="e.g. Student Support & Resources — Kampus Group"
+                                    placeholder="e.g. Student Support & Resources —  RMS Group"
                                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                             </div>
@@ -327,20 +327,19 @@ export default function Create() {
                                     <Sparkles className="w-5 h-5 text-blue-400" />
                                     <span>SEO Analyzer</span>
                                 </h3>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                                    seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 
-                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
-                                    'bg-red-500/20 text-red-400 border border-red-500/30'
-                                }`}>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                        'bg-red-500/20 text-red-400 border border-red-500/30'
+                                    }`}>
                                     {seoResults.score >= 80 ? 'Good SEO' : seoResults.score >= 50 ? 'Needs Improvement' : 'Poor SEO'}
                                 </span>
                             </div>
-                            
+
                             <div className="mb-4">
                                 <label className="block mb-2 text-sm font-bold text-slate-300">Focus Keyword</label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="e.g. study in UK"
                                     value={focusKeyword}
                                     onChange={(e) => setFocusKeyword(e.target.value)}

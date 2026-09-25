@@ -2,8 +2,8 @@ import { Head, usePage } from '@inertiajs/react';
 
 export default function SeoHead({ title, description, image, url, keywords }) {
     const { globalSettings } = usePage().props;
-    
-    const siteName = globalSettings?.site_name || 'Kampus Edu';
+
+    const siteName = globalSettings?.site_name || ' RMS Edu';
     const metaTitle = title ? `${title} | ${siteName}` : siteName;
     const metaDesc = description || globalSettings?.default_meta_description || 'Global education consultancy services.';
     const metaImage = image || (globalSettings?.default_meta_image ? `/storage/${globalSettings.default_meta_image}` : '/default-og-image.jpg');

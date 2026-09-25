@@ -36,7 +36,7 @@ class InquiryReplyStudentMail extends Mailable
         $topic = $this->contactMessage->topic ?: 'Educational Consultation Inquiry';
 
         return new Envelope(
-            subject: "Response from Kampus Education Counselor: {$topic}",
+            subject: "Response from  RMS Education Counselor: {$topic}",
         );
     }
 

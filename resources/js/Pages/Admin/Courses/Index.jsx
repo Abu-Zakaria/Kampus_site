@@ -49,7 +49,7 @@ export default function Index({ courses = [] }) {
 
     return (
         <AdminLayout title="Courses Management">
-            <Head title="Courses — Kampus CMS" />
+            <Head title="Courses —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -204,11 +204,10 @@ export default function Index({ courses = [] }) {
                                                     <button
                                                         type="button"
                                                         onClick={() => handleToggleFee(course.id)}
-                                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold w-fit transition-all cursor-pointer ${
-                                                            course.show_tuition_fee
+                                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold w-fit transition-all cursor-pointer ${course.show_tuition_fee
                                                                 ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
                                                                 : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-200'
-                                                        }`}
+                                                            }`}
                                                         title="Click to toggle Show / Hide fee on public website"
                                                     >
                                                         {course.show_tuition_fee ? (

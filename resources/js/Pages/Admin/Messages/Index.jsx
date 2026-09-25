@@ -200,7 +200,7 @@ export default function Index({
             <Head title="Student Messages & Chat — Admin Workstation" />
 
             <div className="space-y-6">
-                
+
                 {/* 1. TOP HEADER & STATS BAR */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
@@ -270,10 +270,10 @@ export default function Index({
 
                 {/* 2. CHAT WORKSTATION (TWO COLUMN CONTAINER) */}
                 <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col md:flex-row h-[720px]">
-                    
+
                     {/* LEFT SIDEBAR: THREAD LIST */}
                     <div className="w-full md:w-80 lg:w-96 border-r border-slate-200 dark:border-slate-800 flex flex-col h-full bg-slate-50/50 dark:bg-slate-900/50 shrink-0">
-                        
+
                         {/* Search & Filter Header */}
                         <div className="p-4 border-b border-slate-200 dark:border-slate-800 space-y-3">
                             <form onSubmit={handleSearchSubmit} className="relative">
@@ -292,44 +292,40 @@ export default function Index({
                                 <button
                                     type="button"
                                     onClick={() => handleFilterChange('all')}
-                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
-                                        currentFilter === 'all'
+                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${currentFilter === 'all'
                                             ? 'bg-blue-600 text-white shadow-xs'
                                             : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                    }`}
+                                        }`}
                                 >
                                     All ({stats.total || 0})
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => handleFilterChange('unread')}
-                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
-                                        currentFilter === 'unread'
+                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${currentFilter === 'unread'
                                             ? 'bg-rose-600 text-white shadow-xs'
                                             : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                    }`}
+                                        }`}
                                 >
                                     Unread ({stats.unread || 0})
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => handleFilterChange('open')}
-                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
-                                        currentFilter === 'open'
+                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${currentFilter === 'open'
                                             ? 'bg-amber-600 text-white shadow-xs'
                                             : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                    }`}
+                                        }`}
                                 >
                                     Open ({stats.open || 0})
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => handleFilterChange('resolved')}
-                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
-                                        currentFilter === 'resolved'
+                                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${currentFilter === 'resolved'
                                             ? 'bg-emerald-600 text-white shadow-xs'
                                             : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900'
-                                    }`}
+                                        }`}
                                 >
                                     Resolved ({stats.resolved || 0})
                                 </button>
@@ -355,14 +351,13 @@ export default function Index({
                                         <div
                                             key={conv.id}
                                             onClick={() => selectConversation(conv.id)}
-                                            className={`p-4 transition-all cursor-pointer relative ${
-                                                isSelected
+                                            className={`p-4 transition-all cursor-pointer relative ${isSelected
                                                     ? 'bg-blue-50/80 dark:bg-blue-950/40 border-l-4 border-blue-600'
                                                     : 'hover:bg-slate-100/70 dark:hover:bg-slate-800/50'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-start gap-3">
-                                                
+
                                                 {/* Student Initial Avatar */}
                                                 <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-xs">
                                                     {conv.student?.name ? conv.student.name.charAt(0).toUpperCase() : 'S'}
@@ -387,11 +382,10 @@ export default function Index({
                                                     </p>
 
                                                     <div className="flex items-center gap-2 pt-1">
-                                                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
-                                                            conv.status === 'open'
+                                                        <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${conv.status === 'open'
                                                                 ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
                                                                 : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
-                                                        }`}>
+                                                            }`}>
                                                             {conv.status}
                                                         </span>
 
@@ -415,10 +409,10 @@ export default function Index({
                     {/* RIGHT MAIN PANEL: ACTIVE CONVERSATION */}
                     {activeConversation ? (
                         <div className="flex-1 flex flex-col h-full bg-white dark:bg-slate-900">
-                            
+
                             {/* Chat Header */}
                             <div className="p-4 sm:px-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 z-10">
-                                
+
                                 <div className="flex items-center gap-3">
                                     <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 text-white font-black text-base flex items-center justify-center shrink-0 shadow-sm">
                                         {activeConversation.student?.name ? activeConversation.student.name.charAt(0).toUpperCase() : 'S'}
@@ -428,11 +422,10 @@ export default function Index({
                                             <h2 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
                                                 {activeConversation.student?.name || 'Student'}
                                             </h2>
-                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${
-                                                activeConversation.status === 'open'
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase ${activeConversation.status === 'open'
                                                     ? 'bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300'
                                                     : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300'
-                                            }`}>
+                                                }`}>
                                                 {activeConversation.status}
                                             </span>
                                         </div>
@@ -450,11 +443,10 @@ export default function Index({
                                     <button
                                         type="button"
                                         onClick={handleToggleStatus}
-                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${
-                                            activeConversation.status === 'open'
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors flex items-center gap-1.5 cursor-pointer ${activeConversation.status === 'open'
                                                 ? 'border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
                                                 : 'border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40'
-                                        }`}
+                                            }`}
                                     >
                                         {activeConversation.status === 'open' ? (
                                             <>
@@ -525,11 +517,11 @@ export default function Index({
                                                 )}
 
                                                 <div className={`max-w-lg lg:max-w-xl space-y-1 ${isStudent ? 'items-start' : 'items-end'}`}>
-                                                    
+
                                                     {/* Sender header name & time */}
                                                     <div className={`flex items-center gap-2 text-[11px] ${isStudent ? 'text-slate-500 dark:text-slate-400' : 'text-blue-600 dark:text-blue-400 justify-end'}`}>
                                                         <span className="font-bold">
-                                                            {isStudent ? (activeConversation.student?.name || 'Student') : (msg.sender?.name || 'Kampus Counselor')}
+                                                            {isStudent ? (activeConversation.student?.name || 'Student') : (msg.sender?.name || ' RMS Counselor')}
                                                         </span>
                                                         {!isStudent && (
                                                             <span className="px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-950 text-[10px] font-extrabold uppercase text-blue-700 dark:text-blue-300">
@@ -543,11 +535,10 @@ export default function Index({
 
                                                     {/* Message bubble */}
                                                     <div
-                                                        className={`p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-xs ${
-                                                            isStudent
+                                                        className={`p-4 text-xs sm:text-sm leading-relaxed whitespace-pre-line shadow-xs ${isStudent
                                                                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-2xl rounded-tl-sm border border-slate-200/80 dark:border-slate-700'
                                                                 : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl rounded-tr-sm shadow-blue-600/20 font-medium'
-                                                        }`}
+                                                            }`}
                                                     >
                                                         {msg.message}
                                                     </div>
@@ -569,7 +560,7 @@ export default function Index({
 
                             {/* Reply Composer Bar */}
                             <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3">
-                                
+
                                 {/* Quick Canned Responses Chips */}
                                 <div className="flex items-center gap-2 overflow-x-auto pb-1 text-[11px]">
                                     <span className="text-slate-400 font-bold shrink-0 flex items-center gap-1">
@@ -650,7 +641,7 @@ export default function Index({
             {isNewModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative">
-                        
+
                         <button
                             type="button"
                             onClick={() => setIsNewModalOpen(false)}
@@ -668,13 +659,13 @@ export default function Index({
                                     Initiate Message to Student
                                 </h3>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    Reach out directly to a prospective student registered on Kampus.
+                                    Reach out directly to a prospective student registered on  RMS.
                                 </p>
                             </div>
                         </div>
 
                         <form onSubmit={handleNewConvSubmit} className="space-y-4">
-                            
+
                             {/* Student Selection */}
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">

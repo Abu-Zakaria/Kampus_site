@@ -112,7 +112,7 @@ export default function Form({ service = null, nextNumber = '01', nextOrder = 0 
 
     return (
         <AdminLayout title={isEdit ? 'Edit Service' : 'Add New Service'}>
-            <Head title={`${isEdit ? 'Edit' : 'Create'} Service — Kampus CMS`} />
+            <Head title={`${isEdit ? 'Edit' : 'Create'} Service —  RMS CMS`} />
 
             <div className="max-w-4xl mx-auto space-y-6">
 
@@ -135,7 +135,7 @@ export default function Form({ service = null, nextNumber = '01', nextOrder = 0 
 
                 {/* MAIN FORM CARD */}
                 <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-8">
-                    
+
                     {/* Header Details */}
                     <div>
                         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">

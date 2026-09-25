@@ -37,39 +37,39 @@ export default function Index({ settings = {} }) {
 
     const { data, setData, post, processing } = useForm({
         // Brand & Logos
-        site_name: settings.site_name || 'Kampus Edu',
+        site_name: settings.site_name || ' RMS Edu',
         header_subtitle: settings.header_subtitle || 'Educational Consultancy',
         site_logo: null,
-        footer_name: settings.footer_name || settings.site_name || 'Kampus EduConsult',
+        footer_name: settings.footer_name || settings.site_name || ' RMS Global Education',
         footer_subtitle: settings.footer_subtitle || settings.site_tagline || 'Global Higher Education Advisers',
         footer_logo: null,
         site_favicon: null,
         home_hero_image: null,
         footer_description: settings.footer_description || 'Empowering ambitious students worldwide to access top-tier university education with bespoke admissions counselling, visa support, and scholarship guidance.',
-        
+
         // General & Header
         site_tagline: settings.site_tagline || 'Global Higher Education Advisers',
-        
+
         // Footer Contact Information (Head Office)
         head_office_address: settings.head_office_address || settings.contact_address || '124 Education Avenue, Suite 400, Oxford Street, London W1B 3AG, United Kingdom',
         head_office_phone: settings.head_office_phone || 'UK: +44 20 7946 0912 | BD: +880 1812713814',
-        
+
         // Other Contacts
-        contact_email: settings.contact_email || 'apply@kampusedu.com',
+        contact_email: settings.contact_email || 'apply@ RMSedu.com',
         contact_bd_hotline: settings.contact_bd_hotline || '+880 1812713814',
         operating_hours: settings.operating_hours || 'Mon - Sat: 9:00 AM - 7:00 PM',
-        
+
         // Social Media
-        facebook_url: settings.facebook_url || 'https://facebook.com/kampusedu',
-        linkedin_url: settings.linkedin_url || 'https://linkedin.com/company/kampusedu',
-        instagram_url: settings.instagram_url || 'https://instagram.com/kampusedu',
-        youtube_url: settings.youtube_url || 'https://youtube.com/c/kampusedu',
+        facebook_url: settings.facebook_url || 'https://facebook.com/ RMSedu',
+        linkedin_url: settings.linkedin_url || 'https://linkedin.com/company/ RMSedu',
+        instagram_url: settings.instagram_url || 'https://instagram.com/ RMSedu',
+        youtube_url: settings.youtube_url || 'https://youtube.com/c/ RMSedu',
 
         // Contact Us Page Information & Google Maps
         contact_info_title: settings.contact_info_title || 'Contact Information',
         contact_info_subtitle: settings.contact_info_subtitle || 'London Global HQ & Regional Advisory Center',
         contact_info_address: settings.contact_info_address || '1st Floor, Botanical Works, 2 Jubilee Street, London E1 3FU',
-        contact_info_email: settings.contact_info_email || 'info@kampus-group.com',
+        contact_info_email: settings.contact_info_email || 'info@ RMS-group.com',
         contact_info_phone: settings.contact_info_phone || '020 7423 9333',
         contact_info_hours: settings.contact_info_hours || 'Monday - Friday: 9:00 AM - 6:00 PM GMT',
         contact_map_iframe: settings.contact_map_iframe || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.915783307521!2d-0.05716182337775242!3d51.51478190950346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876033580555555%3A0x123456789abcdef!2sJubilee%20St%2C%20London!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk',
@@ -118,7 +118,7 @@ export default function Index({ settings = {} }) {
 
     return (
         <AdminLayout title="Global Site Settings">
-            <Head title="Global Settings — Kampus CMS" />
+            <Head title="Global Settings —  RMS CMS" />
 
             <div className="max-w-4xl mx-auto space-y-8">
 
@@ -191,7 +191,7 @@ export default function Index({ settings = {} }) {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            
+
                             {/* 1. Header Logo */}
                             <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 space-y-3">
                                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
@@ -406,7 +406,7 @@ export default function Index({ settings = {} }) {
                                     required
                                     value={data.site_name}
                                     onChange={(e) => setData('site_name', e.target.value)}
-                                    placeholder="e.g. Kampus Edu"
+                                    placeholder="e.g.  RMS Edu"
                                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                             </div>
@@ -433,7 +433,7 @@ export default function Index({ settings = {} }) {
                                     required
                                     value={data.footer_name}
                                     onChange={(e) => setData('footer_name', e.target.value)}
-                                    placeholder="e.g. Kampus EduConsult"
+                                    placeholder="e.g.  RMS Global Education"
                                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                             </div>
@@ -547,7 +547,7 @@ export default function Index({ settings = {} }) {
                                         required
                                         value={data.contact_email}
                                         onChange={(e) => setData('contact_email', e.target.value)}
-                                        placeholder="apply@kampusedu.com"
+                                        placeholder="apply@ RMSedu.com"
                                         className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                     <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -723,7 +723,7 @@ export default function Index({ settings = {} }) {
                                         type="email"
                                         value={data.contact_info_email}
                                         onChange={(e) => setData('contact_info_email', e.target.value)}
-                                        placeholder="info@kampus-group.com"
+                                        placeholder="info@ RMS-group.com"
                                         className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                     />
                                 </div>
@@ -829,7 +829,7 @@ export default function Index({ settings = {} }) {
                                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                                     Default Meta Image (OG Image)
                                 </label>
-                                
+
                                 {metaImagePreview ? (
                                     <div className="relative w-full max-w-md h-48 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-700 mb-3">
                                         <img src={metaImagePreview} alt="Default Meta OG Image Preview" className="w-full h-full object-cover" />

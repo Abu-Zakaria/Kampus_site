@@ -130,21 +130,20 @@ export default function Layout({ children }) {
 
     return (
         <div className="min-h-screen flex flex-col font-sans bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 antialiased">
-            
+
             {/* 1. GLOBAL TOP BAR */}
             <TopBar />
 
             {/* STICKY NAVBAR */}
             <header
-                className={`sticky top-0 z-40 transition-all duration-300 ${
-                    scrolled
-                        ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-md border-b border-slate-200/70 dark:border-slate-800/70 py-3'
-                        : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800 py-4'
-                }`}
+                className={`sticky top-0 z-40 transition-all duration-300 ${scrolled
+                    ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-md border-b border-slate-200/70 dark:border-slate-800/70 py-3'
+                    : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-100 dark:border-slate-800 py-4'
+                    }`}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between gap-4">
-                        
+
                         {/* 1. Brand Logo */}
                         <Link href="/" className="flex items-center gap-3 group focus:outline-none">
                             {globalSettings?.site_logo ? (
@@ -161,7 +160,7 @@ export default function Layout({ children }) {
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1.5">
                                     <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">
-                                        {globalSettings?.site_name || 'Kampus Edu'}
+                                        {globalSettings?.site_name || ' RMS Edu'}
                                     </span>
                                 </div>
                                 <span className="text-[11px] font-medium text-slate-500 tracking-wide dark:text-slate-400">
@@ -178,11 +177,10 @@ export default function Layout({ children }) {
                                     <Link
                                         key={link.name}
                                         href={link.href}
-                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                                            isActive
-                                                ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                                                : 'text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-700'
-                                        }`}
+                                        className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${isActive
+                                            ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
+                                            : 'text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-700'
+                                            }`}
                                     >
                                         {link.name}
                                     </Link>
@@ -249,11 +247,10 @@ export default function Layout({ children }) {
                                     key={link.name}
                                     href={link.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className={`px-4 py-2.5 rounded-xl text-base font-medium transition-colors ${
-                                        url === link.href
-                                            ? 'bg-blue-600 text-white font-semibold'
-                                            : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                    }`}
+                                    className={`px-4 py-2.5 rounded-xl text-base font-medium transition-colors ${url === link.href
+                                        ? 'bg-blue-600 text-white font-semibold'
+                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                        }`}
                                 >
                                     {link.name}
                                 </Link>
@@ -272,7 +269,7 @@ export default function Layout({ children }) {
             <footer className="bg-slate-950 text-slate-300 border-t border-slate-800 pt-16 pb-8 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800/80">
-                        
+
                         {/* COL 1: Logo & Brand Information */}
                         <div className="space-y-5">
                             <div className="flex items-center gap-3">
@@ -295,7 +292,7 @@ export default function Layout({ children }) {
                                 )}
                                 <div className="flex flex-col">
                                     <span className="font-extrabold text-xl text-white tracking-tight">
-                                        {globalSettings?.footer_name || globalSettings?.site_name || 'Kampus EduConsult'}
+                                        {globalSettings?.footer_name || globalSettings?.site_name || ' RMS Global Education'}
                                     </span>
                                     <span className="text-[11px] text-slate-400">
                                         {globalSettings?.footer_subtitle || globalSettings?.site_tagline || 'Global Higher Education Advisers'}
@@ -335,8 +332,8 @@ export default function Layout({ children }) {
                             {globalBranches && globalBranches.length > 0 ? (
                                 <div className="flex flex-col space-y-3 max-h-[280px] overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900/50">
                                     {globalBranches.map((branch) => (
-                                        <div 
-                                            key={branch.id} 
+                                        <div
+                                            key={branch.id}
                                             onClick={() => setSelectedBranch(branch)}
                                             className="flex items-center justify-between p-3 border border-slate-700/50 rounded-xl bg-slate-800/30 hover:bg-slate-800/80 hover:border-slate-600 transition-all cursor-pointer shrink-0 group"
                                             title={`Click to view ${branch.country_name} branch location and map`}

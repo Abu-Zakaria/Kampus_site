@@ -24,7 +24,7 @@ class EnvSettingController extends Controller
 
         $envData = [
             // App settings
-            'APP_NAME' => $rawVars['APP_NAME'] ?? config('app.name', 'Kampus Edu'),
+            'APP_NAME' => $rawVars['APP_NAME'] ?? config('app.name', ' RMS Edu'),
             'APP_ENV' => $rawVars['APP_ENV'] ?? config('app.env', 'local'),
             'APP_DEBUG' => filter_var($rawVars['APP_DEBUG'] ?? config('app.debug', true), FILTER_VALIDATE_BOOLEAN),
             'APP_URL' => $rawVars['APP_URL'] ?? config('app.url', 'http://localhost'),
@@ -39,14 +39,14 @@ class EnvSettingController extends Controller
             'MAIL_USERNAME' => $rawVars['MAIL_USERNAME'] ?? config('mail.mailers.smtp.username', ''),
             'MAIL_PASSWORD' => $rawVars['MAIL_PASSWORD'] ?? '',
             'MAIL_ENCRYPTION' => $rawVars['MAIL_ENCRYPTION'] ?? config('mail.mailers.smtp.encryption', 'tls'),
-            'MAIL_FROM_ADDRESS' => $rawVars['MAIL_FROM_ADDRESS'] ?? config('mail.from.address', 'hello@kampus.com'),
-            'MAIL_FROM_NAME' => $rawVars['MAIL_FROM_NAME'] ?? config('mail.from.name', 'Kampus Edu'),
+            'MAIL_FROM_ADDRESS' => $rawVars['MAIL_FROM_ADDRESS'] ?? config('mail.from.address', 'hello@ RMS.com'),
+            'MAIL_FROM_NAME' => $rawVars['MAIL_FROM_NAME'] ?? config('mail.from.name', ' RMS Edu'),
 
             // Database settings
             'DB_CONNECTION' => $rawVars['DB_CONNECTION'] ?? config('database.default', 'mysql'),
             'DB_HOST' => $rawVars['DB_HOST'] ?? config('database.connections.mysql.host', '127.0.0.1'),
             'DB_PORT' => (string) ($rawVars['DB_PORT'] ?? config('database.connections.mysql.port', '3306')),
-            'DB_DATABASE' => $rawVars['DB_DATABASE'] ?? config('database.connections.mysql.database', 'kampus'),
+            'DB_DATABASE' => $rawVars['DB_DATABASE'] ?? config('database.connections.mysql.database', ' RMS'),
             'DB_USERNAME' => $rawVars['DB_USERNAME'] ?? config('database.connections.mysql.username', 'root'),
             'DB_PASSWORD' => $rawVars['DB_PASSWORD'] ?? '',
 
@@ -166,7 +166,7 @@ class EnvSettingController extends Controller
         ]);
 
         $recipient = $request->input('email');
-        $appName = config('app.name', 'Kampus Edu');
+        $appName = config('app.name', ' RMS Edu');
 
         try {
             Mail::raw(

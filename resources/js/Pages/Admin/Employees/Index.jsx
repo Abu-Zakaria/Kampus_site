@@ -89,7 +89,7 @@ export default function Index({ employees = [], stats = {} }) {
 
     return (
         <AdminLayout title="Team & Employees">
-            <Head title="Team & Employees Management — Kampus CMS" />
+            <Head title="Team & Employees Management —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -331,11 +331,10 @@ export default function Index({ employees = [], stats = {} }) {
                                     key={status}
                                     type="button"
                                     onClick={() => setStatusFilter(status)}
-                                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                        statusFilter === status
+                                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${statusFilter === status
                                             ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
+                                        }`}
                                 >
                                     {status}
                                 </button>
@@ -378,11 +377,10 @@ export default function Index({ employees = [], stats = {} }) {
                         {filteredEmployees.map((emp) => (
                             <div
                                 key={emp.id}
-                                className={`rounded-3xl border bg-white dark:bg-slate-900 p-6 flex flex-col justify-between transition-all duration-300 relative group hover:shadow-lg ${
-                                    emp.is_active
+                                className={`rounded-3xl border bg-white dark:bg-slate-900 p-6 flex flex-col justify-between transition-all duration-300 relative group hover:shadow-lg ${emp.is_active
                                         ? 'border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/40'
                                         : 'border-rose-200 dark:border-rose-950/50 bg-rose-50/20 opacity-80'
-                                }`}
+                                    }`}
                             >
                                 {/* Top Controls & Status */}
                                 <div>
@@ -474,11 +472,10 @@ export default function Index({ employees = [], stats = {} }) {
                                     <button
                                         type="button"
                                         onClick={() => handleToggleStatus(emp.id)}
-                                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                                            emp.is_active
+                                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${emp.is_active
                                                 ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100'
                                                 : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400 hover:bg-rose-100'
-                                        }`}
+                                            }`}
                                     >
                                         {emp.is_active ? (
                                             <>

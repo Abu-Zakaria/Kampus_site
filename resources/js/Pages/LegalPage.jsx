@@ -7,7 +7,7 @@ import DynamicPageSections from '../Components/DynamicPageSections';
 export default function LegalPage({ title, lastUpdated, page = null, badge = 'Legal & Compliance', children }) {
     const isBadgeHidden = page?.slug === 'accreditation' || page?.slug === 'terms-of-service' || page?.slug === 'terms' || page?.slug === 'privacy-policy' || !badge;
     const displayBadge = isBadgeHidden ? null : badge;
-    const displayTitle = page?.meta_title || `${page?.name || title} — RMS EduConsult`;
+    const displayTitle = page?.meta_title || `${page?.name || title} — RMS Global Education`;
     const metaDescription = page?.meta_description || 'Official compliance, terms, and legal documentation for RMS Educational Consultancy Ltd.';
     const metaKeywords = page?.meta_keywords || 'privacy policy, terms of service, RMS compliance';
 
@@ -23,7 +23,7 @@ export default function LegalPage({ title, lastUpdated, page = null, badge = 'Le
 
             <div className="w-full bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors py-12 lg:py-20 border-b border-slate-200/60 dark:border-slate-800">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    
+
                     {/* PAGE HEADER */}
                     <div className="mb-10 pb-8 border-b border-slate-200 dark:border-slate-800 space-y-3">
                         {displayBadge && (

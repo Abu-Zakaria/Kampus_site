@@ -33,10 +33,10 @@ export default function Index({ countries = [] }) {
 
     return (
         <AdminLayout title="Countries Management">
-            <Head title="Countries — Kampus CMS" />
+            <Head title="Countries —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* HEADER BANNER & ACTION BUTTONS */}
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -120,7 +120,7 @@ export default function Index({ countries = [] }) {
                                 ) : (
                                     filteredCountries.map((c) => (
                                         <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                            
+
                                             {/* Country Name */}
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">

@@ -146,7 +146,7 @@ class AdminNotificationService
     {
         $subject = "[New Inquiry] {$contactMessage->name} — " . ($contactMessage->topic ?: 'General Inquiry');
         $title = 'New Student Inquiry / Consultation';
-        $message = "A new inquiry message was lodged on the Kampus website from {$contactMessage->name}.";
+        $message = "A new inquiry message was lodged on the  RMS website from {$contactMessage->name}.";
 
         $details = [
             'Applicant Name' => $contactMessage->name,
@@ -306,7 +306,7 @@ class AdminNotificationService
     {
         $subject = "[New Partner Application] {$application->company_name} — {$application->contact_person}";
         $title = 'New Educational Partnership Application';
-        $message = "An agency or institutional representative has applied to partner with Kampus.";
+        $message = "An agency or institutional representative has applied to partner with  RMS.";
 
         $details = [
             'Company / Agency' => $application->company_name,
@@ -403,4 +403,3 @@ class AdminNotificationService
         );
     }
 }
-

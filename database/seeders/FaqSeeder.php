@@ -14,7 +14,7 @@ class FaqSeeder extends Seeder
     {
         $faqs = [
             [
-                'question' => 'Where can I study with Kampus EduConsult?',
+                'question' => 'Where can I study with  RMS Global Education?',
                 'answer' => 'We partner with over 500+ top-ranked universities across the UK, USA, Canada, Australia, Finland, Germany, Ireland, and Dubai (UAE). Our senior education counselors analyze your academic background, budget, and career aspirations to shortlist the ideal target institutions.',
                 'sort_order' => 1,
                 'is_active' => true,
@@ -32,7 +32,7 @@ class FaqSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'question' => 'Are Kampus consultancy and visa guidance services really 100% free?',
+                'question' => 'Are  RMS consultancy and visa guidance services really 100% free?',
                 'answer' => 'Yes, 100%! Our counseling, university application processing, document review, and visa guidance services are completely free for students. We are officially contracted and funded directly by our partner universities globally.',
                 'sort_order' => 4,
                 'is_active' => true,

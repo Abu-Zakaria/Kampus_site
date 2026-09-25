@@ -63,7 +63,7 @@ export default function Form({ course = null, universities = [] }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit Course: ${course.title}` : 'Add New Course'}>
-            <Head title={isEdit ? `Edit ${course.title} — Kampus CMS` : 'Add Course — Kampus CMS'} />
+            <Head title={isEdit ? `Edit ${course.title} —  RMS CMS` : 'Add Course —  RMS CMS'} />
 
             <div className="max-w-4xl mx-auto space-y-8">
 
@@ -251,11 +251,10 @@ export default function Form({ course = null, universities = [] }) {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">
                                         Annual Tuition Fee Display
                                     </span>
-                                    <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                                        data.show_tuition_fee
+                                    <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${data.show_tuition_fee
                                             ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
                                             : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
-                                    }`}>
+                                        }`}>
                                         {data.show_tuition_fee ? 'Visible Publicly' : 'Hidden Publicly'}
                                     </span>
                                 </div>
@@ -272,11 +271,10 @@ export default function Form({ course = null, universities = [] }) {
                                 className="inline-flex items-center cursor-pointer focus:outline-none shrink-0"
                             >
                                 <div
-                                    className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${
-                                        data.show_tuition_fee
+                                    className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${data.show_tuition_fee
                                             ? 'bg-emerald-500 justify-end'
                                             : 'bg-slate-300 dark:bg-slate-700 justify-start'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="bg-white w-4 h-4 rounded-full shadow-md transition-transform" />
                                 </div>

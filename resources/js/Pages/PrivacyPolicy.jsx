@@ -5,7 +5,7 @@ export default function PrivacyPolicy({ page = null }) {
     return (
         <LegalPage title="Privacy Policy" lastUpdated="August 2026" page={page} badge={null}>
             <p>
-                At <strong>RMS Educational Consultancy Ltd</strong> ("Kampus EduConsult", "we", "us", or "our"), we respect your privacy and are committed to protecting the personal data of our prospective students, partner institutions, and site visitors.
+                At <strong>RMS Educational Consultancy Ltd</strong> (" RMS Global Education", "we", "us", or "our"), we respect your privacy and are committed to protecting the personal data of our prospective students, partner institutions, and site visitors.
             </p>
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">1. Information We Collect</h2>
@@ -42,7 +42,7 @@ export default function PrivacyPolicy({ page = null }) {
 
             <h2 className="text-xl font-bold text-slate-900 dark:text-white pt-4">5. Your Privacy Rights</h2>
             <p>
-                Under applicable data protection laws, you have the right to request access to, correction of, or deletion of your personal data stored with Kampus EduConsult. You can exercise these rights anytime by contacting privacy@kampusedu.com.
+                Under applicable data protection laws, you have the right to request access to, correction of, or deletion of your personal data stored with  RMS Global Education. You can exercise these rights anytime by contacting privacy@ RMSedu.com.
             </p>
         </LegalPage>
     );

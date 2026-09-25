@@ -204,7 +204,7 @@ const DEFAULT_SCHOLARSHIPS = [
 ];
 
 export default function Scholarships({ page = null, countries = [] }) {
-    const metaTitle = page?.meta_title || 'International Scholarships Finder — Kampus EduConsult';
+    const metaTitle = page?.meta_title || 'International Scholarships Finder —  RMS Global Education';
     const metaDescription = page?.meta_description || 'Explore merit-based, need-based, and government-funded scholarships to study in the UK, USA, Canada, and Europe.';
     const metaKeywords = page?.meta_keywords || 'study abroad scholarships, UK great scholarship, Fulbright, tuition waiver';
 
@@ -392,10 +392,10 @@ export default function Scholarships({ page = null, countries = [] }) {
 
             {/* MAIN SCHOLARSHIPS PAGE CONTAINER WITH MODERN SPACING */}
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
-                
+
                 {/* 1. HERO SECTION */}
                 <section className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 bg-gradient-to-b from-blue-50/70 via-indigo-50/30 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
-                    
+
                     {/* Ambient Light Orbs */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[400px] pointer-events-none overflow-hidden">
                         <div className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[130px]" />
@@ -451,7 +451,7 @@ export default function Scholarships({ page = null, countries = [] }) {
                 {/* 2. SCHOLARSHIPS GRID */}
                 <section className="py-16 lg:py-24 bg-white dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        
+
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 pb-4 border-b border-slate-100 dark:border-slate-800">
                             <div>
                                 <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
@@ -468,11 +468,10 @@ export default function Scholarships({ page = null, countries = [] }) {
                                     <button
                                         key={type}
                                         onClick={() => setSelectedType(type)}
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                                            selectedType === type
-                                                ? 'bg-blue-600 text-white shadow-xs'
-                                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                                        }`}
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${selectedType === type
+                                            ? 'bg-blue-600 text-white shadow-xs'
+                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                                            }`}
                                     >
                                         {type}
                                     </button>
@@ -507,7 +506,7 @@ export default function Scholarships({ page = null, countries = [] }) {
                                         className="group relative p-7 rounded-3xl bg-slate-50/70 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs hover:shadow-xl hover:-translate-y-1.5 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-300 flex flex-col justify-between"
                                     >
                                         <div className="space-y-4">
-                                            
+
                                             {/* Flag & Type Badge Header */}
                                             <div className="flex items-center justify-between">
                                                 <span className="text-3xl" title={s.country}>
@@ -518,52 +517,52 @@ export default function Scholarships({ page = null, countries = [] }) {
                                                 </span>
                                             </div>
 
-                                        {/* Scholarship Title */}
-                                        <div>
-                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                                {s.name}
-                                            </h3>
-                                            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                                Destination: <strong className="text-slate-700 dark:text-slate-200">{s.country}</strong>
-                                            </span>
+                                            {/* Scholarship Title */}
+                                            <div>
+                                                <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                    {s.name}
+                                                </h3>
+                                                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                                    Destination: <strong className="text-slate-700 dark:text-slate-200">{s.country}</strong>
+                                                </span>
+                                            </div>
+
+                                            {/* PROMINENT AMOUNT BADGE */}
+                                            <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-slate-900/80 border border-blue-100 dark:border-slate-700/80 flex items-center justify-between">
+                                                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Award Amount:</span>
+                                                <span className="text-base font-extrabold text-blue-600 dark:text-blue-400">
+                                                    {s.amount}
+                                                </span>
+                                            </div>
+
+                                            {/* Description */}
+                                            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                                {s.description}
+                                            </p>
+
+                                            {/* Deadline Info */}
+                                            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 pt-1">
+                                                <Calendar className="w-4 h-4 text-rose-500 shrink-0" />
+                                                <span>Deadline: <strong className="text-slate-800 dark:text-slate-200">{s.deadline}</strong></span>
+                                            </div>
+
                                         </div>
 
-                                        {/* PROMINENT AMOUNT BADGE */}
-                                        <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-slate-900/80 border border-blue-100 dark:border-slate-700/80 flex items-center justify-between">
-                                            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Award Amount:</span>
-                                            <span className="text-base font-extrabold text-blue-600 dark:text-blue-400">
-                                                {s.amount}
-                                            </span>
-                                        </div>
-
-                                        {/* Description */}
-                                        <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-                                            {s.description}
-                                        </p>
-
-                                        {/* Deadline Info */}
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 pt-1">
-                                            <Calendar className="w-4 h-4 text-rose-500 shrink-0" />
-                                            <span>Deadline: <strong className="text-slate-800 dark:text-slate-200">{s.deadline}</strong></span>
+                                        {/* Action Apply Button */}
+                                        <div className="pt-6 mt-4 border-t border-slate-200 dark:border-slate-700">
+                                            <button
+                                                onClick={() => handleApplyClick(s)}
+                                                className="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                                            >
+                                                <span>Apply For Scholarship</span>
+                                                <ArrowRight className="w-4 h-4" />
+                                            </button>
                                         </div>
 
                                     </div>
-
-                                    {/* Action Apply Button */}
-                                    <div className="pt-6 mt-4 border-t border-slate-200 dark:border-slate-700">
-                                        <button
-                                            onClick={() => handleApplyClick(s)}
-                                            className="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                                        >
-                                            <span>Apply For Scholarship</span>
-                                            <ArrowRight className="w-4 h-4" />
-                                        </button>
-                                    </div>
-
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                                ))}
+                            </div>
+                        )}
 
                     </div>
                 </section>
@@ -607,7 +606,7 @@ export default function Scholarships({ page = null, countries = [] }) {
             {applyModalScholarship && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
                     <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[92vh] flex flex-col">
-                        
+
                         {/* Modal Header */}
                         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between bg-gradient-to-r from-blue-50/80 via-indigo-50/40 to-white dark:from-slate-900 dark:via-slate-850 dark:to-slate-900">
                             <div className="space-y-1 pr-4">
@@ -698,7 +697,7 @@ export default function Scholarships({ page = null, countries = [] }) {
                             ) : (
                                 /* APPLICATION FORM */
                                 <form onSubmit={handleFormSubmit} className="space-y-4">
-                                    
+
                                     {/* Full Name */}
                                     <div>
                                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
@@ -711,9 +710,8 @@ export default function Scholarships({ page = null, countries = [] }) {
                                                 value={formData.full_name}
                                                 onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                                                 placeholder="e.g. Sarah Jenkins"
-                                                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${
-                                                    formErrors.full_name ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                                } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${formErrors.full_name ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                                    } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                             />
                                             <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                                         </div>
@@ -737,9 +735,8 @@ export default function Scholarships({ page = null, countries = [] }) {
                                                     value={formData.email}
                                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                     placeholder="sarah@example.com"
-                                                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${
-                                                        formErrors.email ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                                    } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${formErrors.email ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                                        } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                                 />
                                                 <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                                             </div>
@@ -761,9 +758,8 @@ export default function Scholarships({ page = null, countries = [] }) {
                                                     value={formData.phone}
                                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                     placeholder="+44 7123 456789"
-                                                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${
-                                                        formErrors.phone ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
-                                                    } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                                                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border ${formErrors.phone ? 'border-rose-500' : 'border-slate-200 dark:border-slate-700'
+                                                        } text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none`}
                                                 />
                                                 <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                                             </div>

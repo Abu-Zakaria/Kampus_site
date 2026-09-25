@@ -77,10 +77,10 @@ export default function Index({ pages = [] }) {
 
     return (
         <AdminLayout title="Pages & Content Management">
-            <Head title="Pages & SEO — Kampus CMS" />
+            <Head title="Pages & SEO —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* 1. HEADER ROW WITH STATS & ADD BUTTON */}
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -150,39 +150,36 @@ export default function Index({ pages = [] }) {
 
                 {/* 3. FILTER TABS & SEARCH BAR */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-                    
+
                     {/* Filter Tabs */}
                     <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl w-full sm:w-auto">
                         <button
                             type="button"
                             onClick={() => setSelectedTab('all')}
-                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                selectedTab === 'all'
+                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${selectedTab === 'all'
                                     ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             All Pages ({stats.total})
                         </button>
                         <button
                             type="button"
                             onClick={() => setSelectedTab('core')}
-                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                selectedTab === 'core'
+                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${selectedTab === 'core'
                                     ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             System Core ({stats.core})
                         </button>
                         <button
                             type="button"
                             onClick={() => setSelectedTab('custom')}
-                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                selectedTab === 'custom'
+                            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${selectedTab === 'custom'
                                     ? 'bg-white dark:bg-slate-900 text-purple-600 dark:text-purple-400 shadow-xs'
                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             Custom ({stats.custom})
                         </button>
@@ -228,15 +225,14 @@ export default function Index({ pages = [] }) {
 
                                         return (
                                             <tr key={p.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                                
+
                                                 {/* Page Name */}
                                                 <td className="py-4 px-6">
                                                     <div className="flex items-center gap-3.5">
-                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold border shrink-0 ${
-                                                            isCore
+                                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold border shrink-0 ${isCore
                                                                 ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900'
                                                                 : 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900'
-                                                        }`}>
+                                                            }`}>
                                                             {isCore ? <Globe className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
                                                         </div>
                                                         <div className="flex flex-col min-w-0">

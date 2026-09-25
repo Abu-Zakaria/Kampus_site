@@ -49,10 +49,10 @@ export default function Form({ country = null }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit Country: ${country.name}` : 'Create Destination Country'}>
-            <Head title={`${isEdit ? 'Edit Country' : 'Create Country'} — Kampus CMS`} />
+            <Head title={`${isEdit ? 'Edit Country' : 'Create Country'} —  RMS CMS`} />
 
             <div className="max-w-3xl mx-auto space-y-6">
-                
+
                 {/* HEADER NAV & ACTION */}
                 <div className="flex items-center justify-between">
                     <Link
@@ -80,7 +80,7 @@ export default function Form({ country = null }) {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        
+
                         {/* COUNTRY NAME & COUNTRY CODE GRID */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="sm:col-span-2 space-y-2">

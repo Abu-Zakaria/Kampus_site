@@ -111,7 +111,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
         }
     };
     const adminName = currentUser?.name || 'Administrator';
-    const adminEmail = currentUser?.email || 'admin@kampusedu.com';
+    const adminEmail = currentUser?.email || 'admin@ RMSedu.com';
     const isSuperAdmin = currentUser?.is_super_admin || currentUser?.roles?.includes('Super Admin') || currentUser?.id === 1;
     const userPermissions = currentUser?.permissions || [];
     const primaryRole = currentUser?.roles?.[0] || (isSuperAdmin ? 'Super Admin' : 'Staff');
@@ -185,7 +185,7 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                             )}
                             <div className="flex flex-col">
                                 <span className="font-extrabold text-base tracking-tight text-white">
-                                    {props?.globalSettings?.site_name || 'Kampus'} <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
+                                    {props?.globalSettings?.site_name || ' RMS'} <span className="text-blue-400">{primaryRole === 'Partner' ? 'Partner' : 'CMS'}</span>
                                 </span>
                                 <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
                                     {primaryRole === 'Partner' ? 'Partner Portal' : 'Admin Panel'}
@@ -403,26 +403,23 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                                         key={notif.id}
                                                         href={targetUrl}
                                                         onClick={() => handleNotificationClick(notif)}
-                                                        className={`group flex items-start gap-3 p-3.5 transition-colors text-left border-l-4 ${
-                                                            isUnread
+                                                        className={`group flex items-start gap-3 p-3.5 transition-colors text-left border-l-4 ${isUnread
                                                                 ? 'bg-blue-50/60 dark:bg-blue-950/25 border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40'
                                                                 : 'bg-transparent border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/60 opacity-80 hover:opacity-100'
-                                                        }`}
+                                                            }`}
                                                     >
-                                                        <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${
-                                                            isUnread
+                                                        <div className={`mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-transform group-hover:scale-105 ${isUnread
                                                                 ? 'bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 border-blue-200/80 dark:border-blue-800/80'
                                                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700'
-                                                        }`}>
+                                                            }`}>
                                                             <Bell className="w-4 h-4" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
                                                             <div className="flex items-center justify-between gap-1 mb-0.5">
-                                                                <p className={`text-xs truncate transition-colors ${
-                                                                    isUnread
+                                                                <p className={`text-xs truncate transition-colors ${isUnread
                                                                         ? 'font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'
                                                                         : 'font-semibold text-slate-600 dark:text-slate-300'
-                                                                }`}>
+                                                                    }`}>
                                                                     {title}
                                                                 </p>
                                                                 {timeAgo && (
@@ -431,11 +428,10 @@ export default function AdminLayout({ children, title = 'Admin Dashboard' }) {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <p className={`text-[11px] line-clamp-2 leading-relaxed ${
-                                                                isUnread
+                                                            <p className={`text-[11px] line-clamp-2 leading-relaxed ${isUnread
                                                                     ? 'text-slate-700 dark:text-slate-200 font-medium'
                                                                     : 'text-slate-500 dark:text-slate-400'
-                                                            }`}>
+                                                                }`}>
                                                                 {message}
                                                             </p>
                                                         </div>

@@ -87,10 +87,10 @@ export default function Index({
 
     return (
         <AdminLayout title="Student Applications">
-            <Head title="Student Applications — Kampus CMS" />
+            <Head title="Student Applications —  RMS CMS" />
 
             <div className="space-y-6">
-                
+
                 {/* 1. HEADER BANNER */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div>
@@ -109,7 +109,7 @@ export default function Index({
 
                 {/* 2. STAT TILES */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-                    
+
                     <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total</p>
                         <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.total || 0}</p>
@@ -150,7 +150,7 @@ export default function Index({
 
                 {/* 3. FILTERS & SEARCH */}
                 <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-                    
+
                     {/* Status Tabs */}
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
                         {[
@@ -165,11 +165,10 @@ export default function Index({
                             <button
                                 key={tab.key}
                                 onClick={() => setStatusFilter(tab.key)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-colors cursor-pointer ${
-                                    statusFilter === tab.key
+                                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-colors cursor-pointer ${statusFilter === tab.key
                                         ? 'bg-purple-600 text-white shadow-xs'
                                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                }`}
+                                    }`}
                             >
                                 {tab.label}
                             </button>
@@ -226,7 +225,7 @@ export default function Index({
 
                                         return (
                                             <tr key={app.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/30 transition-colors">
-                                                
+
                                                 {/* Ref & Date */}
                                                 <td className="py-4 px-6">
                                                     <span className="font-mono font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950 px-2 py-0.5 rounded-md border border-purple-200 dark:border-purple-800 text-[11px]">
@@ -330,7 +329,7 @@ export default function Index({
             {selectedAppModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto">
-                        
+
                         {/* Close button */}
                         <button
                             onClick={() => setSelectedAppModal(null)}
@@ -391,7 +390,7 @@ export default function Index({
                         )}
 
                         <form onSubmit={handleStatusSubmit} className="space-y-4">
-                            
+
                             {/* Admission Stage Selector */}
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">

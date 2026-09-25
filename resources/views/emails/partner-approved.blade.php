@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             padding: 0;
             line-height: 1.6;
         }
+
         .container {
             max-width: 600px;
             margin: 30px auto;
@@ -22,11 +24,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             padding: 36px 32px;
             text-align: center;
         }
+
         .header h1 {
             color: #ffffff;
             font-size: 24px;
@@ -34,6 +38,7 @@
             margin: 0;
             letter-spacing: -0.5px;
         }
+
         .header .badge {
             display: inline-block;
             margin-top: 10px;
@@ -47,20 +52,24 @@
             padding: 4px 12px;
             border-radius: 9999px;
         }
+
         .content {
             padding: 32px;
         }
+
         .greeting {
             font-size: 16px;
             font-weight: 600;
             color: #0f172a;
             margin-bottom: 16px;
         }
+
         .message {
             font-size: 14px;
             color: #475569;
             margin-bottom: 24px;
         }
+
         .credentials-card {
             background-color: #f1f5f9;
             border: 1px solid #cbd5e1;
@@ -68,6 +77,7 @@
             padding: 20px;
             margin-bottom: 28px;
         }
+
         .credentials-title {
             font-size: 12px;
             font-weight: 800;
@@ -76,25 +86,30 @@
             color: #475569;
             margin-bottom: 12px;
         }
+
         .cred-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
             font-size: 14px;
         }
+
         .cred-label {
             color: #64748b;
             font-weight: 500;
         }
+
         .cred-value {
             color: #0f172a;
             font-weight: 700;
             font-family: monospace;
         }
+
         .button-wrapper {
             text-align: center;
             margin-bottom: 28px;
         }
+
         .btn {
             display: inline-block;
             background-color: #2563eb;
@@ -106,6 +121,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
+
         .footer {
             background-color: #f8fafc;
             border-top: 1px solid #e2e8f0;
@@ -114,6 +130,7 @@
             font-size: 12px;
             color: #94a3b8;
         }
+
         .security-notice {
             font-size: 12px;
             color: #64748b;
@@ -123,19 +140,22 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <h1>Kampus Education</h1>
+            <h1> RMS Education</h1>
             <div class="badge">Official Partner Network</div>
         </div>
         <div class="content">
             <p class="greeting">Hello {{ $contactPerson }},</p>
             <p class="message">
-                We are pleased to inform you that your agency partnership application for <strong>{{ $companyName }}</strong> has been officially <strong>approved</strong>!
+                We are pleased to inform you that your agency partnership application for
+                <strong>{{ $companyName }}</strong> has been officially <strong>approved</strong>!
             </p>
             <p class="message">
-                You now have official access to the Kampus Partner Portal where you can explore participating universities, admission guidelines, course repositories, and study abroad offerings.
+                You now have official access to the RMS Partner Portal where you can explore participating universities,
+                admission guidelines, course repositories, and study abroad offerings.
             </p>
 
             <div class="credentials-card">
@@ -164,17 +184,21 @@
 
             <div class="security-notice">
                 <p style="margin: 0 0 6px 0;">
-                    <strong>Security Notice:</strong> To protect your agency account, login is only available via the secure 1-click magic link above.
+                    <strong>Security Notice:</strong> To protect your agency account, login is only available via the
+                    secure 1-click magic link above.
                 </p>
                 <p style="margin: 0;">
-                    Upon clicking the button, you will be automatically signed in and asked to choose your permanent password (and verify your email if required). This link is cryptographically signed and active for 7 days.
+                    Upon clicking the button, you will be automatically signed in and asked to choose your permanent
+                    password (and verify your email if required). This link is cryptographically signed and active for 7
+                    days.
                 </p>
             </div>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} Kampus Group. All rights reserved. <br>
+            &copy; {{ date('Y') }} RMS Group. All rights reserved. <br>
             If you did not request this account, please contact our support team.
         </div>
     </div>
 </body>
+
 </html>

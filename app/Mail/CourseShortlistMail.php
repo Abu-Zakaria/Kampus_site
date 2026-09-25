@@ -32,7 +32,7 @@ class CourseShortlistMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Personalized Course Shortlist - Kampus Edu',
+            subject: 'Your Personalized Course Shortlist -  RMS Edu',
         );
     }
 

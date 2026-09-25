@@ -69,7 +69,7 @@ export default function Edit({ page, countries = [] }) {
         let checks = [];
         const title = data.meta_title || data.name || '';
         const desc = data.meta_description || '';
-        
+
         const extractText = (val) => {
             if (!val) return '';
             if (typeof val === 'string') return val.replace(/<[^>]*>?/gm, ' ');
@@ -215,10 +215,10 @@ export default function Edit({ page, countries = [] }) {
 
     return (
         <AdminLayout title={`Customize Page: ${page.name}`}>
-            <Head title={`Customize ${page.name} — Kampus CMS`} />
+            <Head title={`Customize ${page.name} —  RMS CMS`} />
 
             <div className="max-w-5xl mx-auto space-y-8">
-                
+
                 {/* 1. HEADER ROW WITH BACK BUTTON & SUBMIT ACTION */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
                     <div className="flex items-center gap-3.5">
@@ -287,14 +287,14 @@ export default function Edit({ page, countries = [] }) {
                                 System Core Page Routing Active: <span className="font-mono underline">{routePath}</span>
                             </div>
                             <p className="text-indigo-700 dark:text-indigo-300 leading-relaxed font-normal">
-                                This page is deeply integrated into the Kampus system. You can freely customize its <strong>Display Name</strong>, <strong>SEO Meta Title & Description</strong>, <strong>Hero Headings</strong>, <strong>Custom Body Content</strong>, and append <strong>Dynamic Visual Sections</strong> below.
+                                This page is deeply integrated into the  RMS system. You can freely customize its <strong>Display Name</strong>, <strong>SEO Meta Title & Description</strong>, <strong>Hero Headings</strong>, <strong>Custom Body Content</strong>, and append <strong>Dynamic Visual Sections</strong> below.
                             </p>
                         </div>
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-8">
-                    
+
                     {/* SECTION 1: SEARCH ENGINE OPTIMIZATION (SEO) SETTINGS & NAVIGATION */}
                     <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
                         <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -383,11 +383,10 @@ export default function Edit({ page, countries = [] }) {
                                     readOnly={isCore}
                                     value={data.slug}
                                     onChange={(e) => !isCore && setData('slug', e.target.value)}
-                                    className={`w-full px-4 py-3 rounded-2xl border text-sm font-mono focus:outline-none ${
-                                        isCore
-                                            ? 'bg-slate-100 dark:bg-slate-850 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800 cursor-not-allowed'
-                                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500'
-                                    }`}
+                                    className={`w-full px-4 py-3 rounded-2xl border text-sm font-mono focus:outline-none ${isCore
+                                        ? 'bg-slate-100 dark:bg-slate-850 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800 cursor-not-allowed'
+                                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500'
+                                        }`}
                                 />
                             </div>
                         </div>
@@ -402,7 +401,7 @@ export default function Edit({ page, countries = [] }) {
                                     type="text"
                                     value={data.meta_title}
                                     onChange={(e) => setData('meta_title', e.target.value)}
-                                    placeholder="e.g. Kampus EduConsult — Global Higher Education Advisers"
+                                    placeholder="e.g.  RMS Global Education — Global Higher Education Advisers"
                                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 />
                                 {errors.meta_title && <span className="text-xs text-rose-500 font-semibold">{errors.meta_title}</span>}
@@ -454,20 +453,19 @@ export default function Edit({ page, countries = [] }) {
                                     <Sparkles className="w-5 h-5 text-blue-400" />
                                     <span>SEO Analyzer</span>
                                 </h3>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                                    seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 
-                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
-                                    'bg-red-500/20 text-red-400 border border-red-500/30'
-                                }`}>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                        'bg-red-500/20 text-red-400 border border-red-500/30'
+                                    }`}>
                                     {seoResults.score >= 80 ? 'Good SEO' : seoResults.score >= 50 ? 'Needs Improvement' : 'Poor SEO'}
                                 </span>
                             </div>
-                            
+
                             <div className="mb-4">
                                 <label className="block mb-2 text-sm font-bold text-slate-300">Focus Keyword</label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="e.g. study in UK"
                                     value={focusKeyword}
                                     onChange={(e) => setFocusKeyword(e.target.value)}
@@ -579,7 +577,7 @@ export default function Edit({ page, countries = [] }) {
                                                 className="w-full h-full object-cover"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30" />
-                                            
+
                                             <div className="absolute top-3 right-3 flex items-center gap-2">
                                                 <button
                                                     type="button"
@@ -607,11 +605,10 @@ export default function Edit({ page, countries = [] }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                                     {/* File Upload Button */}
                                     <div className="sm:col-span-6">
-                                        <label className={`w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-2xl border-2 border-dashed ${
-                                            isUploadingHero
-                                                ? 'border-blue-400 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 cursor-wait'
-                                                : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer'
-                                        } transition-all`}>
+                                        <label className={`w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-2xl border-2 border-dashed ${isUploadingHero
+                                            ? 'border-blue-400 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 cursor-wait'
+                                            : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer'
+                                            } transition-all`}>
                                             <input
                                                 type="file"
                                                 accept="image/*"

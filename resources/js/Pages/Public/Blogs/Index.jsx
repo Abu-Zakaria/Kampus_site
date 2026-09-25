@@ -18,7 +18,7 @@ import DynamicPageSections from '../../../Components/DynamicPageSections';
 export default function BlogIndex() {
     const { blogs = {}, categories = [], filters = {}, page = null } = usePage().props;
 
-    const metaTitle = page?.meta_title || 'Latest Insights & Success Stories — Kampus EduConsult';
+    const metaTitle = page?.meta_title || 'Latest Insights & Success Stories —  RMS Global Education';
     const metaDescription = page?.meta_description || 'Read expert study abroad guides, university admissions tips, and inspiring stories from international students.';
     const metaKeywords = page?.meta_keywords || 'study abroad blog, student guides, UK visa advice, success stories';
 
@@ -86,10 +86,10 @@ export default function BlogIndex() {
 
             {/* MAIN BLOG PAGE CONTAINER */}
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
-                
+
                 {/* 1. HERO SECTION */}
                 <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
-                    
+
                     {/* Ambient Glows */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] pointer-events-none overflow-hidden">
                         <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[140px]" />
@@ -144,11 +144,10 @@ export default function BlogIndex() {
                                     <button
                                         type="button"
                                         onClick={() => handleCategoryChange('All')}
-                                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                                            selectedCategory === 'All'
-                                                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                                        }`}
+                                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${selectedCategory === 'All'
+                                            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                            }`}
                                     >
                                         All Stories
                                     </button>
@@ -157,11 +156,10 @@ export default function BlogIndex() {
                                             key={cat}
                                             type="button"
                                             onClick={() => handleCategoryChange(cat)}
-                                            className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                                                selectedCategory === cat
-                                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                                                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
-                                            }`}
+                                            className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                                                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                                }`}
                                         >
                                             {cat}
                                         </button>
@@ -175,7 +173,7 @@ export default function BlogIndex() {
                 {/* 2. BLOG POSTS GRID SECTION */}
                 <section className="py-16 lg:py-24 bg-white dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        
+
                         {/* Section Header Count */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-4 border-b border-slate-200/70 dark:border-slate-800">
                             <div>
@@ -205,10 +203,10 @@ export default function BlogIndex() {
                                 {blogList.map((blog) => {
                                     const postDate = blog.created_at
                                         ? new Date(blog.created_at).toLocaleDateString('en-US', {
-                                              month: 'short',
-                                              day: 'numeric',
-                                              year: 'numeric'
-                                          })
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric'
+                                        })
                                         : 'Recent Post';
 
                                     const imageUrl = blog.image
@@ -312,11 +310,10 @@ export default function BlogIndex() {
                                             preserveScroll={true}
                                             preserveState={true}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
-                                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors border shadow-md ${
-                                                link.active
-                                                    ? 'bg-blue-600 border-blue-600 text-white shadow-blue-500/20'
-                                                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-white'
-                                            }`}
+                                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors border shadow-md ${link.active
+                                                ? 'bg-blue-600 border-blue-600 text-white shadow-blue-500/20'
+                                                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-white'
+                                                }`}
                                         />
                                     ) : (
                                         <span

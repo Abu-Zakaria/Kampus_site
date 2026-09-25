@@ -165,7 +165,7 @@ export default function Form({ blog = null, existingCategories = [] }) {
 
     return (
         <AdminLayout title={isEdit ? `Edit Post: ${blog.title}` : 'Add New Blog Post'}>
-            <Head title={isEdit ? `Edit ${blog.title} — Kampus CMS` : 'Add Blog Post — Kampus CMS'} />
+            <Head title={isEdit ? `Edit ${blog.title} —  RMS CMS` : 'Add Blog Post —  RMS CMS'} />
 
             <div className="max-w-4xl mx-auto space-y-8">
 
@@ -337,13 +337,13 @@ export default function Form({ blog = null, existingCategories = [] }) {
                             <label className="block mb-2 text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                 Full Article Content <span className="text-red-500">*</span>
                             </label>
-                            
+
                             <QuillEditor
                                 value={data.content || ''}
                                 onChange={(value) => setData('content', value)}
                                 placeholder="Write your full blog post content here..."
                             />
-                            
+
                             {errors.content && <p className="mt-2 text-sm text-red-500">{errors.content}</p>}
                         </div>
                     </div>
@@ -503,20 +503,19 @@ export default function Form({ blog = null, existingCategories = [] }) {
                                     <Sparkles className="w-5 h-5 text-blue-400" />
                                     <span>SEO Analyzer</span>
                                 </h3>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                                    seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 
-                                    seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 
-                                    'bg-red-500/20 text-red-400 border border-red-500/30'
-                                }`}>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${seoResults.score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                                        seoResults.score >= 50 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                            'bg-red-500/20 text-red-400 border border-red-500/30'
+                                    }`}>
                                     {seoResults.score >= 80 ? 'Good SEO' : seoResults.score >= 50 ? 'Needs Improvement' : 'Poor SEO'}
                                 </span>
                             </div>
-                            
+
                             <div className="mb-4">
                                 <label className="block mb-2 text-sm font-bold text-slate-300">Focus Keyword</label>
-                                <input 
-                                    type="text" 
-                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     placeholder="e.g. study in UK"
                                     value={focusKeyword}
                                     onChange={(e) => setFocusKeyword(e.target.value)}

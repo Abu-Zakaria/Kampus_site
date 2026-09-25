@@ -54,6 +54,6 @@ class PartnerLoginController extends Controller
         }
 
         return redirect()->intended(route('admin.dashboard', absolute: false))
-            ->with('success', "Welcome to the Kampus Partner Portal, {$user->name}!");
+            ->with('success', "Welcome to the  RMS Partner Portal, {$user->name}!");
     }
 }

@@ -269,7 +269,7 @@ export default function TopBar({ onSearch }) {
                             </div>
                             <div>
                                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                    Become a Kampus Partner
+                                    Become a  RMS Partner
                                 </h3>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                                     Global Higher Education Network

@@ -44,7 +44,7 @@ export default function Index({ branches = [] }) {
 
     return (
         <AdminLayout title="Global Branches Management">
-            <Head title="Global Branches — Kampus CMS" />
+            <Head title="Global Branches —  RMS CMS" />
 
             <div className="space-y-6">
 
@@ -93,11 +93,10 @@ export default function Index({ branches = [] }) {
                                     key={status}
                                     type="button"
                                     onClick={() => setStatusFilter(status)}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                        statusFilter === status
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${statusFilter === status
                                             ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
+                                        }`}
                                 >
                                     {status}
                                 </button>
@@ -194,11 +193,10 @@ export default function Index({ branches = [] }) {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleToggleStatus(branch.id)}
-                                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                                                        branch.is_active
+                                                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${branch.is_active
                                                             ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
                                                             : 'bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     {branch.is_active ? (
                                                         <>
