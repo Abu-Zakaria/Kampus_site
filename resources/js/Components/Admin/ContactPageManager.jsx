@@ -9,8 +9,7 @@ import {
     Globe,
     CheckCircle2,
     Sparkles,
-    HelpCircle,
-    Compass
+    HelpCircle
 } from 'lucide-react';
 
 export default function ContactPageManager({ content = {}, onChange }) {
@@ -37,7 +36,6 @@ export default function ContactPageManager({ content = {}, onChange }) {
         { id: 'inquiry_form', label: 'Inquiry Form', icon: MessageSquare },
         { id: 'hq_details', label: 'London HQ & Info Card', icon: Building2 },
         { id: 'branches', label: 'Global Branches Network', icon: Globe },
-        { id: 'roadmap', label: 'Admission Roadmap', icon: Compass },
     ];
 
     return (
@@ -247,37 +245,6 @@ export default function ContactPageManager({ content = {}, onChange }) {
                             value={content.branches_subtitle ?? 'Local offices staffed by certified counselors across South Asia, Africa, Europe, and North America.'}
                             onChange={(e) => updateField('branches_subtitle', e.target.value)}
                             placeholder="Enter descriptive text explaining your global branch network..."
-                            className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
-                    </div>
-                </div>
-            )}
-
-            {/* TAB CONTENT: 4. ADMISSION ROADMAP */}
-            {activeTab === 'roadmap' && (
-                <div className="space-y-5 animate-in fade-in duration-200">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            Roadmap Section Heading
-                        </label>
-                        <input
-                            type="text"
-                            value={content.roadmap_title ?? 'Your 5-Step Admission Journey'}
-                            onChange={(e) => updateField('roadmap_title', e.target.value)}
-                            placeholder="Your 5-Step Admission Journey"
-                            className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            Roadmap Section Subtitle
-                        </label>
-                        <textarea
-                            rows={3}
-                            value={content.roadmap_subtitle ?? 'From initial profiling through to visa issuance and campus arrival, our certified team handles every step.'}
-                            onChange={(e) => updateField('roadmap_subtitle', e.target.value)}
-                            placeholder="Enter subtitle for the 5-step roadmap..."
                             className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
                     </div>

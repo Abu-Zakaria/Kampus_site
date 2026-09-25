@@ -102,7 +102,7 @@ class PublicCourseController extends Controller
         }
 
         // Paginate 10 courses per page
-        $courses = $query->paginate(10)->withQueryString();
+        $courses = $query->paginate(20)->withQueryString();
 
         // Dynamic Filter Options for the Sidebar & Hero
         $destinations = Country::whereHas('universities.courses')

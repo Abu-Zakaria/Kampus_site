@@ -18,6 +18,44 @@ export default function AboutTeam({ employees = [], companyStats = {}, content =
     const heading = content?.heading || companyStats?.team_heading || 'Meet our global education leadership';
     const subheading = content?.subheading || companyStats?.team_subheading || 'Driven by ethics, academic expertise, and student success, our multi-disciplinary team brings decades of university admissions experience.';
 
+    const defaultBadges = [
+        {
+            value: '100%',
+            label: 'Certified Advisors',
+            subtext: 'ICEF & British Council',
+            icon: ShieldCheck,
+            iconBg: 'bg-blue-500/20 text-blue-300',
+            borderHover: 'hover:border-blue-400/30',
+        },
+        {
+            value: '15+',
+            label: 'Global Locations',
+            subtext: 'London, Asia, Africa',
+            icon: Globe2,
+            iconBg: 'bg-indigo-500/20 text-indigo-300',
+            borderHover: 'hover:border-indigo-400/30',
+        },
+        {
+            value: '24 Years',
+            label: 'Of Excellence',
+            subtext: 'Founded in 2002',
+            icon: Award,
+            iconBg: 'bg-emerald-500/20 text-emerald-300',
+            borderHover: 'hover:border-emerald-400/30',
+        },
+    ];
+
+    const customBadges = content?.badges || content?.team?.badges;
+    const teamBadges = defaultBadges.map((def, idx) => {
+        const item = customBadges && customBadges[idx];
+        return {
+            ...def,
+            value: (item?.value !== undefined && item?.value !== '') ? item.value : def.value,
+            label: (item?.label !== undefined && item?.label !== '') ? item.label : def.label,
+            subtext: (item?.subtext !== undefined && item?.subtext !== '') ? item.subtext : def.subtext,
+        };
+    });
+
     return (
         <section id="team" className="py-16 lg:py-24 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 border-b border-slate-200/60 dark:border-slate-800 relative overflow-hidden transition-colors">
             
@@ -60,32 +98,22 @@ export default function AboutTeam({ employees = [], companyStats = {}, content =
 
                         {/* Supporting Badges / Trust Metrics Grid */}
                         <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-blue-400/30 transition-colors">
-                                <div className="p-2.5 rounded-xl bg-blue-500/20 text-blue-300 w-fit mb-3">
-                                    <ShieldCheck className="w-5 h-5" />
-                                </div>
-                                <div className="text-xl font-black text-white">100%</div>
-                                <div className="text-xs font-semibold text-slate-300 mt-0.5">Certified Advisors</div>
-                                <div className="text-[11px] text-slate-400 mt-1">ICEF & British Council</div>
-                            </div>
-
-                            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-indigo-400/30 transition-colors">
-                                <div className="p-2.5 rounded-xl bg-indigo-500/20 text-indigo-300 w-fit mb-3">
-                                    <Globe2 className="w-5 h-5" />
-                                </div>
-                                <div className="text-xl font-black text-white">15+</div>
-                                <div className="text-xs font-semibold text-slate-300 mt-0.5">Global Locations</div>
-                                <div className="text-[11px] text-slate-400 mt-1">London, Asia, Africa</div>
-                            </div>
-
-                            <div className="p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-emerald-400/30 transition-colors">
-                                <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 w-fit mb-3">
-                                    <Award className="w-5 h-5" />
-                                </div>
-                                <div className="text-xl font-black text-white">24 Years</div>
-                                <div className="text-xs font-semibold text-slate-300 mt-0.5">Of Excellence</div>
-                                <div className="text-[11px] text-slate-400 mt-1">Founded in 2002</div>
-                            </div>
+                            {teamBadges.map((badge, idx) => {
+                                const IconComponent = badge.icon;
+                                return (
+                                    <div
+                                        key={idx}
+                                        className={`p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 ${badge.borderHover} transition-colors`}
+                                    >
+                                        <div className={`p-2.5 rounded-xl ${badge.iconBg} w-fit mb-3`}>
+                                            <IconComponent className="w-5 h-5" />
+                                        </div>
+                                        <div className="text-xl font-black text-white">{badge.value}</div>
+                                        <div className="text-xs font-semibold text-slate-300 mt-0.5">{badge.label}</div>
+                                        <div className="text-[11px] text-slate-400 mt-1">{badge.subtext}</div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

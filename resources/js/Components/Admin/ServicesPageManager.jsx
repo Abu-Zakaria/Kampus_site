@@ -7,8 +7,7 @@ import {
     ShieldCheck,
     Layers,
     PhoneCall,
-    Award,
-    Compass
+    Award
 } from 'lucide-react';
 
 export default function ServicesPageManager({ content = {}, onChange }) {
@@ -25,7 +24,6 @@ export default function ServicesPageManager({ content = {}, onChange }) {
         { id: 'trust_badges', label: 'Hero Trust Badges', icon: ShieldCheck },
         { id: 'services_intro', label: 'Services Intro Header', icon: Layers },
         { id: 'cta_banner', label: 'Bottom CTA Banner', icon: PhoneCall },
-        { id: 'roadmap', label: 'Admission Roadmap', icon: Compass },
     ];
 
     return (
@@ -41,7 +39,7 @@ export default function ServicesPageManager({ content = {}, onChange }) {
                             Services Page Customization
                         </h3>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                            Configure hero micro-badges, services catalog header, CTA banner callout, and roadmap
+                            Configure hero micro-badges, services catalog header, and CTA banner callout
                         </p>
                     </div>
                 </div>
@@ -211,37 +209,6 @@ export default function ServicesPageManager({ content = {}, onChange }) {
                                 className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
                         </div>
-                    </div>
-                </div>
-            )}
-
-            {/* TAB CONTENT: 4. ADMISSION ROADMAP */}
-            {activeTab === 'roadmap' && (
-                <div className="space-y-5 animate-in fade-in duration-200">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            Roadmap Section Heading
-                        </label>
-                        <input
-                            type="text"
-                            value={content.roadmap_title ?? 'Your 5-Step Admission Journey'}
-                            onChange={(e) => updateField('roadmap_title', e.target.value)}
-                            placeholder="Your 5-Step Admission Journey"
-                            className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                            Roadmap Section Subtitle
-                        </label>
-                        <textarea
-                            rows={3}
-                            value={content.roadmap_subtitle ?? 'From initial profiling through to visa issuance and campus arrival, our certified team handles every step.'}
-                            onChange={(e) => updateField('roadmap_subtitle', e.target.value)}
-                            placeholder="Enter subtitle for the 5-step roadmap..."
-                            className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
                     </div>
                 </div>
             )}

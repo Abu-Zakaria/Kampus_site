@@ -4,7 +4,6 @@ import Layout from '../Layouts/Layout';
 import ContactHero from '../Components/ContactHero';
 import ContactContent from '../Components/ContactContent';
 import ContactBranches from '../Components/ContactBranches';
-import JourneyProcess from '../Components/JourneyProcess';
 import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
 
@@ -39,10 +38,7 @@ export default function Contact({ page = null }) {
                     <DynamicPageSections sections={page.content.sections} />
                 )}
 
-                {/* 5. 5-STEP ADMISSION ROADMAP */}
-                <JourneyProcess content={page?.content || {}} />
-
-                {/* 6. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
+                {/* 5. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
                 {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
                     <FaqSection />
                 )}

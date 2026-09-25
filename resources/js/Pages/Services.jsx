@@ -3,7 +3,6 @@ import { Head } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
 import ServicesHero from '../Components/ServicesHero';
 import DetailedServices from '../Components/DetailedServices';
-import JourneyProcess from '../Components/JourneyProcess';
 import ServicesCta from '../Components/ServicesCta';
 import FaqSection from '../Components/FaqSection';
 import DynamicPageSections from '../Components/DynamicPageSections';
@@ -46,13 +45,10 @@ export default function Services({ services = [], faqs = [], page = null }) {
                     <DynamicPageSections sections={page.content.sections} />
                 )}
 
-                {/* 4. 5-STEP ADMISSION ROADMAP */}
-                <JourneyProcess content={page?.content || {}} />
-
-                {/* 5. PREMIUM CTA BANNER SECTION */}
+                {/* 4. PREMIUM CTA BANNER SECTION */}
                 <ServicesCta onOpenBookCall={handleOpenBookCall} content={page?.content || {}} />
 
-                {/* 6. FREQUENTLY ASKED QUESTIONS (CONTROLLED BY CMS ADMIN) */}
+                {/* 5. FREQUENTLY ASKED QUESTIONS (CONTROLLED BY CMS ADMIN) */}
                 {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
                     <FaqSection faqs={faqs} />
                 )}

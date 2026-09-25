@@ -46,7 +46,7 @@ class PublicBlogController extends Controller
             Blog::where('category', $cat)->increment('search_count');
         }
 
-        $blogs = $query->latest()->paginate(9)->withQueryString();
+        $blogs = $query->latest()->paginate(20)->withQueryString();
 
         // Most recent and most searched categories (max 10)
         $categories = Blog::where('is_published', true)

@@ -133,6 +133,28 @@ export default function AboutPageManager({ content = {}, onChange }) {
         ? content.commitment.items
         : defaultCommitments;
 
+    const defaultTeamBadges = [
+        {
+            value: '100%',
+            label: 'Certified Advisors',
+            subtext: 'ICEF & British Council',
+        },
+        {
+            value: '15+',
+            label: 'Global Locations',
+            subtext: 'London, Asia, Africa',
+        },
+        {
+            value: '24 Years',
+            label: 'Of Excellence',
+            subtext: 'Founded in 2002',
+        },
+    ];
+
+    const currentTeamBadges = content?.team?.badges && Array.isArray(content.team.badges) && content.team.badges.length === 3
+        ? content.team.badges
+        : defaultTeamBadges;
+
     const tabs = [
         { id: 'hero_stats', name: 'Hero Stats & Badges', icon: Sparkles, badge: 'Hero' },
         { id: 'mission', name: 'Our Mission & Photo', icon: Target, badge: 'Photo & Text' },
@@ -772,6 +794,72 @@ export default function AboutPageManager({ content = {}, onChange }) {
                                 onChange={(e) => updateSectionField('team', 'employee_stat_subtext', e.target.value)}
                                 className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none"
                             />
+                        </div>
+                    </div>
+
+                    {/* SUPPORTING TRUST METRIC BADGES (3 CARDS ON RIGHT OF BLUE BANNER) */}
+                    <div className="pt-5 border-t border-slate-200 dark:border-slate-700/80 space-y-4">
+                        <div>
+                            <h5 className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
+                                Supporting Metric Badges (3 Cards on Banner Right)
+                            </h5>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                Customize the 3 trust & credentials cards displayed inside the dark blue workforce banner.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {currentTeamBadges.map((badge, idx) => (
+                                <div
+                                    key={idx}
+                                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">
+                                            Badge #{idx + 1}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                            Big Metric / Value
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={badge.value || ''}
+                                            placeholder={defaultTeamBadges[idx].value}
+                                            onChange={(e) => updateArrayItem('team', 'badges', idx, 'value', e.target.value, defaultTeamBadges)}
+                                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white focus:outline-none"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                            Badge Label
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={badge.label || ''}
+                                            placeholder={defaultTeamBadges[idx].label}
+                                            onChange={(e) => updateArrayItem('team', 'badges', idx, 'label', e.target.value, defaultTeamBadges)}
+                                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                            Subtext / Notes
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={badge.subtext || ''}
+                                            placeholder={defaultTeamBadges[idx].subtext}
+                                            onChange={(e) => updateArrayItem('team', 'badges', idx, 'subtext', e.target.value, defaultTeamBadges)}
+                                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

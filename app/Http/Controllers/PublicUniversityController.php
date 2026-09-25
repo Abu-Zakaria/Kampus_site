@@ -40,7 +40,7 @@ class PublicUniversityController extends Controller
                     ->increment('search_count');
             })
             ->latest()
-            ->paginate(12)
+            ->paginate(20)
             ->withQueryString(); // Crucial for keeping filters during pagination
 
         // If a free-text search was conducted, track matching country if applicable
