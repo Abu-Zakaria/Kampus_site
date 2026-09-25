@@ -172,15 +172,17 @@ export default function Courses() {
                 </section>
 
                 {/* 3. 5-STEP ADMISSION ROADMAP */}
-                <JourneyProcess />
+                <JourneyProcess content={page?.content || {}} />
 
                 {/* 4. DYNAMIC PAGE BUILDER SECTIONS (IF CONFIGURED IN CMS) */}
                 {page?.content?.sections && (
                     <DynamicPageSections sections={page.content.sections} />
                 )}
 
-                {/* 5. FAQ ACCORDION SECTION */}
-                <FaqSection />
+                {/* 5. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection />
+                )}
 
             </div>
         </Layout>

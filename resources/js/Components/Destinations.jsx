@@ -8,7 +8,7 @@ import {
     ChevronRight
 } from 'lucide-react';
 
-export default function Destinations({ countries = [] }) {
+export default function Destinations({ countries = [], content = {} }) {
     const defaultDestinations = [
         {
             id: 1,
@@ -254,11 +254,11 @@ export default function Destinations({ countries = [] }) {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div className="space-y-3 max-w-2xl">
                         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                            Explore top study destinations
+                            {content?.destinations_title || 'Explore top study destinations'}
                         </h2>
 
                         <p className="text-slate-600 dark:text-slate-400 text-base">
-                            Discover world-leading universities, generous scholarship options, and post-graduation career opportunities in your preferred country.
+                            {content?.destinations_subtitle || 'Discover world-leading universities, generous scholarship options, and post-graduation career opportunities in your preferred country.'}
                         </p>
                     </div>
 

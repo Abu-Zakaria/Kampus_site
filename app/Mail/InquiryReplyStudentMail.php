@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\ContactMessage;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -34,9 +35,10 @@ class InquiryReplyStudentMail extends Mailable
     public function envelope(): Envelope
     {
         $topic = $this->contactMessage->topic ?: 'Educational Consultation Inquiry';
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
 
         return new Envelope(
-            subject: "Response from  RMS Education Counselor: {$topic}",
+            subject: "Response from {$siteName} Counselor: {$topic}",
         );
     }
 
@@ -45,6 +47,9 @@ class InquiryReplyStudentMail extends Mailable
      */
     public function content(): Content
     {
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $footerName = Setting::get('footer_name', $siteName);
+
         return new Content(
             view: 'emails.inquiry-reply-student',
             with: [
@@ -55,6 +60,8 @@ class InquiryReplyStudentMail extends Mailable
                 'counselorName' => $this->counselor?->name ?: 'Admissions & Visa Advisory Team',
                 'repliedAt' => now()->format('M d, Y \a\t h:i A'),
                 'portalUrl' => url('/student/dashboard?active_tab=queries'),
+                'siteName' => $siteName,
+                'footerName' => $footerName,
             ]
         );
     }

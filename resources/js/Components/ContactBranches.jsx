@@ -7,9 +7,12 @@ import {
 } from 'lucide-react';
 import BranchDetailsModal from './BranchDetailsModal';
 
-export default function ContactBranches() {
+export default function ContactBranches({ content = {} }) {
     const { props } = usePage();
     const [selectedBranch, setSelectedBranch] = useState(null);
+
+    const branchesTitle = content?.branches_title || 'Our Global Branches';
+    const branchesSubtitle = content?.branches_subtitle || 'Local offices staffed by certified counselors across South Asia, Africa, Europe, and North America.';
 
     const fallbackBranches = [
         { id: 1, country_code: 'GB', country_name: 'United Kingdom', cities: 'London (HQ Oxford St.)', status_text: 'Open Now' },
@@ -34,11 +37,11 @@ export default function ContactBranches() {
                 {/* CENTERED HEADING */}
                 <div className="text-center max-w-2xl mx-auto space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        Our Global Branches
+                        {branchesTitle}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-                        Local offices staffed by certified counselors across South Asia, Africa, Europe, and North America.
+                        {branchesSubtitle}
                     </p>
                 </div>
 

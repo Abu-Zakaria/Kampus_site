@@ -39,7 +39,7 @@ export default function Services({ services = [], faqs = [], page = null }) {
                 <ServicesHero content={page?.content || {}} />
 
                 {/* 2. DETAILED ZIG-ZAG SERVICES BREAKDOWN */}
-                <DetailedServices services={services} />
+                <DetailedServices services={services} content={page?.content || {}} />
 
                 {/* 3. DYNAMIC PAGE BUILDER SECTIONS (IF CONFIGURED IN CMS) */}
                 {page?.content?.sections && (
@@ -47,13 +47,15 @@ export default function Services({ services = [], faqs = [], page = null }) {
                 )}
 
                 {/* 4. 5-STEP ADMISSION ROADMAP */}
-                <JourneyProcess />
+                <JourneyProcess content={page?.content || {}} />
 
                 {/* 5. PREMIUM CTA BANNER SECTION */}
-                <ServicesCta onOpenBookCall={handleOpenBookCall} />
+                <ServicesCta onOpenBookCall={handleOpenBookCall} content={page?.content || {}} />
 
-                {/* 6. FREQUENTLY ASKED QUESTIONS */}
-                <FaqSection faqs={faqs} />
+                {/* 6. FREQUENTLY ASKED QUESTIONS (CONTROLLED BY CMS ADMIN) */}
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection faqs={faqs} />
+                )}
             </div>
         </Layout>
     );

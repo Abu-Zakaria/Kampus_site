@@ -55,7 +55,8 @@ export default function Index({ settings = {} }) {
         head_office_phone: settings.head_office_phone || 'UK: +44 20 7946 0912 | BD: +880 1812713814',
 
         // Other Contacts
-        contact_email: settings.contact_email || 'apply@ RMSedu.com',
+        contact_email: settings.contact_email || 'apply@RMSedu.com',
+        contact_uk_hotline: settings.contact_uk_hotline || '+44 20 7946 0912',
         contact_bd_hotline: settings.contact_bd_hotline || '+880 1812713814',
         operating_hours: settings.operating_hours || 'Mon - Sat: 9:00 AM - 7:00 PM',
 
@@ -536,7 +537,7 @@ export default function Index({ settings = {} }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div>
                                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                                     Support Email Address
@@ -552,6 +553,19 @@ export default function Index({ settings = {} }) {
                                     />
                                     <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
                                 </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                                    UK Hotline (TopBar)
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.contact_uk_hotline}
+                                    onChange={(e) => setData('contact_uk_hotline', e.target.value)}
+                                    placeholder="+44 20 7946 0912"
+                                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                />
                             </div>
 
                             <div>

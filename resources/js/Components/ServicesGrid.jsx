@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import ConsultationBanner from './ConsultationBanner';
 
-export default function ServicesGrid() {
+export default function ServicesGrid({ content = {} }) {
     const services = [
         {
             title: 'College & University Admission',
@@ -65,11 +65,17 @@ export default function ServicesGrid() {
                 {/* SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        How we help — <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">End-to-end support</span>, every step of the way
+                        {content?.services_title ? (
+                            content.services_title
+                        ) : (
+                            <>
+                                How we help — <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">End-to-end support</span>, every step of the way
+                            </>
+                        )}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
-                        From choosing your dream course to landing safely at your target university campus, our senior counselors are here to manage every detail.
+                        {content?.services_subtitle || 'From choosing your dream course to landing safely at your target university campus, our senior counselors are here to manage every detail.'}
                     </p>
                 </div>
 

@@ -6,8 +6,11 @@ import {
     Award
 } from 'lucide-react';
 
-export default function AboutValues() {
-    const values = [
+export default function AboutValues({ content = {} }) {
+    const title = content?.title || 'What we stand for';
+    const subtitle = content?.subtitle || 'Our foundational values guide every counseling session, university selection, and visa guidance file we manage.';
+
+    const defaultValues = [
         {
             title: 'Free for students',
             text: 'Our guidance is completely free from first enquiry to enrolment.',
@@ -38,6 +41,17 @@ export default function AboutValues() {
         },
     ];
 
+    const values = (content?.items && Array.isArray(content.items) && content.items.length === 4)
+        ? content.items.map((item, idx) => ({
+            ...defaultValues[idx],
+            title: item.title || defaultValues[idx].title,
+            text: item.text || defaultValues[idx].text,
+            badge: item.badge || defaultValues[idx].badge,
+            icon: defaultValues[idx].icon,
+            iconBg: defaultValues[idx].iconBg,
+        }))
+        : defaultValues;
+
     return (
         <section className="py-16 lg:py-24 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,11 +59,11 @@ export default function AboutValues() {
                 {/* SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        What we stand for
+                        {title}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-                        Our foundational values guide every counseling session, university selection, and visa guidance file we manage.
+                        {subtitle}
                     </p>
                 </div>
 

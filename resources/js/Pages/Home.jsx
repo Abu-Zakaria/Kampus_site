@@ -58,13 +58,13 @@ export default function Home({ page = null, universities = [], courses = [], cou
                 />
 
                 {/* 2. SERVICES GRID SECTION */}
-                <ServicesGrid />
+                <ServicesGrid content={contentData} />
 
                 {/* 3. DESTINATIONS GRID SECTION (DYNAMICALLY RANDOMIZED COUNTRIES FROM DATABASE) */}
-                <Destinations countries={countries} />
+                <Destinations countries={countries} content={contentData} />
 
                 {/* 4. JOURNEY PROCESS TIMELINE SECTION */}
-                <JourneyProcess />
+                <JourneyProcess content={contentData} />
 
                 {/* 5. STUDENT SUCCESS STORIES MARQUEE SECTION */}
                 <SuccessStories stories={successStories} />
@@ -74,8 +74,10 @@ export default function Home({ page = null, universities = [], courses = [], cou
                     <DynamicPageSections sections={contentData.sections} />
                 )}
 
-                {/* 7. FAQ ACCORDION SECTION */}
-                <FaqSection faqs={faqs} />
+                {/* 7. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
+                {(contentData?.show_faqs !== false && !contentData?.hide_faqs) && (
+                    <FaqSection faqs={faqs} />
+                )}
 
             </div>
         </Layout>

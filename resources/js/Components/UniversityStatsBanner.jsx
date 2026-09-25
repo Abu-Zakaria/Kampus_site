@@ -5,26 +5,29 @@ import {
     CheckCircle2
 } from 'lucide-react';
 
-export default function UniversityStatsBanner() {
+export default function UniversityStatsBanner({ content = {} }) {
+    const statsTitle = content?.stats_title || 'A growing global network';
+    const statsSubtitle = content?.stats_subtitle || 'Connecting students with accredited universities worldwide through streamlined admission channels.';
+
     const stats = [
         {
-            value: '150+',
-            label: 'Partner Institutions',
-            description: 'Direct admissions partnerships with leading global universities',
+            value: content?.stat_1_value || '150+',
+            label: content?.stat_1_label || 'Partner Institutions',
+            description: content?.stat_1_desc || 'Direct admissions partnerships with leading global universities',
             icon: Building2,
             gradient: 'from-blue-400 to-indigo-400'
         },
         {
-            value: '4',
-            label: 'Global Destinations',
-            description: 'UK, USA, Finland, and Dubai study pathways',
+            value: content?.stat_2_value || '4',
+            label: content?.stat_2_label || 'Global Destinations',
+            description: content?.stat_2_desc || 'UK, USA, Finland, and Dubai study pathways',
             icon: Globe,
             gradient: 'from-indigo-400 to-purple-400'
         },
         {
-            value: '98%',
-            label: 'Acceptance Rate',
-            description: 'Proven track record for conditional & unconditional offer letters',
+            value: content?.stat_3_value || '98%',
+            label: content?.stat_3_label || 'Acceptance Rate',
+            description: content?.stat_3_desc || 'Proven track record for conditional & unconditional offer letters',
             icon: CheckCircle2,
             gradient: 'from-emerald-400 to-teal-300'
         },
@@ -41,11 +44,11 @@ export default function UniversityStatsBanner() {
                 {/* CENTERED HEADING */}
                 <div className="text-center max-w-2xl mx-auto space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                        A growing global network
+                        {statsTitle}
                     </h2>
 
                     <p className="text-slate-400 text-sm sm:text-base">
-                        Connecting students with accredited universities worldwide through streamlined admission channels.
+                        {statsSubtitle}
                     </p>
                 </div>
 

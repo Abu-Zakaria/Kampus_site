@@ -10,7 +10,7 @@ import {
     Send
 } from 'lucide-react';
 
-export default function ServicesCta({ onOpenBookCall }) {
+export default function ServicesCta({ onOpenBookCall, content = {} }) {
     const { props } = usePage();
     const countries = (props?.globalCountries && props.globalCountries.length > 0)
         ? props.globalCountries
@@ -83,12 +83,12 @@ export default function ServicesCta({ onOpenBookCall }) {
                     <div className="relative z-10 max-w-3xl space-y-6">
                         {/* Heading */}
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                            Ready to start your journey?
+                            {content?.cta_title || 'Ready to start your journey?'}
                         </h2>
 
                         {/* Paragraph */}
                         <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-2xl">
-                            Book a free consultation with our expert advisors today and take the first step towards your global future. Our British Council certified counselors are here to help you get admitted into top universities.
+                            {content?.cta_subtitle || 'Book a free consultation with our expert advisors today and take the first step towards your global future. Our British Council certified counselors are here to help you get admitted into top universities.'}
                         </p>
 
                         {/* Two Buttons Side-by-Side (Mobile Stacked) */}
@@ -100,7 +100,7 @@ export default function ServicesCta({ onOpenBookCall }) {
                                 className="px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-base shadow-xl shadow-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group cursor-pointer"
                             >
                                 <PhoneCall className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
-                                <span>Book a Free Call</span>
+                                <span>{content?.cta_primary_btn || 'Book a Free Call'}</span>
                             </button>
 
                             {/* Secondary Button (Outline button, White border, White text) */}
@@ -109,7 +109,7 @@ export default function ServicesCta({ onOpenBookCall }) {
                                 className="px-8 py-4 rounded-full bg-transparent hover:bg-white/10 border-2 border-white/80 hover:border-white text-white font-bold text-base shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <ClipboardCheck className="w-5 h-5 text-blue-300" />
-                                <span>Take Free Assessment</span>
+                                <span>{content?.cta_secondary_btn || 'Take Free Assessment'}</span>
                             </button>
                         </div>
 

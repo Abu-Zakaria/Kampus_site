@@ -1,3 +1,7 @@
+@php
+    $siteName = $siteName ?? \App\Models\Setting::get('site_name', config('app.name', 'Kampus Edu'));
+    $footerName = $footerName ?? \App\Models\Setting::get('footer_name', $siteName);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -220,8 +224,7 @@
 
             <div class="content">
                 <p class="intro-text">
-                    Hello Administrator, a prospective student has submitted an official course enquiry through the
-                    <strong>Courses Directory</strong> on the RMS website.
+                    Hello Administrator, a prospective student has submitted an official course enquiry through the <strong>Courses Directory</strong> on the {{ $siteName }} website.
                 </p>
 
                 <!-- Course Information Card -->
@@ -335,9 +338,9 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p><strong> RMS Educational Consultancy</strong> &bull; Student Inquiries Dispatch</p>
+                <p><strong>{{ $siteName }}</strong> &bull; Student Inquiries Dispatch</p>
                 <p>This automated message was dispatched upon a course inquiry submitted from the /courses portal.</p>
-                <p>&copy; {{ date('Y') }} RMS. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ $footerName }}. All rights reserved.</p>
             </div>
         </div>
     </div>

@@ -5,7 +5,8 @@ import TopbarSearch from './TopbarSearch';
 
 export default function TopBar({ onSearch }) {
     const { props } = usePage();
-    const hotline = props?.globalSettings?.contact_bd_hotline || '+880 1812713814';
+    const bdHotline = props?.globalSettings?.contact_bd_hotline || '+880 1812713814';
+    const ukHotline = props?.globalSettings?.contact_uk_hotline || '+44 20 7946 0912';
     const partnerModalParagraph = props?.globalSettings?.partner_modal_paragraph
         || 'Join our global higher education network. Register your agency below to collaborate with top universities worldwide and streamline student admissions.';
     const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
@@ -67,21 +68,41 @@ export default function TopBar({ onSearch }) {
                     <TopbarSearch onSearch={onSearch} />
 
                     {/* RIGHT SIDE: CONTACT & BECOME A PARTNER ACTION */}
-                    <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+                    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 shrink-0">
 
-                        {/* Country Code & Phone Hotline */}
-                        <div className="hidden sm:flex items-center gap-2.5 text-xs font-extrabold text-white">
-                            <span className="bg-purple-900/60 text-purple-200 px-2 py-0.5 rounded-md border border-purple-700/50">
-                                BD
-                            </span>
-                            <a
-                                href={`tel:${hotline.replace(/\s+/g, '')}`}
-                                className="flex items-center gap-1.5 hover:text-purple-300 transition-colors"
-                            >
-                                <Phone className="w-3.5 h-3.5 text-white" />
-                                <span className="tracking-wide">{hotline}</span>
-                            </a>
-                        </div>
+                        {/* UK Hotline */}
+                        {ukHotline && (
+                            <div className="hidden md:flex items-center gap-2 text-xs font-extrabold text-white">
+                                <span className="bg-blue-900/60 text-blue-200 px-2 py-0.5 rounded-md border border-blue-700/50">
+                                    UK
+                                </span>
+                                <a
+                                    href={`tel:${ukHotline.replace(/\s+/g, '')}`}
+                                    className="flex items-center gap-1.5 hover:text-blue-300 transition-colors"
+                                    title={`Call UK Office: ${ukHotline}`}
+                                >
+                                    <Phone className="w-3.5 h-3.5 text-white" />
+                                    <span className="tracking-wide">{ukHotline}</span>
+                                </a>
+                            </div>
+                        )}
+
+                        {/* BD Hotline */}
+                        {bdHotline && (
+                            <div className="hidden sm:flex items-center gap-2 text-xs font-extrabold text-white">
+                                <span className="bg-purple-900/60 text-purple-200 px-2 py-0.5 rounded-md border border-purple-700/50">
+                                    BD
+                                </span>
+                                <a
+                                    href={`tel:${bdHotline.replace(/\s+/g, '')}`}
+                                    className="flex items-center gap-1.5 hover:text-purple-300 transition-colors"
+                                    title={`Call BD Office: ${bdHotline}`}
+                                >
+                                    <Phone className="w-3.5 h-3.5 text-white" />
+                                    <span className="tracking-wide">{bdHotline}</span>
+                                </a>
+                            </div>
+                        )}
 
                         {/* Vertical Divider Line */}
                         <div className="hidden sm:block border-l border-slate-700 h-5" />

@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\ContactMessage;
+use App\Models\Setting;
 use App\Models\StudentApplication;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -62,6 +63,8 @@ class CourseInquiryAdminNotification extends Mailable
     {
         $adminInquiriesUrl = url('/admin/inquiries');
         $adminApplicationsUrl = url('/admin/student-applications');
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $footerName = Setting::get('footer_name', $siteName);
 
         return new Content(
             view: 'emails.course-inquiry-admin',
@@ -71,6 +74,8 @@ class CourseInquiryAdminNotification extends Mailable
                 'details' => $this->details,
                 'adminInquiriesUrl' => $adminInquiriesUrl,
                 'adminApplicationsUrl' => $adminApplicationsUrl,
+                'siteName' => $siteName,
+                'footerName' => $footerName,
             ],
         );
     }

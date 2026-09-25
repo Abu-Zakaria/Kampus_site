@@ -25,6 +25,16 @@ export default function BlogIndex() {
     const heroHeading = page?.content?.hero_heading || page?.content?.hero?.title;
     const heroSubtitle = page?.content?.hero_subtitle || page?.content?.hero?.subtitle;
 
+    // Resolve hero image with fallback handling
+    const rawHeroImage = page?.content?.hero_image || page?.content?.hero?.image || page?.content?.hero_banner_image || '';
+    const heroImage = (rawHeroImage && typeof rawHeroImage === 'string' && rawHeroImage.trim().length > 0)
+        ? (rawHeroImage.startsWith('http') || rawHeroImage.startsWith('/') ? rawHeroImage : `/storage/${rawHeroImage}`)
+        : null;
+
+    const overlayOpacity = page?.content?.hero_overlay_opacity !== undefined && page?.content?.hero_overlay_opacity !== null && page?.content?.hero_overlay_opacity !== ''
+        ? Math.max(15, Math.min(95, parseInt(page.content.hero_overlay_opacity, 10)))
+        : 75;
+
     const filtersData = (filters && typeof filters === 'object' && !Array.isArray(filters)) ? filters : {};
 
     const [search, setSearch] = useState(typeof filtersData.search === 'string' ? filtersData.search : '');
@@ -88,29 +98,60 @@ export default function BlogIndex() {
             <div className="w-full flex flex-col space-y-0 selection:bg-blue-600 selection:text-white">
 
                 {/* 1. HERO SECTION */}
-                <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800 transition-colors">
+                <section className={`relative overflow-hidden py-16 lg:py-24 border-b border-slate-200/60 dark:border-slate-800 transition-colors ${
+                    heroImage ? 'bg-slate-950 text-white' : 'bg-gradient-to-b from-blue-50/70 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950'
+                }`}>
+                    {/* 1. HERO BANNER IMAGE BACKGROUND */}
+                    {heroImage ? (
+                        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                            <img
+                                src={heroImage}
+                                alt="Blog Hero Banner"
+                                className="w-full h-full object-cover object-center scale-[1.02] transform transition-transform duration-1000 ease-out"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                }}
+                            />
 
-                    {/* Ambient Glows */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] pointer-events-none overflow-hidden">
-                        <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[140px]" />
-                        <div className="absolute top-[120px] left-[10%] w-80 h-80 bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-[120px]" />
-                    </div>
+                            {/* Dark Scrim with Configurable Opacity */}
+                            <div
+                                className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-900/70"
+                                style={{ opacity: overlayOpacity / 100 }}
+                            />
+
+                            {/* Subtle Vertical Fade Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-slate-950/90 pointer-events-none" />
+
+                            {/* Ambient Glow Orbs over banner */}
+                            <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-blue-600/25 rounded-full blur-[140px] pointer-events-none" />
+                        </div>
+                    ) : (
+                        /* Ambient Glows */
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] pointer-events-none overflow-hidden">
+                            <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[650px] h-[350px] bg-blue-500/15 dark:bg-blue-600/20 rounded-full blur-[140px]" />
+                            <div className="absolute top-[120px] left-[10%] w-80 h-80 bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-[120px]" />
+                        </div>
+                    )}
 
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
+                        <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] ${
+                            heroImage ? 'text-white' : 'text-slate-900 dark:text-white'
+                        }`}>
                             {heroHeading ? (
                                 heroHeading
                             ) : (
                                 <>
                                     Our Latest Insights &{' '}
-                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500">
+                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 dark:from-blue-400 dark:via-indigo-400 dark:to-emerald-400">
                                         Success Stories
                                     </span>
                                 </>
                             )}
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto">
+                        <p className={`text-lg sm:text-xl leading-relaxed font-normal max-w-2xl mx-auto ${
+                            heroImage ? 'text-slate-200' : 'text-slate-600 dark:text-slate-300'
+                        }`}>
                             {heroSubtitle || 'Read expert study abroad guides, visa tips, and inspiring journeys of students accepted into top global universities.'}
                         </p>
 
@@ -124,7 +165,7 @@ export default function BlogIndex() {
                                     type="text"
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Search stories, scholarships, destinations..."
+                                    placeholder={page?.content?.search_placeholder || "Search stories, scholarships, destinations..."}
                                     className="w-full bg-transparent py-2.5 px-2 text-slate-900 dark:text-white text-sm sm:text-base font-medium placeholder-slate-400 dark:placeholder-slate-500 border-0 border-none outline-none focus:outline-none focus:ring-0 shadow-none"
                                 />
                                 {search.length > 0 && (
@@ -178,10 +219,16 @@ export default function BlogIndex() {
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-4 border-b border-slate-200/70 dark:border-slate-800">
                             <div>
                                 <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                    Showing <span className="text-blue-600 dark:text-blue-400">{totalBlogs}</span> Articles & Stories
+                                    {page?.content?.articles_heading ? (
+                                        page.content.articles_heading
+                                    ) : (
+                                        <>
+                                            Showing <span className="text-blue-600 dark:text-blue-400">{totalBlogs}</span> Articles & Stories
+                                        </>
+                                    )}
                                 </h2>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                    Verified admission guidance and real student success journeys
+                                    {page?.content?.articles_subtitle || 'Verified admission guidance and real student success journeys'}
                                 </p>
                             </div>
 

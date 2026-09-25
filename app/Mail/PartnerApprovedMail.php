@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\PartnerApplication;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -51,8 +52,10 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+
         return new Envelope(
-            subject: 'Congratulations! Your  RMS Partnership Application Has Been Approved',
+            subject: "Congratulations! Your {$siteName} Partnership Application Has Been Approved",
         );
     }
 
@@ -71,6 +74,9 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
             ? $this->user->email
             : $this->application->email;
 
+        $siteName = Setting::get('site_name', config('app.name', 'Kampus Edu'));
+        $footerName = Setting::get('footer_name', $siteName);
+
         return new Content(
             view: 'emails.partner-approved',
             with: [
@@ -78,6 +84,8 @@ class PartnerApprovedMail extends Mailable implements ShouldQueue
                 'contactPerson' => $this->application->contact_person,
                 'email' => $displayEmail,
                 'magicLoginUrl' => $magicLoginUrl,
+                'siteName' => $siteName,
+                'footerName' => $footerName,
             ],
         );
     }

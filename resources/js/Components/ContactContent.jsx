@@ -17,17 +17,20 @@ const extractMapUrl = (input) => {
     return match ? match[1] : input;
 };
 
-export default function ContactContent() {
+export default function ContactContent({ content = {} }) {
     const { props } = usePage();
     const globalSettings = props?.globalSettings || {};
 
-    const contactTitle = globalSettings.contact_info_title || 'Contact Information';
-    const contactSubtitle = globalSettings.contact_info_subtitle || 'London Global HQ & Regional Advisory Center';
-    const contactAddress = globalSettings.contact_info_address || '1st Floor, Botanical Works, 2 Jubilee Street, London E1 3FU';
-    const contactEmail = globalSettings.contact_info_email || globalSettings.contact_email || 'info@ RMS-group.com';
-    const contactPhone = globalSettings.contact_info_phone || '020 7423 9333';
-    const contactHours = globalSettings.contact_info_hours || globalSettings.operating_hours || 'Monday - Friday: 9:00 AM - 6:00 PM GMT';
-    const mapSrc = extractMapUrl(globalSettings.contact_map_iframe);
+    const formTitle = content?.form_title || 'Send us a message';
+    const formSubtitle = content?.form_subtitle || 'Have questions about application deadlines, university rankings, or visa criteria? Drop your inquiry below.';
+
+    const contactTitle = content?.info_title || globalSettings.contact_info_title || 'Contact Information';
+    const contactSubtitle = content?.info_subtitle || globalSettings.contact_info_subtitle || 'London Global HQ & Regional Advisory Center';
+    const contactAddress = content?.address || globalSettings.contact_info_address || '1st Floor, Botanical Works, 2 Jubilee Street, London E1 3FU';
+    const contactEmail = content?.email || globalSettings.contact_info_email || globalSettings.contact_email || 'info@ RMS-group.com';
+    const contactPhone = content?.phone || globalSettings.contact_info_phone || '020 7423 9333';
+    const contactHours = content?.operating_hours || globalSettings.contact_info_hours || globalSettings.operating_hours || 'Monday - Friday: 9:00 AM - 6:00 PM GMT';
+    const mapSrc = extractMapUrl(content?.map_iframe || globalSettings.contact_map_iframe);
 
     const [formData, setFormData] = useState({
         fullName: '',
@@ -84,10 +87,10 @@ export default function ContactContent() {
                     <div className="lg:col-span-7 bg-slate-50 dark:bg-slate-800/60 p-7 sm:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-700/60 shadow-xs space-y-8">
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                Send us a message
+                                {formTitle}
                             </h2>
                             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-                                Have questions about application deadlines, university rankings, or visa criteria? Drop your inquiry below.
+                                {formSubtitle}
                             </p>
                         </div>
 

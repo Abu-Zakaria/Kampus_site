@@ -13,7 +13,7 @@ import {
     Sparkles
 } from 'lucide-react';
 
-export default function PartnerForm() {
+export default function PartnerForm({ content = {} }) {
     const [formData, setFormData] = useState({
         companyName: '',
         contactPerson: '',
@@ -61,15 +61,15 @@ export default function PartnerForm() {
                     <div className="text-center space-y-2 pb-2 border-b border-slate-100 dark:border-slate-700">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase tracking-wider">
                             <Handshake className="w-3.5 h-3.5" />
-                            <span>PARTNER APPLICATION</span>
+                            <span>{content?.form_badge || 'PARTNER APPLICATION'}</span>
                         </div>
 
                         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                            Apply for Partnership
+                            {content?.form_title || 'Apply for Partnership'}
                         </h2>
 
                         <p className="text-slate-600 dark:text-slate-300 text-sm max-w-lg mx-auto">
-                            Fill out the form below to register your agency. Our partnerships team will get back to you within 48 hours.
+                            {content?.form_subtitle || 'Fill out the form below to register your agency. Our partnerships team will get back to you within 48 hours.'}
                         </p>
                     </div>
 

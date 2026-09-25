@@ -10,7 +10,10 @@ import {
     ArrowRight
 } from 'lucide-react';
 
-export default function JourneyProcess() {
+export default function JourneyProcess({ content = {} }) {
+    const roadmapTitle = content?.roadmap_title;
+    const roadmapSubtitle = content?.roadmap_subtitle || 'Our structured process removes the stress from university applications, visa filings, and relocation.';
+
     const steps = [
         {
             number: '01',
@@ -69,11 +72,17 @@ export default function JourneyProcess() {
                 {/* SECTION HEADER */}
                 <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
                     <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        From dreams to degrees, <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500">in five steps</span>
+                        {roadmapTitle ? (
+                            roadmapTitle
+                        ) : (
+                            <>
+                                From dreams to degrees, <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500">in five steps</span>
+                            </>
+                        )}
                     </h2>
 
                     <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-                        Our structured process removes the stress from university applications, visa filings, and relocation.
+                        {roadmapSubtitle}
                     </p>
                 </div>
 

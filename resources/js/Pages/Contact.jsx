@@ -29,10 +29,10 @@ export default function Contact({ page = null }) {
                 <ContactHero content={page?.content || {}} />
 
                 {/* 2. CONTACT FORM & INFO TWO-COLUMN SECTION */}
-                <ContactContent />
+                <ContactContent content={page?.content || {}} />
 
                 {/* 3. GLOBAL BRANCHES NETWORK GRID */}
-                <ContactBranches />
+                <ContactBranches content={page?.content || {}} />
 
                 {/* 4. DYNAMIC PAGE BUILDER SECTIONS (IF CONFIGURED IN CMS) */}
                 {page?.content?.sections && (
@@ -40,10 +40,12 @@ export default function Contact({ page = null }) {
                 )}
 
                 {/* 5. 5-STEP ADMISSION ROADMAP */}
-                <JourneyProcess />
+                <JourneyProcess content={page?.content || {}} />
 
-                {/* 6. FAQ ACCORDION SECTION */}
-                <FaqSection />
+                {/* 6. FAQ ACCORDION SECTION (CONTROLLED BY CMS ADMIN) */}
+                {(page?.content?.show_faqs !== false && !page?.content?.hide_faqs) && (
+                    <FaqSection />
+                )}
             </div>
         </Layout>
     );
