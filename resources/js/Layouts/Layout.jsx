@@ -259,6 +259,30 @@ export default function Layout({ children }) {
                                 </Link>
                             ))}
                         </div>
+
+                        {/* Mobile Direct Hotlines for UK & BD */}
+                        <div className="pt-4 mt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-2">
+                            {(globalSettings?.contact_uk_hotline || '+44 20 7946 0912') && (
+                                <a
+                                    href={`tel:${(globalSettings?.contact_uk_hotline || '+44 20 7946 0912').replace(/\s+/g, '')}`}
+                                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-50 dark:bg-slate-800/70 text-slate-700 dark:text-slate-200 hover:text-blue-600 border border-slate-200/60 dark:border-slate-700/60 transition-colors"
+                                >
+                                    <span className="bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded text-[10px]">UK</span>
+                                    <Phone className="w-3.5 h-3.5 text-blue-500" />
+                                    <span>{globalSettings?.contact_uk_hotline || '+44 20 7946 0912'}</span>
+                                </a>
+                            )}
+                            {(globalSettings?.contact_bd_hotline || '+880 1812713814') && (
+                                <a
+                                    href={`tel:${(globalSettings?.contact_bd_hotline || '+880 1812713814').replace(/\s+/g, '')}`}
+                                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-50 dark:bg-slate-800/70 text-slate-700 dark:text-slate-200 hover:text-purple-600 border border-slate-200/60 dark:border-slate-700/60 transition-colors"
+                                >
+                                    <span className="bg-purple-600 text-white font-bold px-1.5 py-0.5 rounded text-[10px]">BD</span>
+                                    <Phone className="w-3.5 h-3.5 text-purple-500" />
+                                    <span>{globalSettings?.contact_bd_hotline || '+880 1812713814'}</span>
+                                </a>
+                            )}
+                        </div>
                     </div>
                 )}
             </header>
